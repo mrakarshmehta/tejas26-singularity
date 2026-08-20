@@ -210,6 +210,13 @@
 {% endblock %}
 
 {% block content %}
+
+      <!-- Recent Admin Audit Activity Feed -->
+      <div class="card mt-4" style="padding:16px;background:var(--surface,#1e293b);border-radius:10px;">
+        <h3 style="font-size:1.05rem;margin-bottom:12px;">🛡️ Recent Security & Audit Logs</h3>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Administrative actions and moderation changes are logged with timestamps and administrator attribution.</p>
+      </div>
+
 {% set admin_active = 'dashboard' %}
 <div class="admin-layout">
   {% include "partials/admin_sidebar.html" %}
