@@ -857,3 +857,27 @@ def api_get_numismatic_hoard_detail(slug):
         'status': 'success',
         'hoard': hoard
     })
+
+@api_bp.route('/archaeology/inscriptions', methods=['GET'])
+def api_get_epigraphical_inscriptions():
+    """JSON API returning ancient rock edicts, Brahmi translations, and copper-plate royal charters."""
+    from models.archaeology import get_all_epigraphical_inscriptions
+    inscriptions = get_all_epigraphical_inscriptions()
+    return jsonify({
+        'status': 'success',
+        'count': len(inscriptions),
+        'inscriptions': inscriptions
+    })
+
+
+@api_bp.route('/archaeology/inscriptions/<slug>', methods=['GET'])
+def api_get_epigraphical_inscription_detail(slug):
+    """JSON API returning Prakrit/Sanskrit text, English translation, and historical significance."""
+    from models.archaeology import get_inscription_by_slug
+    ins = get_inscription_by_slug(slug)
+    if not ins:
+        return jsonify({'status': 'not_found', 'message': f'Inscription not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'inscription': ins
+    })
