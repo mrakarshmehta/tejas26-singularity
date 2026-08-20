@@ -830,3 +830,40 @@ def get_submission_status_meta(status_code):
         'draft': {'label': 'Draft', 'color': '#6b7280', 'can_edit': True}
     }
     return status_map.get(str(status_code).lower(), status_map['pending'])
+
+
+def calculate_haversine_distance(lat1, lon1, lat2, lon2):
+    """Calculate the great-circle distance between two points on the Earth (in km)."""
+    import math
+    try:
+        lat1, lon1, lat2, lon2 = map(float, [lat1, lon1, lat2, lon2])
+    except (ValueError, TypeError):
+        return 99999.0
+
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = math.sin(delta_phi / 2.0) ** 2 + \
+        math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2.0) ** 2
+    c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
+    return round(6371.0 * c, 2)
+
+
+def get_bounding_box(center_lat, center_lon, radius_km):
+    """Calculate min/max latitude and longitude for a radius bounding box in km."""
+    import math
+    lat = float(center_lat)
+    lon = float(center_lon)
+    rad = float(radius_km)
+
+    lat_change = rad / 111.0
+    lon_change = rad / (111.0 * math.cos(math.radians(lat)))
+
+    return {
+        'min_lat': lat - lat_change,
+        'max_lat': lat + lat_change,
+        'min_lon': lon - lon_change,
+        'max_lon': lon + lon_change
+    }
