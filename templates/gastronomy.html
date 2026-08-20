@@ -1,0 +1,108 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Bihar Culinary Heritage & Gastronomy Trails - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="gastronomy-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #78350f 0%, #451a03 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #92400e;">
+        <span style="display: inline-block; background: rgba(251, 191, 36, 0.2); color: #fef08a; border: 1px solid rgba(251, 191, 36, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🍲 2,500 Years of Gastronomic Legacy
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Bihar Culinary Heritage</h1>
+        <p style="color: #fed7aa; font-size: 1.05rem; margin: 0; max-width: 700px;">
+            Savor centuries-old culinary traditions from the wood-fired smoky aromas of Litti Chokha and 52-layered Silao Khaja to nutrient-dense Mithila Makhana and winter stone-hammered Tilkut.
+        </p>
+    </div>
+
+    <!-- Curated Food Trails -->
+    <div style="margin-bottom: 3rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🗺️</span> Regional Gastronomy Trail Itineraries
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+            {% for trail in trails %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; border-left: 4px solid #d97706; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #d97706; background: rgba(217, 119, 6, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">
+                        ⏳ {{ trail.duration_days }} Days • {{ trail.region }}
+                    </span>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a);">
+                        {{ trail.title }}
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin: 0 0 0.75rem 0;">
+                        {{ trail.highlights }}
+                    </p>
+                </div>
+                <div style="font-size: 0.85rem; border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 0.75rem;">
+                    <strong>Featured Delicacies:</strong> {{ trail.dishes_included | join(', ') }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Dietary & Category Filters -->
+    <div style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🍽️</span> Traditional Dishes & Confections
+        </h2>
+        <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+            <a href="/gastronomy" style="white-space: nowrap; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 0.9rem; {{ 'background: var(--primary, #0284c7); color: white;' if selected_dietary == 'all' else 'background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155);' }}">
+                All Dishes ({{ dishes | length }})
+            </a>
+            <a href="/gastronomy?dietary=vegan" style="white-space: nowrap; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 0.9rem; {{ 'background: var(--primary, #0284c7); color: white;' if selected_dietary == 'vegan' else 'background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155);' }}">
+                🌱 Vegan & Plant-Based
+            </a>
+            <a href="/gastronomy?dietary=gluten-free" style="white-space: nowrap; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 0.9rem; {{ 'background: var(--primary, #0284c7); color: white;' if selected_dietary == 'gluten-free' else 'background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155);' }}">
+                🌾 Gluten-Free Superfoods
+            </a>
+        </div>
+    </div>
+
+    <!-- Dishes Showcase Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; margin-bottom: 3rem;">
+        {% for dish in dishes %}
+        <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s ease;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <span style="font-size: 2.2rem;">{{ dish.icon }}</span>
+                    {% if dish.gi_status %}
+                    <span style="font-size: 0.75rem; font-weight: 800; background: rgba(234, 179, 8, 0.15); color: #b45309; padding: 0.2rem 0.6rem; border-radius: 6px; border: 1px solid rgba(234, 179, 8, 0.3);">
+                        🏅 Certified GI
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div style="font-size: 0.8rem; color: var(--text-muted, #64748b); margin-bottom: 0.25rem;">
+                    {{ dish.category }} • 📍 {{ dish.origin_district }}
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 0.25rem 0; color: var(--text-primary, #0f172a);">
+                    {{ dish.name }}
+                </h3>
+                <div style="font-size: 0.9rem; font-weight: 600; color: #d97706; margin-bottom: 0.75rem;">
+                    {{ dish.hindi_name }}
+                </div>
+
+                <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                    {{ dish.description }}
+                </p>
+
+                <!-- Dietary Badges -->
+                <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                    {% for tag in dish.dietary_tags %}
+                    <span style="background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
+                        {{ tag }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <a href="/gastronomy/{{ dish.slug }}" style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.7rem; background: var(--bg-subtle, #f1f5f9); color: var(--primary, #0284c7); border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: background 0.2s;">
+                <span>View Recipe & Iconic Eateries</span> ➔
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
