@@ -1,0 +1,93 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Bihar Archaeology & Epigraphy Heritage - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="archaeology-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #3f2c20 0%, #1f140e 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #78350f;">
+        <span style="display: inline-block; background: rgba(217, 119, 6, 0.2); color: #fde68a; border: 1px solid rgba(217, 119, 6, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🏛️ 4,500 Years of Excavated Antiquity
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Bihar Archaeology & Epigraphy</h1>
+        <p style="color: #fed7aa; font-size: 1.05rem; margin: 0; max-width: 750px;">
+            Uncover the cradle of Indian civilization — from the prehistoric bone-tool industry of Chirand and the monolithic Brahmi edicts of Emperor Ashoka to the lost-wax bronzes of Kurkihar and multi-storied monasteries of Telhara.
+        </p>
+    </div>
+
+    <!-- Epigraphy Chronology Timeline -->
+    <div style="margin-bottom: 3rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>📜</span> Historical Eras & Inscriptional Chronology
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.25rem;">
+            {% for era in chronology %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; border-left: 4px solid #b45309;">
+                <span style="font-size: 0.75rem; font-weight: 700; background: rgba(180, 83, 9, 0.1); color: #b45309; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                    ⏳ {{ era.dates }}
+                </span>
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a);">
+                    {{ era.era }}
+                </h3>
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary, #0284c7); margin-bottom: 0.5rem;">
+                    Script: {{ era.primary_scripts }}
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin: 0 0 0.75rem 0; line-height: 1.4;">
+                    {{ era.overview }}
+                </p>
+                <div style="font-size: 0.75rem; color: var(--text-muted, #475569); border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 0.5rem;">
+                    <strong>Key Sites:</strong> {{ era.key_sites | join(', ') }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sites Showcase Grid -->
+    <div style="margin-bottom: 3.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>⛏️</span> Excavation Sites & Royal Monoliths ({{ sites | length }})
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.75rem;">
+            {% for s in sites %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s ease;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(180, 83, 9, 0.1); color: #b45309; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            {{ s.period }}
+                        </span>
+                        <span style="font-size: 0.75rem; font-weight: 700; background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155); padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            📍 {{ s.district }}
+                        </span>
+                    </div>
+
+                    <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a); line-height: 1.3;">
+                        {{ s.title }}
+                    </h3>
+                    <div style="font-size: 0.85rem; color: var(--primary, #0284c7); font-weight: 600; margin-bottom: 0.75rem;">
+                        👑 {{ s.ruler }} • 📜 {{ s.script }}
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                        {{ s.description }}
+                    </p>
+
+                    <div style="background: var(--bg-subtle, #f8fafc); padding: 0.75rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.85rem;">
+                        <strong style="color: var(--text-primary, #1e293b); display: block; margin-bottom: 0.35rem;">Major Excavation Finds:</strong>
+                        <ul style="margin: 0; padding-left: 1.2rem; line-height: 1.5; color: var(--text-muted, #475569); font-size: 0.8rem;">
+                            {% for find in s.excavation_highlights %}
+                            <li>{{ find }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <a href="/archaeology/{{ s.slug }}" style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.75rem; background: #b45309; color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: background 0.2s;">
+                    <span>View Epigraphy & Museum Details</span> ➔
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
