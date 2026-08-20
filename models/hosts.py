@@ -347,3 +347,34 @@ def check_listing_capacity(max_guests, requested_guests):
         return True, None
     except (TypeError, ValueError):
         return False, "Invalid guest count."
+
+
+def calculate_stay_pricing(price_per_night, nights, guests=1, extra_guest_fee=150, service_fee_pct=0.05, tax_pct=0.12):
+    """Calculate structured stay invoice breakdown.
+
+    Returns:
+        dict with base_fare, extra_guest_charge, service_fee, gst_tax, and total_amount.
+    """
+    price_per_night = float(price_per_night or 0)
+    nights = max(1, int(nights))
+    guests = max(1, int(guests))
+
+    base_stay = int(price_per_night * nights)
+    extra_guests = max(0, guests - 2)
+    extra_charge = int(extra_guests * extra_guest_fee * nights)
+
+    subtotal = base_stay + extra_charge
+    service_fee = int(subtotal * service_fee_pct)
+    tax_amount = int((subtotal + service_fee) * tax_pct)
+    total = subtotal + service_fee + tax_amount
+
+    return {
+        'price_per_night': price_per_night,
+        'nights': nights,
+        'guests': guests,
+        'base_stay_amount': base_stay,
+        'extra_guest_charge': extra_charge,
+        'service_fee': service_fee,
+        'tax_amount': tax_amount,
+        'total_amount': total
+    }
