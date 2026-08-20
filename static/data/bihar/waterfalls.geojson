@@ -1,0 +1,86 @@
+{
+  "type": "FeatureCollection",
+  "name": "Bihar Waterfalls",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "metadata": {
+    "source": "OpenStreetMap",
+    "attribution": "© OpenStreetMap contributors",
+    "license": "Open Data Commons Open Database License 1.0 (ODbL)",
+    "timestamp": "2026-08-16T10:53:51Z",
+    "feature_count": 3,
+    "processing": "Spatially filtered to Bihar administrative boundaries"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Waterfall",
+        "name_hi": null,
+        "name_en": null,
+        "waterway": "waterfall",
+        "height": null,
+        "osm_id": "node/3788280160",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/node/3788280160",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.85734,
+          24.74765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Waterfall",
+        "name_hi": null,
+        "name_en": null,
+        "waterway": "waterfall",
+        "height": null,
+        "osm_id": "node/3788280240",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/node/3788280240",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.85623,
+          24.7498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Waterfall",
+        "name_hi": null,
+        "name_en": null,
+        "waterway": "waterfall",
+        "height": null,
+        "osm_id": "node/3788280787",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/node/3788280787",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.85718,
+          24.76742
+        ]
+      }
+    }
+  ]
+}

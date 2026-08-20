@@ -1,0 +1,291 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "name": "Bihar Homestays & Eco Stays",
+    "source": "HiddenYatra Database (host_listings)",
+    "total_features": 10,
+    "timestamp": "2026-08-16T18:36:00Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "title": "Patliputra Heritage Courtyard Stay",
+        "slug": "patliputra-heritage-courtyard-stay",
+        "district_id": 1,
+        "district_name": "Patna",
+        "district_slug": "patna",
+        "listing_type": "paid_homestay",
+        "property_type": "heritage_homestay",
+        "price_per_night": 1800.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_patna_cover.jpg",
+        "avg_rating": 4.9,
+        "review_count": 46,
+        "detail_url": "/stays/patliputra-heritage-courtyard-stay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.04891,
+          25.62925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 19,
+        "title": "Bodh Gaya Lotus Heritage Homestay",
+        "slug": "bodh-gaya-lotus-heritage-homestay",
+        "district_id": 2,
+        "district_name": "Gaya",
+        "district_slug": "gaya",
+        "listing_type": "paid_homestay",
+        "property_type": "heritage_homestay",
+        "price_per_night": 1200.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_gaya_cover.jpg",
+        "avg_rating": 4.9,
+        "review_count": 28,
+        "detail_url": "/stays/bodh-gaya-lotus-heritage-homestay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.99128,
+          24.69613
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 20,
+        "title": "Rajgir Green Valley Eco Homestay",
+        "slug": "rajgir-green-valley-eco-homestay",
+        "district_id": 3,
+        "district_name": "Nalanda",
+        "district_slug": "nalanda",
+        "listing_type": "paid_homestay",
+        "property_type": "eco_cottage",
+        "price_per_night": 1500.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_rajgir_cover.jpg",
+        "avg_rating": 4.8,
+        "review_count": 31,
+        "detail_url": "/stays/rajgir-green-valley-eco-homestay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.42194,
+          25.01889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 21,
+        "title": "Simultala Pine Breeze Forest Stay",
+        "slug": "simultala-pine-breeze-forest-stay",
+        "district_id": 4,
+        "district_name": "Jamui",
+        "district_slug": "jamui",
+        "listing_type": "paid_homestay",
+        "property_type": "hill_cottage",
+        "price_per_night": 1000.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_simultala_cover.jpg",
+        "avg_rating": 4.9,
+        "review_count": 19,
+        "detail_url": "/stays/simultala-pine-breeze-forest-stay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.54167,
+          24.7125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 22,
+        "title": "Silk City Weaver's Heritage Homestay",
+        "slug": "silk-city-weavers-heritage-homestay",
+        "district_id": 5,
+        "district_name": "Bhagalpur",
+        "district_slug": "bhagalpur",
+        "listing_type": "paid_homestay",
+        "property_type": "heritage_homestay",
+        "price_per_night": 1100.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_bhagalpur_cover.jpg",
+        "avg_rating": 4.8,
+        "review_count": 24,
+        "detail_url": "/stays/silk-city-weavers-heritage-homestay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.97184,
+          25.24445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "title": "Munger Ganga Riverfront Yoga Stay",
+        "slug": "munger-ganga-riverfront-yoga-stay",
+        "district_id": 6,
+        "district_name": "Munger",
+        "district_slug": "munger",
+        "listing_type": "paid_homestay",
+        "property_type": "yoga_retreat",
+        "price_per_night": 1400.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_munger_cover.jpg",
+        "avg_rating": 4.8,
+        "review_count": 21,
+        "detail_url": "/stays/munger-ganga-riverfront-yoga-stay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.475,
+          25.375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 27,
+        "title": "Sasaram Sher Shah Heritage Homestay",
+        "slug": "sasaram-sher-shah-heritage-homestay",
+        "district_id": 8,
+        "district_name": "Rohtas",
+        "district_slug": "rohtas",
+        "listing_type": "paid_homestay",
+        "property_type": "heritage_homestay",
+        "price_per_night": 1000.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_rohtas_cover.jpg",
+        "avg_rating": 4.9,
+        "review_count": 35,
+        "detail_url": "/stays/sasaram-sher-shah-heritage-homestay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.032,
+          24.954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "title": "Mithila Folk Art & Heritage Homestay",
+        "slug": "mithila-folk-art-heritage-homestay",
+        "district_id": 20,
+        "district_name": "Jhanjharpur (Madhubani)",
+        "district_slug": "jhanjharpur-madhubani",
+        "listing_type": "paid_homestay",
+        "property_type": "art_homestay",
+        "price_per_night": 800.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_madhubani_cover.jpg",
+        "avg_rating": 4.9,
+        "review_count": 33,
+        "detail_url": "/stays/mithila-folk-art-heritage-homestay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.085,
+          26.355
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 28,
+        "title": "Kaimur Plateau Waterfall Farmstay",
+        "slug": "kaimur-plateau-waterfall-farmstay",
+        "district_id": 22,
+        "district_name": "Kaimur",
+        "district_slug": "kaimur",
+        "listing_type": "free_stay",
+        "property_type": "farmstay",
+        "price_per_night": 0.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_kaimur_cover.jpg",
+        "avg_rating": 4.9,
+        "review_count": 14,
+        "detail_url": "/stays/kaimur-plateau-waterfall-farmstay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.58,
+          24.81
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 24,
+        "title": "Vaishali Mango Orchard Village Stay",
+        "slug": "vaishali-mango-orchard-village-stay",
+        "district_id": 37,
+        "district_name": "Vaishali",
+        "district_slug": "vaishali",
+        "listing_type": "free_stay",
+        "property_type": "farmstay",
+        "price_per_night": 0.0,
+        "currency": "INR",
+        "cover_image": "stay_demo_vaishali_cover.jpg",
+        "avg_rating": 5.0,
+        "review_count": 15,
+        "detail_url": "/stays/vaishali-mango-orchard-village-stay",
+        "source": "HiddenYatra",
+        "source_table": "host_listings"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.1275,
+          25.9875
+        ]
+      }
+    }
+  ]
+}

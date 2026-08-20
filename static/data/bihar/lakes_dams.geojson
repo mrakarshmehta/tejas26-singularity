@@ -1,0 +1,5461 @@
+{
+  "type": "FeatureCollection",
+  "name": "Bihar Lakes, Reservoirs and Waterbodies",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "metadata": {
+    "source": "OpenStreetMap",
+    "attribution": "© OpenStreetMap contributors",
+    "license": "Open Data Commons Open Database License 1.0 (ODbL)",
+    "query": "way[\"natural\"=\"water\"][\"name\"](24.2,83.3,27.6,88.3); relation[\"natural\"=\"water\"][\"name\"](24.2,83.3,27.6,88.3); way[\"landuse\"=\"reservoir\"][\"name\"](24.2,83.3,27.6,88.3); way[\"water\"][\"name\"](24.2,83.3,27.6,88.3);",
+    "timestamp": "2026-08-16T10:23:21Z",
+    "feature_count": 102,
+    "raw_points_count": 14234,
+    "simplified_points_count": 4691,
+    "processing": "Spatially filtered to Bihar administrative boundaries, simplified via Douglas-Peucker (epsilon=0.0004)"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "new basin",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/60726646",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/60726646",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90134,
+              26.1717
+            ],
+            [
+              85.90133,
+              26.16971
+            ],
+            [
+              85.9021,
+              26.16969
+            ],
+            [
+              85.9021,
+              26.17168
+            ],
+            [
+              85.90134,
+              26.1717
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Old Basin",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/60726651",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/60726651",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.89544,
+              26.16334
+            ],
+            [
+              85.8967,
+              26.16327
+            ],
+            [
+              85.89666,
+              26.16788
+            ],
+            [
+              85.89536,
+              26.16793
+            ],
+            [
+              85.89544,
+              26.16334
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gayatri Pokhar.",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "reservoir",
+        "landuse": null,
+        "osm_id": "way/159457117",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/159457117",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.14045,
+              25.4113
+            ],
+            [
+              86.13997,
+              25.41138
+            ],
+            [
+              86.13999,
+              25.41081
+            ],
+            [
+              86.14045,
+              25.4113
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PoKharia",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "water",
+        "landuse": null,
+        "osm_id": "way/159457118",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/159457118",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.13583,
+              25.41999
+            ],
+            [
+              86.13582,
+              25.41925
+            ],
+            [
+              86.13648,
+              25.41926
+            ],
+            [
+              86.13647,
+              25.41996
+            ],
+            [
+              86.13583,
+              25.41999
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sagar Pokhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "water",
+        "landuse": null,
+        "osm_id": "way/193925662",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/193925662",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.51026,
+              26.79876
+            ],
+            [
+              84.51041,
+              26.79807
+            ],
+            [
+              84.51183,
+              26.79785
+            ],
+            [
+              84.51224,
+              26.80007
+            ],
+            [
+              84.51067,
+              26.80033
+            ],
+            [
+              84.51026,
+              26.79876
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Muchalinda Sarovar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "water",
+        "landuse": null,
+        "osm_id": "way/274190414",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/274190414",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.99119,
+              24.69508
+            ],
+            [
+              84.99179,
+              24.69494
+            ],
+            [
+              84.9916,
+              24.69429
+            ],
+            [
+              84.99099,
+              24.69443
+            ],
+            [
+              84.99119,
+              24.69508
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Salva Barkin Lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/274190415",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/274190415",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.98935,
+              24.69349
+            ],
+            [
+              84.98988,
+              24.69344
+            ],
+            [
+              84.98933,
+              24.69286
+            ],
+            [
+              84.98935,
+              24.69349
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "jora talab,khagaul",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/292261985",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292261985",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.0482,
+              25.58208
+            ],
+            [
+              85.04828,
+              25.58164
+            ],
+            [
+              85.04998,
+              25.58191
+            ],
+            [
+              85.0482,
+              25.58208
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "jora talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/292261986",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292261986",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.04989,
+              25.58223
+            ],
+            [
+              85.05228,
+              25.58223
+            ],
+            [
+              85.05186,
+              25.58285
+            ],
+            [
+              85.04989,
+              25.58223
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "chhat puja talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/292263072",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292263072",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.04334,
+              25.59449
+            ],
+            [
+              85.04333,
+              25.5942
+            ],
+            [
+              85.04343,
+              25.59419
+            ],
+            [
+              85.04343,
+              25.5945
+            ],
+            [
+              85.04334,
+              25.59449
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "gandhi maidan panitanki",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "reservoir",
+        "landuse": null,
+        "osm_id": "way/292282999",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292282999",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.05156,
+              25.58457
+            ],
+            [
+              85.05153,
+              25.58449
+            ],
+            [
+              85.05158,
+              25.58443
+            ],
+            [
+              85.05166,
+              25.58445
+            ],
+            [
+              85.05166,
+              25.58457
+            ],
+            [
+              85.05163,
+              25.58457
+            ],
+            [
+              85.05156,
+              25.58457
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "pond near jora talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/292643488",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292643488",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.05019,
+              25.58181
+            ],
+            [
+              85.05066,
+              25.58134
+            ],
+            [
+              85.05282,
+              25.58155
+            ],
+            [
+              85.0524,
+              25.58207
+            ],
+            [
+              85.05019,
+              25.58181
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "pani tanki",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "reservoir",
+        "landuse": null,
+        "osm_id": "way/292847196",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292847196",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.03213,
+              25.58395
+            ],
+            [
+              85.03209,
+              25.58394
+            ],
+            [
+              85.03206,
+              25.58395
+            ],
+            [
+              85.03203,
+              25.58397
+            ],
+            [
+              85.032,
+              25.58399
+            ],
+            [
+              85.03199,
+              25.58403
+            ],
+            [
+              85.03199,
+              25.58406
+            ],
+            [
+              85.032,
+              25.58409
+            ],
+            [
+              85.03202,
+              25.58412
+            ],
+            [
+              85.03205,
+              25.58414
+            ],
+            [
+              85.03209,
+              25.58415
+            ],
+            [
+              85.03212,
+              25.58414
+            ],
+            [
+              85.03216,
+              25.58413
+            ],
+            [
+              85.03218,
+              25.58411
+            ],
+            [
+              85.0322,
+              25.58408
+            ],
+            [
+              85.03221,
+              25.58405
+            ],
+            [
+              85.03221,
+              25.58402
+            ],
+            [
+              85.03219,
+              25.58399
+            ],
+            [
+              85.03216,
+              25.58396
+            ],
+            [
+              85.03213,
+              25.58395
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "water tank",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "reservoir",
+        "landuse": null,
+        "osm_id": "way/292908571",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/292908571",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.04054,
+              25.58138
+            ],
+            [
+              85.04069,
+              25.58137
+            ],
+            [
+              85.04069,
+              25.58126
+            ],
+            [
+              85.04054,
+              25.58127
+            ],
+            [
+              85.04054,
+              25.58138
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mangal Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/297094719",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/297094719",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.22437,
+              25.59619
+            ],
+            [
+              85.22525,
+              25.59612
+            ],
+            [
+              85.22601,
+              25.59326
+            ],
+            [
+              85.22476,
+              25.59382
+            ],
+            [
+              85.22437,
+              25.59619
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PITAMAHESHWAR",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "water",
+        "landuse": null,
+        "osm_id": "way/312544979",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/312544979",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.00881,
+              24.78999
+            ],
+            [
+              85.00878,
+              24.78972
+            ],
+            [
+              85.00913,
+              24.78969
+            ],
+            [
+              85.00916,
+              24.79
+            ],
+            [
+              85.00908,
+              24.79001
+            ],
+            [
+              85.00908,
+              24.78997
+            ],
+            [
+              85.00881,
+              24.78999
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ramsagar Tank",
+        "name_hi": "रामसागर टैंक",
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/312546009",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/312546009",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.00517,
+              24.7832
+            ],
+            [
+              85.00576,
+              24.78323
+            ],
+            [
+              85.0056,
+              24.78197
+            ],
+            [
+              85.00509,
+              24.78215
+            ],
+            [
+              85.00517,
+              24.7832
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Surya Kund",
+        "name_hi": "सूर्य कुंड",
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/312546017",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/312546017",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.00856,
+              24.77917
+            ],
+            [
+              85.00868,
+              24.77912
+            ],
+            [
+              85.00866,
+              24.77908
+            ],
+            [
+              85.00917,
+              24.77889
+            ],
+            [
+              85.00911,
+              24.77864
+            ],
+            [
+              85.00855,
+              24.7788
+            ],
+            [
+              85.00854,
+              24.77876
+            ],
+            [
+              85.00843,
+              24.77881
+            ],
+            [
+              85.0085,
+              24.77905
+            ],
+            [
+              85.00856,
+              24.77917
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Battarani Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/312546022",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/312546022",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.00413,
+              24.77408
+            ],
+            [
+              85.00409,
+              24.77322
+            ],
+            [
+              85.00483,
+              24.77304
+            ],
+            [
+              85.00498,
+              24.77407
+            ],
+            [
+              85.00413,
+              24.77408
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rukmani Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/312546026",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/312546026",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.99968,
+              24.77412
+            ],
+            [
+              84.99958,
+              24.77341
+            ],
+            [
+              85.00056,
+              24.77332
+            ],
+            [
+              85.00066,
+              24.77402
+            ],
+            [
+              84.99968,
+              24.77412
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gandhi Maidan Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/314390187",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/314390187",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.99888,
+              24.7885
+            ],
+            [
+              84.99895,
+              24.78945
+            ],
+            [
+              84.99946,
+              24.78941
+            ],
+            [
+              84.99888,
+              24.7885
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maanikchand Talaab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/315436599",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/315436599",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.09477,
+              25.58434
+            ],
+            [
+              85.09555,
+              25.58441
+            ],
+            [
+              85.09562,
+              25.58357
+            ],
+            [
+              85.09484,
+              25.58349
+            ],
+            [
+              85.09477,
+              25.58434
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/319534378",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/319534378",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.20398,
+              25.74629
+            ],
+            [
+              85.20395,
+              25.74693
+            ],
+            [
+              85.20458,
+              25.74693
+            ],
+            [
+              85.20456,
+              25.74624
+            ],
+            [
+              85.20398,
+              25.74629
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/320021364",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/320021364",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.2052,
+              25.74289
+            ],
+            [
+              85.20523,
+              25.74292
+            ],
+            [
+              85.20526,
+              25.74293
+            ],
+            [
+              85.2053,
+              25.74294
+            ],
+            [
+              85.20534,
+              25.74293
+            ],
+            [
+              85.20538,
+              25.74291
+            ],
+            [
+              85.20541,
+              25.74288
+            ],
+            [
+              85.20543,
+              25.74285
+            ],
+            [
+              85.20543,
+              25.74281
+            ],
+            [
+              85.20542,
+              25.74277
+            ],
+            [
+              85.20539,
+              25.74274
+            ],
+            [
+              85.20535,
+              25.74272
+            ],
+            [
+              85.20531,
+              25.74271
+            ],
+            [
+              85.20527,
+              25.74272
+            ],
+            [
+              85.20523,
+              25.74273
+            ],
+            [
+              85.2052,
+              25.74276
+            ],
+            [
+              85.20518,
+              25.74279
+            ],
+            [
+              85.20518,
+              25.74282
+            ],
+            [
+              85.20518,
+              25.74286
+            ],
+            [
+              85.2052,
+              25.74289
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/320021369",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/320021369",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.21966,
+              25.75328
+            ],
+            [
+              85.22044,
+              25.75327
+            ],
+            [
+              85.22042,
+              25.7525
+            ],
+            [
+              85.2196,
+              25.75256
+            ],
+            [
+              85.21966,
+              25.75328
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/321974637",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/321974637",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.21012,
+              25.7462
+            ],
+            [
+              85.21052,
+              25.74642
+            ],
+            [
+              85.21054,
+              25.74604
+            ],
+            [
+              85.2103,
+              25.74596
+            ],
+            [
+              85.2102,
+              25.74601
+            ],
+            [
+              85.21015,
+              25.74611
+            ],
+            [
+              85.21012,
+              25.7462
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Marai Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/324162801",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/324162801",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.22095,
+              25.69418
+            ],
+            [
+              85.22188,
+              25.69379
+            ],
+            [
+              85.22129,
+              25.69359
+            ],
+            [
+              85.22095,
+              25.69418
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Amra Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/326354463",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/326354463",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.07788,
+              24.95369
+            ],
+            [
+              84.0786,
+              24.95359
+            ],
+            [
+              84.07844,
+              24.95267
+            ],
+            [
+              84.07772,
+              24.95277
+            ],
+            [
+              84.07788,
+              24.95369
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/329853903",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/329853903",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.20491,
+              25.74424
+            ],
+            [
+              85.20495,
+              25.74426
+            ],
+            [
+              85.20499,
+              25.74427
+            ],
+            [
+              85.20504,
+              25.74426
+            ],
+            [
+              85.20506,
+              25.74425
+            ],
+            [
+              85.20507,
+              25.7442
+            ],
+            [
+              85.20507,
+              25.74407
+            ],
+            [
+              85.20507,
+              25.74394
+            ],
+            [
+              85.20507,
+              25.74388
+            ],
+            [
+              85.20505,
+              25.74382
+            ],
+            [
+              85.20501,
+              25.74378
+            ],
+            [
+              85.20498,
+              25.74378
+            ],
+            [
+              85.20495,
+              25.74377
+            ],
+            [
+              85.20492,
+              25.74377
+            ],
+            [
+              85.20489,
+              25.74377
+            ],
+            [
+              85.20487,
+              25.74379
+            ],
+            [
+              85.20485,
+              25.74381
+            ],
+            [
+              85.20484,
+              25.74385
+            ],
+            [
+              85.20489,
+              25.74422
+            ],
+            [
+              85.20491,
+              25.74424
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/329853905",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/329853905",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.20465,
+              25.74309
+            ],
+            [
+              85.20462,
+              25.7431
+            ],
+            [
+              85.20459,
+              25.74313
+            ],
+            [
+              85.20457,
+              25.74316
+            ],
+            [
+              85.20456,
+              25.74319
+            ],
+            [
+              85.20457,
+              25.74323
+            ],
+            [
+              85.20459,
+              25.74326
+            ],
+            [
+              85.20462,
+              25.74328
+            ],
+            [
+              85.20465,
+              25.7433
+            ],
+            [
+              85.20469,
+              25.7433
+            ],
+            [
+              85.20473,
+              25.74329
+            ],
+            [
+              85.20476,
+              25.74327
+            ],
+            [
+              85.20478,
+              25.74325
+            ],
+            [
+              85.2048,
+              25.74321
+            ],
+            [
+              85.2048,
+              25.74318
+            ],
+            [
+              85.20479,
+              25.74315
+            ],
+            [
+              85.20476,
+              25.74312
+            ],
+            [
+              85.20473,
+              25.7431
+            ],
+            [
+              85.20469,
+              25.74309
+            ],
+            [
+              85.20465,
+              25.74309
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/329854171",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/329854171",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.20606,
+              25.74371
+            ],
+            [
+              85.2063,
+              25.74378
+            ],
+            [
+              85.2063,
+              25.74384
+            ],
+            [
+              85.20617,
+              25.7439
+            ],
+            [
+              85.20609,
+              25.74392
+            ],
+            [
+              85.20604,
+              25.7439
+            ],
+            [
+              85.20602,
+              25.7438
+            ],
+            [
+              85.20603,
+              25.74371
+            ],
+            [
+              85.20606,
+              25.74371
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/329854664",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/329854664",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.21701,
+              25.75624
+            ],
+            [
+              85.21761,
+              25.75658
+            ],
+            [
+              85.21767,
+              25.7561
+            ],
+            [
+              85.21701,
+              25.75624
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maya Sarovar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/330511235",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/330511235",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.98385,
+              24.69596
+            ],
+            [
+              84.98553,
+              24.69588
+            ],
+            [
+              84.98553,
+              24.69512
+            ],
+            [
+              84.98375,
+              24.69549
+            ],
+            [
+              84.98385,
+              24.69596
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ghora katora lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/338613654",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/338613654",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.49579,
+              25.01691
+            ],
+            [
+              85.50047,
+              25.01795
+            ],
+            [
+              85.50134,
+              25.01931
+            ],
+            [
+              85.50053,
+              25.01961
+            ],
+            [
+              85.4964,
+              25.0178
+            ],
+            [
+              85.49579,
+              25.01691
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Durbar Taalab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/338766104",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/338766104",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.41736,
+              24.83968
+            ],
+            [
+              85.41821,
+              24.83947
+            ],
+            [
+              85.41828,
+              24.83864
+            ],
+            [
+              85.41726,
+              24.83882
+            ],
+            [
+              85.41736,
+              24.83968
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "field",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/346013729",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/346013729",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.02992,
+              24.80902
+            ],
+            [
+              85.03011,
+              24.80904
+            ],
+            [
+              85.03018,
+              24.80906
+            ],
+            [
+              85.03024,
+              24.80906
+            ],
+            [
+              85.03029,
+              24.80899
+            ],
+            [
+              85.03036,
+              24.80899
+            ],
+            [
+              85.0307,
+              24.80907
+            ],
+            [
+              85.03089,
+              24.80903
+            ],
+            [
+              85.03092,
+              24.80896
+            ],
+            [
+              85.03086,
+              24.80887
+            ],
+            [
+              85.03088,
+              24.80872
+            ],
+            [
+              85.03095,
+              24.80861
+            ],
+            [
+              85.03079,
+              24.80855
+            ],
+            [
+              85.03069,
+              24.80843
+            ],
+            [
+              85.03063,
+              24.80837
+            ],
+            [
+              85.03051,
+              24.80842
+            ],
+            [
+              85.03036,
+              24.80849
+            ],
+            [
+              85.03022,
+              24.8086
+            ],
+            [
+              85.0301,
+              24.80871
+            ],
+            [
+              85.02996,
+              24.8088
+            ],
+            [
+              85.02989,
+              24.80893
+            ],
+            [
+              85.02992,
+              24.80902
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boating pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/383631546",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/383631546",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.51394,
+              25.20375
+            ],
+            [
+              85.51502,
+              25.20368
+            ],
+            [
+              85.51502,
+              25.20331
+            ],
+            [
+              85.51396,
+              25.20331
+            ],
+            [
+              85.5139,
+              25.20338
+            ],
+            [
+              85.51394,
+              25.20375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bhairava Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/394353728",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/394353728",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.95145,
+              25.24685
+            ],
+            [
+              86.95138,
+              25.24596
+            ],
+            [
+              86.95595,
+              25.24562
+            ],
+            [
+              86.95602,
+              25.24697
+            ],
+            [
+              86.95541,
+              25.24771
+            ],
+            [
+              86.95145,
+              25.24685
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mirza Talao",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/394546110",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/394546110",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.97357,
+              25.22618
+            ],
+            [
+              86.97501,
+              25.22615
+            ],
+            [
+              86.9745,
+              25.22522
+            ],
+            [
+              86.97357,
+              25.22618
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Papraur Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/445021038",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/445021038",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.04008,
+              25.4321
+            ],
+            [
+              86.04039,
+              25.43782
+            ],
+            [
+              86.04953,
+              25.4371
+            ],
+            [
+              86.04875,
+              25.43405
+            ],
+            [
+              86.04656,
+              25.43178
+            ],
+            [
+              86.04008,
+              25.4321
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "राजेंद्र सरोवर",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/445036963",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/445036963",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.47372,
+              25.51333
+            ],
+            [
+              86.47347,
+              25.51193
+            ],
+            [
+              86.47462,
+              25.51199
+            ],
+            [
+              86.47481,
+              25.51308
+            ],
+            [
+              86.47372,
+              25.51333
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shiv Ganga",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/494015092",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/494015092",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.79678,
+              25.98457
+            ],
+            [
+              86.79674,
+              25.98369
+            ],
+            [
+              86.79767,
+              25.98366
+            ],
+            [
+              86.79772,
+              25.98449
+            ],
+            [
+              86.79678,
+              25.98457
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PokePond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/575168223",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/575168223",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.12683,
+              25.61311
+            ],
+            [
+              85.12679,
+              25.61304
+            ],
+            [
+              85.12687,
+              25.61301
+            ],
+            [
+              85.12691,
+              25.61307
+            ],
+            [
+              85.12683,
+              25.61311
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Balu Khudda",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/625941356",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/625941356",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.90361,
+              26.23999
+            ],
+            [
+              87.90359,
+              26.23998
+            ],
+            [
+              87.90357,
+              26.23997
+            ],
+            [
+              87.90354,
+              26.23995
+            ],
+            [
+              87.90351,
+              26.23994
+            ],
+            [
+              87.90349,
+              26.23993
+            ],
+            [
+              87.90349,
+              26.23991
+            ],
+            [
+              87.90348,
+              26.23986
+            ],
+            [
+              87.90347,
+              26.23983
+            ],
+            [
+              87.90348,
+              26.2398
+            ],
+            [
+              87.90352,
+              26.23978
+            ],
+            [
+              87.90355,
+              26.23976
+            ],
+            [
+              87.90359,
+              26.23974
+            ],
+            [
+              87.90363,
+              26.23973
+            ],
+            [
+              87.90368,
+              26.23973
+            ],
+            [
+              87.90371,
+              26.23973
+            ],
+            [
+              87.90376,
+              26.23973
+            ],
+            [
+              87.9038,
+              26.23972
+            ],
+            [
+              87.90384,
+              26.23972
+            ],
+            [
+              87.90388,
+              26.23972
+            ],
+            [
+              87.90393,
+              26.23973
+            ],
+            [
+              87.90397,
+              26.23974
+            ],
+            [
+              87.904,
+              26.23975
+            ],
+            [
+              87.90402,
+              26.23977
+            ],
+            [
+              87.90403,
+              26.2398
+            ],
+            [
+              87.90404,
+              26.23984
+            ],
+            [
+              87.90404,
+              26.23988
+            ],
+            [
+              87.90403,
+              26.23991
+            ],
+            [
+              87.90402,
+              26.23994
+            ],
+            [
+              87.90398,
+              26.23995
+            ],
+            [
+              87.90393,
+              26.23997
+            ],
+            [
+              87.90385,
+              26.23998
+            ],
+            [
+              87.90378,
+              26.23998
+            ],
+            [
+              87.90371,
+              26.23999
+            ],
+            [
+              87.90366,
+              26.23999
+            ],
+            [
+              87.90364,
+              26.23999
+            ],
+            [
+              87.90361,
+              26.23999
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rashid Pur Digghi",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/626075539",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/626075539",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.90577,
+              26.23476
+            ],
+            [
+              87.90575,
+              26.23472
+            ],
+            [
+              87.90572,
+              26.23467
+            ],
+            [
+              87.9057,
+              26.23462
+            ],
+            [
+              87.9057,
+              26.23455
+            ],
+            [
+              87.9057,
+              26.23448
+            ],
+            [
+              87.90571,
+              26.23444
+            ],
+            [
+              87.90574,
+              26.23438
+            ],
+            [
+              87.90577,
+              26.23435
+            ],
+            [
+              87.90582,
+              26.23434
+            ],
+            [
+              87.9059,
+              26.23435
+            ],
+            [
+              87.90592,
+              26.23439
+            ],
+            [
+              87.90594,
+              26.23446
+            ],
+            [
+              87.90595,
+              26.23452
+            ],
+            [
+              87.90595,
+              26.23458
+            ],
+            [
+              87.90595,
+              26.23466
+            ],
+            [
+              87.90593,
+              26.23471
+            ],
+            [
+              87.90589,
+              26.23476
+            ],
+            [
+              87.90583,
+              26.23478
+            ],
+            [
+              87.90577,
+              26.23476
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bengali Pokhri",
+        "name_hi": "बंगाली पोखरी",
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/633213243",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/633213243",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.32517,
+              26.18392
+            ],
+            [
+              85.32583,
+              26.18369
+            ],
+            [
+              85.32561,
+              26.18307
+            ],
+            [
+              85.32506,
+              26.18313
+            ],
+            [
+              85.32517,
+              26.18392
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "beware of the crocodiles",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/729110101",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/729110101",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.02711,
+              26.34594
+            ],
+            [
+              86.0277,
+              26.34576
+            ],
+            [
+              86.02755,
+              26.34502
+            ],
+            [
+              86.02694,
+              26.34525
+            ],
+            [
+              86.02711,
+              26.34594
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "raghunath jha college",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/733861506",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/733861506",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.48976,
+              26.5979
+            ],
+            [
+              85.49,
+              26.59782
+            ],
+            [
+              85.48984,
+              26.59747
+            ],
+            [
+              85.48972,
+              26.5975
+            ],
+            [
+              85.48967,
+              26.59755
+            ],
+            [
+              85.48962,
+              26.59759
+            ],
+            [
+              85.48964,
+              26.59771
+            ],
+            [
+              85.48969,
+              26.59781
+            ],
+            [
+              85.48976,
+              26.5979
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "city lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/737765004",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/737765004",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.8946,
+              26.11868
+            ],
+            [
+              85.89536,
+              26.11849
+            ],
+            [
+              85.895,
+              26.1175
+            ],
+            [
+              85.89434,
+              26.11783
+            ],
+            [
+              85.8946,
+              26.11868
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Harahi Pokhari",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/738304336",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738304336",
+        "wikidata": "Q106982409",
+        "wikipedia": "en:Harahi Lake"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90401,
+              26.15772
+            ],
+            [
+              85.90664,
+              26.1578
+            ],
+            [
+              85.90656,
+              26.15375
+            ],
+            [
+              85.90388,
+              26.15399
+            ],
+            [
+              85.90401,
+              26.15772
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dighi Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/738304337",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738304337",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90384,
+              26.15146
+            ],
+            [
+              85.90556,
+              26.15204
+            ],
+            [
+              85.90715,
+              26.1512
+            ],
+            [
+              85.90665,
+              26.14568
+            ],
+            [
+              85.90396,
+              26.14583
+            ],
+            [
+              85.90384,
+              26.15146
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "small lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/738328579",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738328579",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90097,
+              26.15536
+            ],
+            [
+              85.90158,
+              26.15477
+            ],
+            [
+              85.90095,
+              26.1548
+            ],
+            [
+              85.90097,
+              26.15536
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "small lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/738328590",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738328590",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.89359,
+              26.15005
+            ],
+            [
+              85.89369,
+              26.15014
+            ],
+            [
+              85.89399,
+              26.15022
+            ],
+            [
+              85.8941,
+              26.15003
+            ],
+            [
+              85.89414,
+              26.14983
+            ],
+            [
+              85.89404,
+              26.14976
+            ],
+            [
+              85.89368,
+              26.14976
+            ],
+            [
+              85.8936,
+              26.14989
+            ],
+            [
+              85.89359,
+              26.15005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "gangasagar lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/738328592",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738328592",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.89656,
+              26.14788
+            ],
+            [
+              85.89756,
+              26.14772
+            ],
+            [
+              85.89735,
+              26.14606
+            ],
+            [
+              85.89629,
+              26.14643
+            ],
+            [
+              85.89656,
+              26.14788
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mitthu Thakur Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/738351607",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738351607",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90917,
+              26.16957
+            ],
+            [
+              85.90971,
+              26.16959
+            ],
+            [
+              85.90977,
+              26.16883
+            ],
+            [
+              85.90918,
+              26.16882
+            ],
+            [
+              85.90917,
+              26.16957
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ganga Sagar Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/738586927",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/738586927",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90387,
+              26.14325
+            ],
+            [
+              85.90636,
+              26.14352
+            ],
+            [
+              85.90708,
+              26.14275
+            ],
+            [
+              85.90719,
+              26.13958
+            ],
+            [
+              85.90633,
+              26.13829
+            ],
+            [
+              85.90407,
+              26.13868
+            ],
+            [
+              85.90387,
+              26.14325
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Badh Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/748636282",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/748636282",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.94912,
+              26.26595
+            ],
+            [
+              85.94851,
+              26.2661
+            ],
+            [
+              85.94814,
+              26.26211
+            ],
+            [
+              85.94975,
+              26.26135
+            ],
+            [
+              85.95123,
+              26.26145
+            ],
+            [
+              85.95169,
+              26.26567
+            ],
+            [
+              85.94912,
+              26.26595
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "small pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/765671791",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/765671791",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.89273,
+              26.17032
+            ],
+            [
+              85.89194,
+              26.17038
+            ],
+            [
+              85.89209,
+              26.17097
+            ],
+            [
+              85.89273,
+              26.17092
+            ],
+            [
+              85.89273,
+              26.17032
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "small pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/765940047",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/765940047",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.89505,
+              26.18627
+            ],
+            [
+              85.89435,
+              26.18622
+            ],
+            [
+              85.89438,
+              26.18529
+            ],
+            [
+              85.89541,
+              26.18562
+            ],
+            [
+              85.89505,
+              26.18627
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sundari Ghat",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/773559680",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/773559680",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.04928,
+              26.75827
+            ],
+            [
+              84.04894,
+              26.75772
+            ],
+            [
+              84.05288,
+              26.75692
+            ],
+            [
+              84.05282,
+              26.75755
+            ],
+            [
+              84.04928,
+              26.75827
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "small pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/787291179",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/787291179",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.90198,
+              26.09958
+            ],
+            [
+              85.9016,
+              26.09865
+            ],
+            [
+              85.90238,
+              26.09859
+            ],
+            [
+              85.90198,
+              26.09958
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "LAKE",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/814089499",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/814089499",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.15972,
+              26.11726
+            ],
+            [
+              86.16055,
+              26.11741
+            ],
+            [
+              86.16052,
+              26.11656
+            ],
+            [
+              86.15972,
+              26.11726
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Collectorate Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/832337788",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/832337788",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.66118,
+              25.56279
+            ],
+            [
+              84.66272,
+              25.56269
+            ],
+            [
+              84.66244,
+              25.5611
+            ],
+            [
+              84.66111,
+              25.56111
+            ],
+            [
+              84.66118,
+              25.56279
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kachchi Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/955130298",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/955130298",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.11868,
+              25.59197
+            ],
+            [
+              85.11925,
+              25.59235
+            ],
+            [
+              85.11983,
+              25.59161
+            ],
+            [
+              85.11925,
+              25.59125
+            ],
+            [
+              85.11868,
+              25.59197
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/960726704",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/960726704",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.20689,
+              25.59741
+            ],
+            [
+              85.20417,
+              25.59687
+            ],
+            [
+              85.20538,
+              25.59584
+            ],
+            [
+              85.20505,
+              25.5966
+            ],
+            [
+              85.20689,
+              25.59741
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ranipur Talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/960726705",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/960726705",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.22141,
+              25.58942
+            ],
+            [
+              85.21983,
+              25.58669
+            ],
+            [
+              85.22087,
+              25.58542
+            ],
+            [
+              85.22295,
+              25.5871
+            ],
+            [
+              85.22141,
+              25.58942
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Irki talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/963561376",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/963561376",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.01256,
+              24.92455
+            ],
+            [
+              85.0127,
+              24.92454
+            ],
+            [
+              85.01269,
+              24.92443
+            ],
+            [
+              85.01268,
+              24.92432
+            ],
+            [
+              85.01258,
+              24.92434
+            ],
+            [
+              85.01252,
+              24.9244
+            ],
+            [
+              85.01254,
+              24.92449
+            ],
+            [
+              85.01256,
+              24.92455
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Irki pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/963561377",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/963561377",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.01186,
+              24.92345
+            ],
+            [
+              85.01202,
+              24.92345
+            ],
+            [
+              85.01219,
+              24.92341
+            ],
+            [
+              85.01228,
+              24.92326
+            ],
+            [
+              85.01228,
+              24.92313
+            ],
+            [
+              85.01208,
+              24.92312
+            ],
+            [
+              85.01204,
+              24.92304
+            ],
+            [
+              85.01185,
+              24.92309
+            ],
+            [
+              85.01176,
+              24.92312
+            ],
+            [
+              85.01178,
+              24.92333
+            ],
+            [
+              85.01186,
+              24.92345
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "IOC Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/964082162",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/964082162",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.11531,
+              25.41906
+            ],
+            [
+              86.11502,
+              25.41843
+            ],
+            [
+              86.11613,
+              25.418
+            ],
+            [
+              86.11639,
+              25.41867
+            ],
+            [
+              86.11531,
+              25.41906
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chath Pokhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1001921401",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1001921401",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.81373,
+              25.63842
+            ],
+            [
+              83.81337,
+              25.63852
+            ],
+            [
+              83.81323,
+              25.63817
+            ],
+            [
+              83.81367,
+              25.63802
+            ],
+            [
+              83.81373,
+              25.63842
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dhupsagar Pokhara",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1171971429",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1171971429",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.04962,
+              26.80435
+            ],
+            [
+              84.04868,
+              26.80227
+            ],
+            [
+              84.0504,
+              26.80164
+            ],
+            [
+              84.05119,
+              26.80382
+            ],
+            [
+              84.04962,
+              26.80435
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Taal",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/1172960701",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1172960701",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.68452,
+              25.05857
+            ],
+            [
+              83.68427,
+              25.05754
+            ],
+            [
+              83.68479,
+              25.05746
+            ],
+            [
+              83.68513,
+              25.05833
+            ],
+            [
+              83.68452,
+              25.05857
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pokhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/1172960702",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1172960702",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.68192,
+              25.06002
+            ],
+            [
+              83.68197,
+              25.06001
+            ],
+            [
+              83.68202,
+              25.06
+            ],
+            [
+              83.68207,
+              25.05999
+            ],
+            [
+              83.6821,
+              25.05999
+            ],
+            [
+              83.68215,
+              25.05998
+            ],
+            [
+              83.68218,
+              25.05998
+            ],
+            [
+              83.68222,
+              25.05997
+            ],
+            [
+              83.68225,
+              25.05997
+            ],
+            [
+              83.68235,
+              25.05996
+            ],
+            [
+              83.68239,
+              25.05994
+            ],
+            [
+              83.68239,
+              25.0599
+            ],
+            [
+              83.68239,
+              25.05982
+            ],
+            [
+              83.68239,
+              25.05977
+            ],
+            [
+              83.68238,
+              25.05972
+            ],
+            [
+              83.68235,
+              25.05965
+            ],
+            [
+              83.6823,
+              25.05961
+            ],
+            [
+              83.68224,
+              25.05959
+            ],
+            [
+              83.68217,
+              25.05958
+            ],
+            [
+              83.68211,
+              25.05957
+            ],
+            [
+              83.68205,
+              25.05957
+            ],
+            [
+              83.68199,
+              25.05956
+            ],
+            [
+              83.68195,
+              25.05957
+            ],
+            [
+              83.68191,
+              25.05958
+            ],
+            [
+              83.68187,
+              25.05961
+            ],
+            [
+              83.68188,
+              25.05967
+            ],
+            [
+              83.68187,
+              25.05972
+            ],
+            [
+              83.68187,
+              25.05977
+            ],
+            [
+              83.68187,
+              25.05983
+            ],
+            [
+              83.68188,
+              25.05989
+            ],
+            [
+              83.68188,
+              25.05993
+            ],
+            [
+              83.68189,
+              25.05997
+            ],
+            [
+              83.68192,
+              25.06002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Taal",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "basin",
+        "landuse": null,
+        "osm_id": "way/1173090781",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1173090781",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.68422,
+              25.05755
+            ],
+            [
+              83.68412,
+              25.05754
+            ],
+            [
+              83.68399,
+              25.05754
+            ],
+            [
+              83.68389,
+              25.05754
+            ],
+            [
+              83.68387,
+              25.05764
+            ],
+            [
+              83.68386,
+              25.05778
+            ],
+            [
+              83.68385,
+              25.05789
+            ],
+            [
+              83.68384,
+              25.05799
+            ],
+            [
+              83.68386,
+              25.05811
+            ],
+            [
+              83.68384,
+              25.05829
+            ],
+            [
+              83.68386,
+              25.05837
+            ],
+            [
+              83.6839,
+              25.05844
+            ],
+            [
+              83.68396,
+              25.05851
+            ],
+            [
+              83.68403,
+              25.05856
+            ],
+            [
+              83.68415,
+              25.05855
+            ],
+            [
+              83.68426,
+              25.05855
+            ],
+            [
+              83.68435,
+              25.05853
+            ],
+            [
+              83.68444,
+              25.05852
+            ],
+            [
+              83.68444,
+              25.05842
+            ],
+            [
+              83.6844,
+              25.05832
+            ],
+            [
+              83.68438,
+              25.05824
+            ],
+            [
+              83.68436,
+              25.05811
+            ],
+            [
+              83.68432,
+              25.05796
+            ],
+            [
+              83.6843,
+              25.05786
+            ],
+            [
+              83.68426,
+              25.0577
+            ],
+            [
+              83.68425,
+              25.05765
+            ],
+            [
+              83.68422,
+              25.05755
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dhuria Emiliya Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "water",
+        "landuse": null,
+        "osm_id": "way/1173245765",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1173245765",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.19179,
+              26.71603
+            ],
+            [
+              84.19172,
+              26.71599
+            ],
+            [
+              84.19161,
+              26.71572
+            ],
+            [
+              84.19164,
+              26.71567
+            ],
+            [
+              84.19179,
+              26.71565
+            ],
+            [
+              84.1921,
+              26.71554
+            ],
+            [
+              84.19215,
+              26.71556
+            ],
+            [
+              84.19225,
+              26.71583
+            ],
+            [
+              84.19225,
+              26.71589
+            ],
+            [
+              84.19179,
+              26.71603
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Seetaram Sarovar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1175924470",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1175924470",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.68378,
+              25.06102
+            ],
+            [
+              83.68406,
+              25.0605
+            ],
+            [
+              83.68347,
+              25.06049
+            ],
+            [
+              83.68378,
+              25.06102
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Common Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1180011836",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1180011836",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.53818,
+              25.2066
+            ],
+            [
+              85.53821,
+              25.20588
+            ],
+            [
+              85.5388,
+              25.20584
+            ],
+            [
+              85.53887,
+              25.20648
+            ],
+            [
+              85.53818,
+              25.2066
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dhaneshwar ghat pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1180051998",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1180051998",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.52162,
+              25.20104
+            ],
+            [
+              85.52158,
+              25.20063
+            ],
+            [
+              85.52206,
+              25.20062
+            ],
+            [
+              85.52211,
+              25.20107
+            ],
+            [
+              85.52162,
+              25.20104
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pond of Bangra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1246249478",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1246249478",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.82516,
+              25.86145
+            ],
+            [
+              84.82513,
+              25.86143
+            ],
+            [
+              84.82508,
+              25.86133
+            ],
+            [
+              84.82507,
+              25.86123
+            ],
+            [
+              84.82513,
+              25.86118
+            ],
+            [
+              84.82518,
+              25.86116
+            ],
+            [
+              84.82523,
+              25.86114
+            ],
+            [
+              84.82525,
+              25.86114
+            ],
+            [
+              84.82528,
+              25.86114
+            ],
+            [
+              84.82531,
+              25.86117
+            ],
+            [
+              84.82532,
+              25.8612
+            ],
+            [
+              84.82534,
+              25.86125
+            ],
+            [
+              84.82535,
+              25.86128
+            ],
+            [
+              84.82537,
+              25.86132
+            ],
+            [
+              84.82537,
+              25.86137
+            ],
+            [
+              84.82537,
+              25.86139
+            ],
+            [
+              84.82533,
+              25.86141
+            ],
+            [
+              84.8253,
+              25.86142
+            ],
+            [
+              84.82525,
+              25.86143
+            ],
+            [
+              84.82521,
+              25.86145
+            ],
+            [
+              84.82516,
+              25.86145
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1257169127",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1257169127",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.20522,
+              26.24981
+            ],
+            [
+              86.20604,
+              26.24973
+            ],
+            [
+              86.20633,
+              26.24825
+            ],
+            [
+              86.20509,
+              26.24824
+            ],
+            [
+              86.20522,
+              26.24981
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vimal Devi Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1257169656",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1257169656",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.20392,
+              26.24181
+            ],
+            [
+              86.20405,
+              26.24188
+            ],
+            [
+              86.20411,
+              26.24189
+            ],
+            [
+              86.20415,
+              26.2417
+            ],
+            [
+              86.20422,
+              26.24156
+            ],
+            [
+              86.20412,
+              26.24119
+            ],
+            [
+              86.20397,
+              26.24088
+            ],
+            [
+              86.20368,
+              26.24077
+            ],
+            [
+              86.20346,
+              26.24095
+            ],
+            [
+              86.20348,
+              26.24125
+            ],
+            [
+              86.20359,
+              26.24144
+            ],
+            [
+              86.2038,
+              26.24169
+            ],
+            [
+              86.20392,
+              26.24181
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "old Naulagarh pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1258405650",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1258405650",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.05563,
+              25.56131
+            ],
+            [
+              86.0542,
+              25.56083
+            ],
+            [
+              86.05397,
+              25.56005
+            ],
+            [
+              86.05626,
+              25.56002
+            ],
+            [
+              86.05563,
+              25.56131
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "pokar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1262283609",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1262283609",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.7895,
+              26.8773
+            ],
+            [
+              84.78936,
+              26.87661
+            ],
+            [
+              84.79015,
+              26.87649
+            ],
+            [
+              84.79024,
+              26.87721
+            ],
+            [
+              84.7895,
+              26.8773
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "talab",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1262284052",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1262284052",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.79037,
+              26.87759
+            ],
+            [
+              84.79024,
+              26.87671
+            ],
+            [
+              84.79048,
+              26.8767
+            ],
+            [
+              84.79065,
+              26.87758
+            ],
+            [
+              84.79037,
+              26.87759
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "water reservoir",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1262300080",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1262300080",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.79616,
+              26.87597
+            ],
+            [
+              84.79608,
+              26.8754
+            ],
+            [
+              84.79687,
+              26.87524
+            ],
+            [
+              84.79738,
+              26.87573
+            ],
+            [
+              84.79616,
+              26.87597
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "heart lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/1262314038",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1262314038",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.79835,
+              26.87971
+            ],
+            [
+              84.79825,
+              26.87935
+            ],
+            [
+              84.79826,
+              26.8793
+            ],
+            [
+              84.79829,
+              26.87926
+            ],
+            [
+              84.79835,
+              26.87925
+            ],
+            [
+              84.79847,
+              26.87924
+            ],
+            [
+              84.79855,
+              26.87932
+            ],
+            [
+              84.79862,
+              26.87941
+            ],
+            [
+              84.79872,
+              26.87949
+            ],
+            [
+              84.79873,
+              26.87959
+            ],
+            [
+              84.7987,
+              26.87965
+            ],
+            [
+              84.79843,
+              26.87974
+            ],
+            [
+              84.79838,
+              26.87972
+            ],
+            [
+              84.79835,
+              26.87971
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pokhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1285495104",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1285495104",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.43686,
+              25.59515
+            ],
+            [
+              84.43782,
+              25.5947
+            ],
+            [
+              84.43835,
+              25.59554
+            ],
+            [
+              84.43739,
+              25.59603
+            ],
+            [
+              84.43686,
+              25.59515
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "tilaiya pokhra",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360297978",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360297978",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.36645,
+              24.75885
+            ],
+            [
+              84.36667,
+              24.75878
+            ],
+            [
+              84.36683,
+              24.75872
+            ],
+            [
+              84.36683,
+              24.75857
+            ],
+            [
+              84.36679,
+              24.75845
+            ],
+            [
+              84.36681,
+              24.75835
+            ],
+            [
+              84.36677,
+              24.75824
+            ],
+            [
+              84.36662,
+              24.75816
+            ],
+            [
+              84.36654,
+              24.75811
+            ],
+            [
+              84.36642,
+              24.75819
+            ],
+            [
+              84.36642,
+              24.7583
+            ],
+            [
+              84.36634,
+              24.75834
+            ],
+            [
+              84.36624,
+              24.75839
+            ],
+            [
+              84.3662,
+              24.75844
+            ],
+            [
+              84.36645,
+              24.75885
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jamalpur Lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/1360353902",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360353902",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.49506,
+              25.31616
+            ],
+            [
+              86.49432,
+              25.314
+            ],
+            [
+              86.49609,
+              25.31352
+            ],
+            [
+              86.49682,
+              25.31566
+            ],
+            [
+              86.49506,
+              25.31616
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jamalpur Lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/1360353906",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360353906",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.50362,
+              25.31148
+            ],
+            [
+              86.5028,
+              25.30871
+            ],
+            [
+              86.50777,
+              25.31087
+            ],
+            [
+              86.50585,
+              25.31196
+            ],
+            [
+              86.5048,
+              25.31129
+            ],
+            [
+              86.50362,
+              25.31148
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KALI POKHAIR",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360398729",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360398729",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.52223,
+              25.83505
+            ],
+            [
+              86.52168,
+              25.83447
+            ],
+            [
+              86.52233,
+              25.8343
+            ],
+            [
+              86.52223,
+              25.83505
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mandir Par ka Pokhair",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360540408",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360540408",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.52338,
+              25.83223
+            ],
+            [
+              86.52321,
+              25.83212
+            ],
+            [
+              86.52312,
+              25.83196
+            ],
+            [
+              86.52309,
+              25.83174
+            ],
+            [
+              86.52326,
+              25.83157
+            ],
+            [
+              86.52352,
+              25.83157
+            ],
+            [
+              86.52375,
+              25.83172
+            ],
+            [
+              86.52372,
+              25.83197
+            ],
+            [
+              86.52338,
+              25.83223
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MANTORI POKHAIR",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360632208",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360632208",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.51831,
+              25.83025
+            ],
+            [
+              86.51812,
+              25.82958
+            ],
+            [
+              86.51877,
+              25.8296
+            ],
+            [
+              86.51831,
+              25.83025
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Water Filter",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "reservoir",
+        "landuse": null,
+        "osm_id": "way/1360660749",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360660749",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.50467,
+              25.30907
+            ],
+            [
+              86.50493,
+              25.30862
+            ],
+            [
+              86.50588,
+              25.30929
+            ],
+            [
+              86.50467,
+              25.30907
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ramnagar Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360663289",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360663289",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.49834,
+              25.33309
+            ],
+            [
+              86.49871,
+              25.33299
+            ],
+            [
+              86.49863,
+              25.33259
+            ],
+            [
+              86.49825,
+              25.33266
+            ],
+            [
+              86.49834,
+              25.33309
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CHATTHI POKHAIR",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360671717",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360671717",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.51661,
+              25.83052
+            ],
+            [
+              86.51652,
+              25.83008
+            ],
+            [
+              86.51707,
+              25.83003
+            ],
+            [
+              86.5171,
+              25.83051
+            ],
+            [
+              86.51661,
+              25.83052
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "B R B College Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1360687136",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1360687136",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.77396,
+              25.85091
+            ],
+            [
+              85.77452,
+              25.85074
+            ],
+            [
+              85.77466,
+              25.85126
+            ],
+            [
+              85.77411,
+              25.85144
+            ],
+            [
+              85.77396,
+              25.85091
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shilpi Cinema Pokhra",
+        "name_hi": "शिल्पी सिनेमा पोखरा",
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1391296643",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1391296643",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.74783,
+              25.7827
+            ],
+            [
+              84.74799,
+              25.78332
+            ],
+            [
+              84.74739,
+              25.78339
+            ],
+            [
+              84.74783,
+              25.7827
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mohi Pokhar",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1416890497",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1416890497",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.92172,
+              26.14278
+            ],
+            [
+              85.9217,
+              26.14351
+            ],
+            [
+              85.92288,
+              26.14416
+            ],
+            [
+              85.92316,
+              26.14359
+            ],
+            [
+              85.92471,
+              26.14398
+            ],
+            [
+              85.92365,
+              26.14245
+            ],
+            [
+              85.92172,
+              26.14278
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Line Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "water",
+        "landuse": null,
+        "osm_id": "way/1424102558",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1424102558",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.98758,
+              24.77747
+            ],
+            [
+              84.98751,
+              24.77699
+            ],
+            [
+              84.99029,
+              24.77679
+            ],
+            [
+              84.98758,
+              24.77747
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chambal Lake",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "lake",
+        "landuse": null,
+        "osm_id": "way/1430540282",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1430540282",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.02787,
+              24.81698
+            ],
+            [
+              85.02791,
+              24.81686
+            ],
+            [
+              85.02788,
+              24.81684
+            ],
+            [
+              85.0278,
+              24.81669
+            ],
+            [
+              85.02801,
+              24.81661
+            ],
+            [
+              85.02808,
+              24.81665
+            ],
+            [
+              85.02817,
+              24.81668
+            ],
+            [
+              85.02823,
+              24.81674
+            ],
+            [
+              85.02822,
+              24.81683
+            ],
+            [
+              85.02815,
+              24.81691
+            ],
+            [
+              85.02805,
+              24.81694
+            ],
+            [
+              85.02797,
+              24.81701
+            ],
+            [
+              85.02794,
+              24.81702
+            ],
+            [
+              85.02787,
+              24.81698
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ramnath Pond",
+        "name_hi": null,
+        "name_en": null,
+        "natural": "water",
+        "water": "pond",
+        "landuse": null,
+        "osm_id": "way/1479114689",
+        "source": "OpenStreetMap",
+        "source_url": "https://www.openstreetmap.org/way/1479114689",
+        "wikidata": null,
+        "wikipedia": null
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.03388,
+              24.74744
+            ],
+            [
+              84.03408,
+              24.74734
+            ],
+            [
+              84.03403,
+              24.74726
+            ],
+            [
+              84.03383,
+              24.74736
+            ],
+            [
+              84.03388,
+              24.74744
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

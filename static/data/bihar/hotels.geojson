@@ -1,0 +1,263 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "name": "Bihar Hotels & Lodging",
+    "source": "HiddenYatra Database (nearby_services)",
+    "total_features": 12,
+    "timestamp": "2026-08-16T18:36:00Z"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 51,
+        "name": "Hotel Maurya Patna",
+        "district_id": 1,
+        "district_name": "Patna",
+        "district_slug": "patna",
+        "address": "Fraser Road, Gandhi Maidan, Patna",
+        "phone": "0612-2203000",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.139,
+          25.6125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 52,
+        "name": "Lemon Tree Premier Patna",
+        "district_id": 1,
+        "district_name": "Patna",
+        "district_slug": "patna",
+        "address": "Exhibition Road, Patna",
+        "phone": "0612-7100100",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.141,
+          25.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 53,
+        "name": "Welcomhotel by ITC Patna",
+        "district_id": 1,
+        "district_name": "Patna",
+        "district_slug": "patna",
+        "address": "Bailey Road, Raja Bazar, Patna",
+        "phone": "0612-3500500",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.088,
+          25.6095
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 54,
+        "name": "Hotel Patliputra Ashok",
+        "district_id": 1,
+        "district_name": "Patna",
+        "district_slug": "patna",
+        "address": "Beer Chand Patel Path, Patna",
+        "phone": "0612-2226270",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.128,
+          25.608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 77,
+        "name": "Hotel Bodhgaya Regency",
+        "district_id": 2,
+        "district_name": "Gaya",
+        "district_slug": "gaya",
+        "address": "Near Japanese Temple, Bodh Gaya",
+        "phone": "0631-2300400",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.9855,
+          24.6972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 78,
+        "name": "Hyatt Place Bodh Gaya",
+        "district_id": 2,
+        "district_name": "Gaya",
+        "district_slug": "gaya",
+        "address": "Sujata Bypass Road, Bodh Gaya",
+        "phone": "0631-2300500",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.983,
+          24.694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 79,
+        "name": "Royal Residency Bodh Gaya",
+        "district_id": 2,
+        "district_name": "Gaya",
+        "district_slug": "gaya",
+        "address": "Dumburi Road, Bodh Gaya",
+        "phone": "0631-2300600",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.984,
+          24.6985
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 80,
+        "name": "Hotel Taj Darbar Bodh Gaya",
+        "district_id": 2,
+        "district_name": "Gaya",
+        "district_slug": "gaya",
+        "address": "Near Mahabodhi Temple, Bodh Gaya",
+        "phone": "0631-2300700",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.99,
+          24.6955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "name": "Hotel Rajhans Jamui",
+        "district_id": 4,
+        "district_name": "Jamui",
+        "district_slug": "jamui",
+        "address": "Near Collectorate, Jamui Main Road",
+        "phone": "06345-223344",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.2242,
+          24.9212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 24,
+        "name": "Hotel Yashodhara Jamui",
+        "district_id": 4,
+        "district_name": "Jamui",
+        "district_slug": "jamui",
+        "address": "Station Road, Jamui",
+        "phone": "06345-224455",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.2238,
+          24.9205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "name": "Jhajha Retreat Hotel",
+        "district_id": 4,
+        "district_name": "Jamui",
+        "district_slug": "jamui",
+        "address": "Main Road, Jhajha, Jamui",
+        "phone": "06349-225566",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.383,
+          24.773
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "name": "Simultala Holiday Inn",
+        "district_id": 4,
+        "district_name": "Jamui",
+        "district_slug": "jamui",
+        "address": "Hill Top, Simultala, Jamui",
+        "phone": "06349-226677",
+        "source": "HiddenYatra",
+        "source_table": "nearby_services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.543,
+          24.714
+        ]
+      }
+    }
+  ]
+}
