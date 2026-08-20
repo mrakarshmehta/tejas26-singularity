@@ -846,3 +846,23 @@ def host_cancel_request(req_id):
         flash('Reservation has been cancelled and dates have been freed.', 'info')
 
     return redirect(request.referrer or url_for('host.host_requests'))
+
+
+@host_bp.route('/stays/api/calculate-price', methods=['POST'])
+def api_calculate_stay_price():
+    """Calculate stay quote based on listing, dates, and guest count."""
+    data = request.get_json(silent=True) or request.form
+    listing_id = data.get('listing_id')
+    check_in = data.get('check_in')
+    check_out = data.get('check_out')
+    guests = data.get('guests', 1)
+
+    from models.hosts import validate_stay_dates, calculate_stay_pricing, get_listing_by_id
+    is_valid, err, nights = validate_stay_dates(check_in, check_out)
+    if not is_valid:
+        return jsonify({'status': 'error', 'message': err}), 400
+
+    listing = get_listing_by_id(listing_id)
+    price_night = listing.get('price_per_night', 1200) if listing else 1200
+    quote = calculate_stay_pricing(price_night, nights, guests=guests)
+    return jsonify({'status': 'success', 'quote': quote})
