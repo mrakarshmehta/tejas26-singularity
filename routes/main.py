@@ -452,3 +452,33 @@ def dish_detail(slug):
     if not dish:
         abort(404)
     return render_template('dish_detail.html', dish=dish)
+
+@main_bp.route('/wildlife')
+def wildlife_directory():
+    """Explore Bihar's national parks, tiger reserves, dolphin sanctuaries, and bird wetlands."""
+    from models.wildlife import get_all_sanctuaries, get_sanctuaries_by_district, get_safari_guidelines
+    district = request.args.get('district')
+
+    if district:
+        sanctuaries = get_sanctuaries_by_district(district)
+    else:
+        sanctuaries = get_all_sanctuaries()
+
+    guidelines = get_safari_guidelines()
+
+    return render_template(
+        'wildlife.html',
+        sanctuaries=sanctuaries,
+        guidelines=guidelines,
+        selected_district=district or 'all'
+    )
+
+
+@main_bp.route('/wildlife/<slug>')
+def wildlife_detail(slug):
+    """View sanctuary wildlife profile, safari booking guide, and flora/fauna checklists."""
+    from models.wildlife import get_sanctuary_by_slug
+    sanctuary = get_sanctuary_by_slug(slug)
+    if not sanctuary:
+        abort(404)
+    return render_template('wildlife_detail.html', sanctuary=sanctuary)
