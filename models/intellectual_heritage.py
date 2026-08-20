@@ -71,3 +71,67 @@ ANCIENT_SCHOLARS_DB = [
         "biography": "Court poet of King Shiva Simha of Mithila. Legend holds that Lord Shiva was so captivated by Vidyapati's devotional verses that He descended to Earth as the servant 'Ugna' to serve the poet."
     }
 ]
+
+ANCIENT_UNIVERSITIES_DB = [
+    {
+        "id": "univ-nalanda-mahavihara",
+        "slug": "nalanda-monastic-university",
+        "name": "Nalanda Mahavihara & Dharmaganja Library",
+        "district": "Nalanda",
+        "founded_era": "Gupta Empire (5th Century CE by King Kumaragupta I)",
+        "peak_capacity": "10,000 monks & students, 2,000 faculty professors",
+        "famous_library": "Dharmaganja ('Mart of Religion') housing nine-story library towers: Ratnasagara, Ratnodadhi, and Ratnaranjaka",
+        "curriculum": "Grammar, Logic, Medicine, Astronomy, Metaphysics, Sankhya, Mahayana Buddhism",
+        "international_alumni": ["Xuanzang (China)", "Yijing (China)", "Padmasambhava (Guru Rinpoche / Tibet)", "Aryadeva (Sri Lanka)"]
+    },
+    {
+        "id": "univ-vikramashila-mahavihara",
+        "slug": "vikramashila-tantric-university",
+        "name": "Vikramashila Mahavihara",
+        "district": "Bhagalpur (Antichak)",
+        "founded_era": "Pala Empire (8th Century CE by Emperor Dharmapala)",
+        "peak_capacity": "3,000 scholar monks overseen by 6 Gatekeeper Scholars (Dvara-Panditas)",
+        "famous_library": "Extensive palm-leaf & birch-bark manuscript repository of Vajrayana tantras",
+        "curriculum": "Vajrayana Buddhism, Tantra, Logic, Metaphysics, Lexicography",
+        "international_alumni": ["Atisha Dipankara Srijnana (Re-established Buddhism in Tibet)", "Ratnakarashanti", "Abhayakaragupta"]
+    },
+    {
+        "id": "univ-telhara-monastery",
+        "slug": "telhara-monastic-complex",
+        "name": "Telhara Mahavihara Excavations",
+        "district": "Nalanda (Ekangarsarai)",
+        "founded_era": "Kushan to Gupta Period (1st Century BCE - 11th Century CE)",
+        "peak_capacity": "1,000 resident Mahayana monks",
+        "famous_library": "Terracotta seal archive and bronze casting ateliers",
+        "curriculum": "Theravada & Mahayana Buddhist doctrine, Sanskrit logic",
+        "international_alumni": ["Mentioned extensively in Xuanzang's 7th-century travelogue 'Great Tang Records'"]
+    }
+]
+
+def get_all_scholars():
+    """Return all cataloged ancient scholars and polymaths."""
+    return ANCIENT_SCHOLARS_DB
+
+def get_scholar_by_slug(slug):
+    """Retrieve scholar profile by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for sch in ANCIENT_SCHOLARS_DB:
+        if sch["slug"] == s or sch["id"] == s:
+            return sch
+    return None
+
+def get_all_ancient_universities():
+    """Return catalog of ancient monastic universities and library archives."""
+    return ANCIENT_UNIVERSITIES_DB
+
+def get_university_by_slug(slug):
+    """Retrieve university archive by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for u in ANCIENT_UNIVERSITIES_DB:
+        if u["slug"] == s or u["id"] == s:
+            return u
+    return None
