@@ -189,3 +189,28 @@ ECO_CAMPSITES_DB = [
 def get_all_eco_campsites():
     """Return verified wilderness eco-campsites and tenting grounds."""
     return ECO_CAMPSITES_DB
+
+TREK_FITNESS_LEVELS = [
+    {
+        "grade": "Easy",
+        "suitable_for": "Families, beginners, senior walkers",
+        "trail_characteristics": "Gradual gradient, paved stone walkways or short nature trails under 3 km",
+        "recommended_prep": "Comfortable walking shoes, 30 min daily walking"
+    },
+    {
+        "grade": "Moderate",
+        "suitable_for": "Regular fitness enthusiasts, active hikers",
+        "trail_characteristics": "200m - 300m elevation gain, rocky steps, 3 to 5 km trail distance",
+        "recommended_prep": "Stair climbing practice, ankle-support footwear"
+    },
+    {
+        "grade": "Challenging",
+        "suitable_for": "Experienced trekkers with endurance training",
+        "trail_characteristics": "400m+ elevation gain, full-day duration, cliff edges, rough wilderness",
+        "recommended_prep": "Cardio training, hydration backpack, trekking poles"
+    }
+]
+
+def get_trek_fitness_levels():
+    """Return trekking difficulty grading matrix and fitness preparation guidelines."""
+    return TREK_FITNESS_LEVELS
