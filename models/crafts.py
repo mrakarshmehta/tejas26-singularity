@@ -91,3 +91,65 @@ def get_craft_by_slug(slug):
         if c['slug'] == slug_clean:
             return c
     return None
+
+
+ARTISAN_CENTERS_DB = [
+    {
+        "id": 1,
+        "center_name": "Mithila Kalashilp Artisan Co-Op",
+        "craft_slug": "madhubani-mithila-painting",
+        "district": "Madhubani",
+        "location": "Jitwarpur Village",
+        "lat": 26.3540,
+        "lng": 86.0820,
+        "master_artisans_count": 45,
+        "accepts_visitors": True,
+        "contact_phone": "+91-6276-224100",
+        "experience": "Live wall mural workshops & authentic signed painting purchases direct from National Awardees."
+    },
+    {
+        "id": 2,
+        "center_name": "Anga Handloom Silk Weavers Guild",
+        "craft_slug": "bhagalpuri-tussar-silk",
+        "district": "Bhagalpur",
+        "location": "Champanagar Weavers Colony",
+        "lat": 25.2425,
+        "lng": 86.9842,
+        "master_artisans_count": 120,
+        "accepts_visitors": True,
+        "contact_phone": "+91-6412-421500",
+        "experience": "Watch live cocoon boiling, silk thread spinning, and wooden pit loom weaving."
+    },
+    {
+        "id": 3,
+        "center_name": "Mahila Vikas Sikki Grass Producers",
+        "craft_slug": "sikki-grass-craft",
+        "district": "Madhubani",
+        "location": "Ranti Village",
+        "lat": 26.3600,
+        "lng": 86.0900,
+        "master_artisans_count": 30,
+        "accepts_visitors": True,
+        "contact_phone": "+91-6276-225588",
+        "experience": "Participate in half-day grass dyeing and box weaving masterclasses."
+    }
+]
+
+
+def get_artisan_centers_for_craft(craft_slug):
+    """Return artisan centers and workshops for a given craft slug."""
+    if not craft_slug:
+        return ARTISAN_CENTERS_DB
+    slug_clean = craft_slug.strip().lower()
+    return [c for c in ARTISAN_CENTERS_DB if c['craft_slug'] == slug_clean]
+
+
+def get_crafts_by_district(district_name):
+    """Return traditional crafts originating from a given district."""
+    if not district_name:
+        return BIHAR_GI_CRAFTS
+    d_clean = district_name.strip().lower()
+    return [
+        c for c in BIHAR_GI_CRAFTS
+        if d_clean in c['origin_district'].lower() or d_clean in c['region'].lower()
+    ]
