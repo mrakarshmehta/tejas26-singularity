@@ -153,3 +153,25 @@ ARTISAN_WORKSHOPS_DB = [
 def get_all_artisan_workshops():
     """Return verified artisan craft villages and workshop visit destinations."""
     return ARTISAN_WORKSHOPS_DB
+
+GI_AUTHENTICITY_CHECKLIST = [
+    {
+        "craft_type": "Mithila / Madhubani Painting",
+        "authentic_indicator": "Hand-drawn nib double-lines filled with organic natural pigments (soot black, lampblack, Palash orange). Slight natural variations across motifs.",
+        "fake_warning_sign": "Pixelated machine digital prints on polyester with uniform synthetic chemical color fills."
+    },
+    {
+        "craft_type": "Bhagalpuri Silk",
+        "authentic_indicator": "Distinct textured coarse feel with rich natural golden-brown sheen. Carries official green Silk Mark India label with unique hologram.",
+        "fake_warning_sign": "Overly slippery, static-generating synthetic rayon/polyester sold as 'pure tussar'."
+    },
+    {
+        "craft_type": "Sikki Grass Craft",
+        "authentic_indicator": "Natural sweet hay aroma, lustrous metallic golden hue that intensifies with age. Sturdy ribbed weave.",
+        "fake_warning_sign": "Bleached plastic reeds dyed with synthetic spray paints that peel under moisture."
+    }
+]
+
+def get_authenticity_checklist():
+    """Return GI and handicraft authenticity verification checklist."""
+    return GI_AUTHENTICITY_CHECKLIST
