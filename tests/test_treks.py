@@ -71,3 +71,29 @@ class TestTreksModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestEcoCampsites(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_campsites_data(self):
+        """Verify presence of signature eco-campsites."""
+        from models.treks import get_all_eco_campsites
+        campsites = get_all_eco_campsites()
+        self.assertGreaterEqual(len(campsites), 2)
+        districts = [c['district'] for c in campsites]
+        self.assertIn('West Champaran', districts)
+        self.assertIn('Rohtas', districts)
+
+    def test_campsites_api(self):
+        """Test /api/v1/treks/campsites endpoint."""
+        res = self.client.get('/api/v1/treks/campsites')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 2)
