@@ -1222,3 +1222,14 @@ def api_get_artisan_workshops():
         'count': len(workshops),
         'workshops': workshops
     })
+
+@api_bp.route('/souvenirs/authenticity', methods=['GET'])
+def api_get_souvenir_authenticity():
+    """JSON API returning authenticity tests, hallmark verification, and counterfeit warning signs."""
+    from models.souvenirs import get_authenticity_checklist
+    checklist = get_authenticity_checklist()
+    return jsonify({
+        'status': 'success',
+        'count': len(checklist),
+        'checklist': checklist
+    })
