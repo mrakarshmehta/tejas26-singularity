@@ -1144,3 +1144,14 @@ def api_get_trek_safety():
         'count': len(guidelines),
         'guidelines': guidelines
     })
+
+@api_bp.route('/treks/campsites', methods=['GET'])
+def api_get_eco_campsites():
+    """JSON API returning verified eco-campsites, tent amenities, and permit authorities."""
+    from models.treks import get_all_eco_campsites
+    campsites = get_all_eco_campsites()
+    return jsonify({
+        'status': 'success',
+        'count': len(campsites),
+        'campsites': campsites
+    })
