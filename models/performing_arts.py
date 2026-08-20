@@ -76,3 +76,55 @@ PERFORMING_ARTS_DB = [
         "key_themes": ["Divine Blessings", "Maternal Joy", "Lineage Continuity"]
     }
 ]
+
+FOLK_INSTRUMENTS_DB = [
+    {
+        "name": "Dholak",
+        "category": "Membranophone (Double-Headed Hand Drum)",
+        "materials": "Sheesham or Mango wood shell, goat skin heads",
+        "role": "The rhythmic heartbeat of Bihar folk music, wedding songs, and Chhath geet."
+    },
+    {
+        "name": "Dhamsa",
+        "category": "Membranophone (War Kettle Drum)",
+        "materials": "Riveted iron bowl, heavy buffalo hide",
+        "role": "Produces thunderous low-frequency pulses during Chhau martial dance leaps."
+    },
+    {
+        "name": "Shehnai",
+        "category": "Aerophone (Double-Reed Oboe)",
+        "materials": "Marwar wood body, brass flare, reed mouth",
+        "role": "Immortalized by Bharat Ratna Ustad Bismillah Khan of Dumraon, Bihar; central to temple rituals and marriages."
+    },
+    {
+        "name": "Kartal & Jhal",
+        "category": "Idiophone (Brass Clappers / Cymbals)",
+        "materials": "Bell metal / Bell brass",
+        "role": "Provides high-frequency syncopated claps in devotional Bhajans and Bidesiya theater."
+    }
+]
+
+def get_all_performing_arts():
+    """Return all cataloged folk theater, dance, and music forms."""
+    return PERFORMING_ARTS_DB
+
+def get_art_by_slug(slug):
+    """Retrieve performing art by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for art in PERFORMING_ARTS_DB:
+        if art["slug"] == s or art["id"] == s:
+            return art
+    return None
+
+def get_arts_by_region(region):
+    """Filter performing arts by cultural region (e.g. Mithila, Bhojpur, Magadha)."""
+    if not region or region.lower() == 'all':
+        return PERFORMING_ARTS_DB
+    r_clean = region.lower().strip()
+    return [a for a in PERFORMING_ARTS_DB if r_clean in a["region"].lower() or "all bihar" in a["region"].lower()]
+
+def get_all_folk_instruments():
+    """Return catalog of traditional Bihar musical instruments."""
+    return FOLK_INSTRUMENTS_DB
