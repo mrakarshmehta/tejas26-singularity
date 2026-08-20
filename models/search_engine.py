@@ -1451,4 +1451,21 @@ def search_cross_domain_heritage(query, limit=12):
     except Exception:
         pass
 
+    # 10. Eco-Trails & Hill Treks
+    try:
+        from models.treks import get_all_treks
+        for t in get_all_treks():
+            if q in t.get('name', '').lower() or q in t.get('description', '').lower() or q in t.get('district', '').lower():
+                matches.append({
+                    'type': 'trek',
+                    'category_label': 'Eco-Trail & Trek',
+                    'title': t['name'],
+                    'slug': t['slug'],
+                    'url': f"/treks/{t['slug']}",
+                    'description': t.get('difficulty', '') + ' • +' + str(t.get('elevation_gain_m', 0)) + 'm Gain (' + t.get('district', '') + ')',
+                    'icon': '⛰️'
+                })
+    except Exception:
+        pass
+
     return matches[:limit]
