@@ -1014,3 +1014,64 @@ def api_get_performance_seasons():
         'count': len(seasons),
         'seasons': seasons
     })
+
+@api_bp.route('/guides', methods=['GET'])
+def api_get_guides():
+    """JSON API returning certified local tour guides and language proficiencies."""
+    from models.guides import get_all_guides, get_guides_by_district, get_guides_by_language, get_guides_by_specialization
+    district = request.args.get('district')
+    language = request.args.get('language')
+    spec = request.args.get('specialization')
+
+    if district:
+        guides = get_guides_by_district(district)
+    elif language:
+        guides = get_guides_by_language(language)
+    elif spec:
+        guides = get_guides_by_specialization(spec)
+    else:
+        guides = get_all_guides()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(guides),
+        'guides': guides
+    })
+
+
+@api_bp.route('/guides/<slug>', methods=['GET'])
+def api_get_guide_detail(slug):
+    """JSON API returning license tier, daily rate, languages, and bio for a tour guide."""
+    from models.guides import get_guide_by_slug
+    guide = get_guide_by_slug(slug)
+    if not guide:
+        return jsonify({'status': 'not_found', 'message': f'Guide not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'guide': guide
+    })
+
+
+@api_bp.route('/guides/inquire', methods=['POST'])
+def api_inquire_guide():
+    """JSON API to submit a booking inquiry to a certified tour guide."""
+    from models.guides import validate_guide_inquiry
+    data = request.get_json(silent=True) or request.form
+    name = (data.get('name') or '').strip()
+    email = (data.get('email') or '').strip()
+    phone = (data.get('phone') or '').strip()
+    guide_slug = (data.get('guide_slug') or '').strip()
+    travel_date = (data.get('travel_date') or '').strip()
+    group_size = data.get('group_size', 1)
+
+    is_valid, msg = validate_guide_inquiry(name, email, phone, guide_slug, travel_date, group_size)
+    if not is_valid:
+        return jsonify({'status': 'error', 'message': msg}), 400
+
+    inquiry_id = f'HY-GD-{abs(hash(email + guide_slug + travel_date)) % 100000:05d}'
+    return jsonify({
+        'status': 'success',
+        'message': f'Inquiry successfully forwarded to guide. Reference: {inquiry_id}',
+        'inquiry_id': inquiry_id,
+        'guide_slug': guide_slug
+    })
