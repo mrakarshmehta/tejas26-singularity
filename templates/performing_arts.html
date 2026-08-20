@@ -1,0 +1,87 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Bihar Folk Performing Arts & Traditional Music - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="arts-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #831843 0%, #500724 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #9d174d;">
+        <span style="display: inline-block; background: rgba(244, 114, 182, 0.2); color: #fbcfe8; border: 1px solid rgba(244, 114, 182, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🎭 Living Theatrical & Musical Soul of Bihar
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Bihar Folk Performing Arts</h1>
+        <p style="color: #fce7f3; font-size: 1.05rem; margin: 0; max-width: 750px;">
+            Immerse yourself in centuries of rural storytelling — from Bhikhari Thakur's poignant Bidesiya social drama and UNESCO-inscribed Chhau mask dances to midnight Domkach wedding theater and monsoon Kajari ballads.
+        </p>
+    </div>
+
+    <!-- Folk Instruments Gallery -->
+    <div style="margin-bottom: 3rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🥁</span> Traditional Musical Instruments
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+            {% for inst in instruments %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.25rem; border-left: 4px solid #db2777;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 0.25rem 0; color: var(--text-primary, #0f172a);">
+                    {{ inst.name }}
+                </h3>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #db2777; margin-bottom: 0.5rem;">
+                    {{ inst.category }}
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin: 0 0 0.5rem 0; line-height: 1.4;">
+                    {{ inst.role }}
+                </p>
+                <div style="font-size: 0.75rem; color: var(--text-muted, #475569);">
+                    <strong>Craft Materials:</strong> {{ inst.materials }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Performing Arts Grid -->
+    <div style="margin-bottom: 3.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>✨</span> Folk Dances, Theater & Ballads ({{ arts | length }})
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.75rem;">
+            {% for art in arts %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s ease;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <span style="font-size: 2.2rem;">{{ art.icon }}</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(219, 39, 119, 0.1); color: #db2777; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            {{ art.category }}
+                        </span>
+                    </div>
+
+                    <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a); line-height: 1.3;">
+                        {{ art.title }}
+                    </h3>
+                    <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0.75rem;">
+                        📍 {{ art.region }} • ✍️ {{ art.creator }}
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                        {{ art.summary }}
+                    </p>
+
+                    <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                        {% for theme in art.key_themes %}
+                        <span style="background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
+                            {{ theme }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <a href="/performing-arts/{{ art.slug }}" style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.75rem; background: #be185d; color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: background 0.2s;">
+                    <span>Explore History & Musical Lore</span> ➔
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
