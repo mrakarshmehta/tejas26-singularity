@@ -14,6 +14,7 @@ from utils import csrf_required
 import json
 
 logger = logging.getLogger(__name__)
+from models.admin_db import format_audit_log_entry
 from models.database import (
     get_all_states, get_all_places, get_place_by_id,
     create_place, update_place, update_place_extra_fields,
