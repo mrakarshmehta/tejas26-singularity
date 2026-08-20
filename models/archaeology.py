@@ -240,3 +240,56 @@ def get_coin_hoard_by_slug(slug):
         if c["slug"] == s or c["id"] == s:
             return c
     return None
+
+EPIGRAPHICAL_INSCRIPTIONS_DB = [
+    {
+        "id": "ins-ashoka-mre-sahasram",
+        "slug": "ashoka-sahasram-minor-rock-edict",
+        "title": "Emperor Ashoka Sahasram Minor Rock Edict",
+        "location": "Chandan Shahid Hill, Sasaram, Rohtas",
+        "script": "Ashokan Brahmi",
+        "language": "Magadhi Prakrit",
+        "date_issued": "c. 256 BCE",
+        "original_prakrit_excerpt": "Devanam piyasa piyadasino hevam aha...",
+        "english_translation": "Thus says the Beloved of the Gods: For more than two and a half years I was a lay follower... Let small and great exert themselves in righteousness (Dhamma).",
+        "thematic_significance": "Proclaims individual spiritual effort and universal moral ethical striving without sectarian discrimination."
+    },
+    {
+        "id": "ins-devapala-nalanda-copperplate",
+        "slug": "devapala-nalanda-copper-plate-charter",
+        "location": "Nalanda Monastery Site No. 1",
+        "title": "Devapala Nalanda International Copper-Plate Charter",
+        "script": "Siddhamatrika (Proto-Bengali-Maithili)",
+        "language": "Classical Sanskrit",
+        "date_issued": "c. 860 CE (Regnal Year 39 of King Devapala)",
+        "original_prakrit_excerpt": "Sri Suvarnadvipadhipa Maharaja Balaputradevena...",
+        "english_translation": "King Balaputradeva of Suvarnadvipa (Sumatra/Indonesia) constructed a monastery at Nalanda. At his request, King Devapala of Magadha grants five revenue villages for its upkeep and copyists of sacred texts.",
+        "thematic_significance": "Concrete epigraphical evidence of ancient maritime educational diplomacy between Bihar and Southeast Asia."
+    },
+    {
+        "id": "ins-mundeshwari-brahmi",
+        "slug": "mundeshwari-temple-inscription",
+        "location": "Mundeshwari Hill, Kaimur",
+        "title": "Mundeshwari Temple Brahmi Royal Dedication Slab",
+        "script": "Early Gupta Brahmi",
+        "language": "Sanskrit Verse",
+        "date_issued": "c. 635 CE (Harsha Era 30)",
+        "original_prakrit_excerpt": "Samvat 30 Karttika Sukla Dvitayayam...",
+        "english_translation": "Records the establishment of the shrine of Viniteshvara and Mandaleshvara by General Gomibhata during the reign of Maharaja Udayasena.",
+        "thematic_significance": "Establishes Mundeshwari as one of the oldest continuously functioning Hindu temple sanctums in India."
+    }
+]
+
+def get_all_epigraphical_inscriptions():
+    """Return all cataloged ancient royal stone and copper-plate inscriptions."""
+    return EPIGRAPHICAL_INSCRIPTIONS_DB
+
+def get_inscription_by_slug(slug):
+    """Retrieve inscription details by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for ins in EPIGRAPHICAL_INSCRIPTIONS_DB:
+        if ins["slug"] == s or ins["id"] == s:
+            return ins
+    return None
