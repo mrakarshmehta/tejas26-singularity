@@ -111,3 +111,54 @@ ECO_TREKS_DB = [
         "gear_required": ["Quick-dry apparel", "Water shoes or grippy sandals", "Waterproof drybag"]
     }
 ]
+
+TREK_SAFETY_GUIDELINES = [
+    {
+        "principle": "Leave No Trace (Pristine Eco-Trails)",
+        "protocol": "Carry back all plastic wrappers, bottles, and non-biodegradable waste. Refuse single-use plastics."
+    },
+    {
+        "principle": "Hydration & Electrolyte Management",
+        "protocol": "Carry minimum 2 liters of drinking water on hill treks. Plateau heat requires continuous hydration."
+    },
+    {
+        "principle": "Respect Wildlife & Sacred Hill Sanctuaries",
+        "protocol": "Stay on marked trails. Do not disturb wild monkeys or birds; refrain from loud acoustic noise in hermit caves."
+    },
+    {
+        "principle": "Daylight Turnaround Time",
+        "protocol": "Always initiate descents at least 90 minutes prior to sunset to ensure safe footing before darkness falls."
+    }
+]
+
+def get_all_treks():
+    """Return all cataloged eco-trails and trekking expeditions."""
+    return ECO_TREKS_DB
+
+def get_trek_by_slug(slug):
+    """Retrieve trek by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for t in ECO_TREKS_DB:
+        if t["slug"] == s or t["id"] == s:
+            return t
+    return None
+
+def get_treks_by_district(district):
+    """Filter treks by district."""
+    if not district or district.lower() == 'all':
+        return ECO_TREKS_DB
+    d_clean = district.lower().strip()
+    return [t for t in ECO_TREKS_DB if d_clean in t["district"].lower()]
+
+def get_treks_by_difficulty(diff):
+    """Filter treks by difficulty level."""
+    if not diff or diff.lower() == 'all':
+        return ECO_TREKS_DB
+    df_clean = diff.lower().strip()
+    return [t for t in ECO_TREKS_DB if df_clean in t["difficulty"].lower()]
+
+def get_trekking_safety_guidelines():
+    """Return wilderness trail safety principles."""
+    return TREK_SAFETY_GUIDELINES
