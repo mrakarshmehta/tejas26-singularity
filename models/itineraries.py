@@ -141,3 +141,50 @@ def calculate_daily_slots(total_days, pace='balanced'):
             'pace_label': config['label']
         })
     return slots
+
+
+def calculate_itinerary_budget(days=3, companion_type='solo', budget_tier='moderate'):
+    """Calculate estimated trip budget with category breakdowns (in INR)."""
+    tier_multipliers = {
+        'budget': {'stay': 800, 'food': 400, 'transport': 300, 'activities': 200},
+        'moderate': {'stay': 2200, 'food': 900, 'transport': 700, 'activities': 500},
+        'luxury': {'stay': 5500, 'food': 2000, 'transport': 1800, 'activities': 1200}
+    }
+    companion_multipliers = {
+        'solo': 1.0,
+        'couple': 1.6,
+        'family': 2.8,
+        'friends': 3.2
+    }
+
+    rates = tier_multipliers.get(budget_tier, tier_multipliers['moderate'])
+    comp_mult = companion_multipliers.get(companion_type, 1.0)
+
+    daily_stay = int(rates['stay'] * comp_mult)
+    daily_food = int(rates['food'] * comp_mult)
+    daily_trans = int(rates['transport'] * comp_mult)
+    daily_acts = int(rates['activities'] * comp_mult)
+
+    total_stay = daily_stay * max(1, days - 1)
+    total_food = daily_food * days
+    total_trans = daily_trans * days
+    total_acts = daily_acts * days
+
+    subtotal = total_stay + total_food + total_trans + total_acts
+    contingency = int(subtotal * 0.10)
+    total = subtotal + contingency
+
+    return {
+        'days': days,
+        'companion_type': companion_type,
+        'budget_tier': budget_tier,
+        'breakdown': {
+            'accommodation': total_stay,
+            'food_dining': total_food,
+            'transportation': total_trans,
+            'entry_activities': total_acts,
+            'emergency_buffer': contingency
+        },
+        'daily_average': int(total / days) if days > 0 else total,
+        'total_estimated_inr': total
+    }
