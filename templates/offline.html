@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Offline Mode — HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="offline-container" style="max-width:600px;margin:80px auto;text-align:center;padding:30px;">
+  <div style="font-size:3.5rem;margin-bottom:16px;">📡</div>
+  <h1 style="font-size:1.8rem;margin-bottom:10px;">You are currently offline</h1>
+  <p style="color:var(--text-muted);line-height:1.6;margin-bottom:24px;">
+    It looks like your internet connection was interrupted. You can still browse previously cached places and access your saved itineraries.
+  </p>
+  <div style="display:flex;justify-content:center;gap:12px;">
+    <button onclick="window.location.reload()" class="btn btn-primary" style="padding:10px 20px;border-radius:8px;">🔄 Retry Connection</button>
+    <a href="/wishlist" class="btn btn-secondary" style="padding:10px 20px;border-radius:8px;">⭐ View Saved Places</a>
+  </div>
+</div>
+{% endblock %}
