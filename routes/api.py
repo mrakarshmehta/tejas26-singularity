@@ -135,7 +135,7 @@ def api_instant_search():
     user_lat = request.args.get('lat', type=float)
     user_lng = request.args.get('lng', type=float)
 
-    results = instant_search(q, limit=limit, filters=filters,
+    results = instant_search(q, limit=limit, filters=filters, seq_id=seq_id,
                              user_lat=user_lat, user_lng=user_lng)
 
     # Determine "did you mean" — if query is a typo of top result name or district
