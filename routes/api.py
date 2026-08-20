@@ -1233,3 +1233,39 @@ def api_get_souvenir_authenticity():
         'count': len(checklist),
         'checklist': checklist
     })
+
+@api_bp.route('/scholars', methods=['GET'])
+def api_get_scholars():
+    """JSON API returning ancient philosophers, astronomers, and Sanskrit grammarians of Bihar."""
+    from models.intellectual_heritage import get_all_scholars
+    scholars = get_all_scholars()
+    return jsonify({
+        'status': 'success',
+        'count': len(scholars),
+        'scholars': scholars
+    })
+
+
+@api_bp.route('/scholars/<slug>', methods=['GET'])
+def api_get_scholar_detail(slug):
+    """JSON API returning breakthrough discoveries, treatises, and biography for a scholar."""
+    from models.intellectual_heritage import get_scholar_by_slug
+    scholar = get_scholar_by_slug(slug)
+    if not scholar:
+        return jsonify({'status': 'not_found', 'message': f'Scholar not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'scholar': scholar
+    })
+
+
+@api_bp.route('/scholars/universities', methods=['GET'])
+def api_get_ancient_universities():
+    """JSON API returning ancient monastic universities (Nalanda, Vikramashila, Telhara) and library archives."""
+    from models.intellectual_heritage import get_all_ancient_universities
+    universities = get_all_ancient_universities()
+    return jsonify({
+        'status': 'success',
+        'count': len(universities),
+        'universities': universities
+    })
