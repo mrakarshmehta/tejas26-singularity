@@ -867,3 +867,59 @@ def get_bounding_box(center_lat, center_lon, radius_km):
         'min_lon': lon - lon_change,
         'max_lon': lon + lon_change
     }
+
+
+PLACE_AUDIO_GUIDES_DB = {
+    "golghar": {
+        "title": "Golghar: The Granary of Patna",
+        "district": "Patna",
+        "duration_sec": 145,
+        "narrator": "HiddenYatra Heritage Voice",
+        "languages": {
+            "en": {
+                "label": "English",
+                "audio_url": "/static/audio/golghar_en.mp3",
+                "transcript": "Standing tall on the bank of the Ganges in Patna, Golghar was commissioned in 1786 by Captain John Garstin following the catastrophic famine of 1770. Built without pillars, its spiraling double staircase of 145 steps offers a breathtaking panoramic vista of Patna and the sacred river Ganges."
+            },
+            "hi": {
+                "label": "हिन्दी (Hindi)",
+                "audio_url": "/static/audio/golghar_hi.mp3",
+                "transcript": "पटना के गांधी मैदान के पास स्थित गोलघर 1786 में कैप्टन जॉन गार्स्टिन द्वारा बनवाया गया था। बिना किसी खंभे के बना यह विशाल अन्न भंडार अपनी अनोखी वास्तुकला और 145 सीढ़ियों के सर्पिलाकार मार्ग के लिए विश्व प्रसिद्ध है।"
+            },
+            "bho": {
+                "label": "भोजपुरी (Bhojpuri)",
+                "audio_url": "/static/audio/golghar_bho.mp3",
+                "transcript": "पटना के ऐतिहासिक गोलघर गंगा जी के तीरे बनल बा। एह में बिना कौनों खम्भा के सवा लाख टन अनाज रखे के क्षमता रहे। ऊपर से पूरा पटना शहर अउर गंगा माई के अनुपम दर्शन होला।"
+            }
+        }
+    },
+    "mahabodhi": {
+        "title": "Mahabodhi Temple: The Seat of Supreme Enlightenment",
+        "district": "Gaya",
+        "duration_sec": 180,
+        "narrator": "Monastery Heritage Archive",
+        "languages": {
+            "en": {
+                "label": "English",
+                "audio_url": "/static/audio/mahabodhi_en.mp3",
+                "transcript": "The Mahabodhi Temple at Bodh Gaya marks the exact spot where Siddhartha Gautama attained supreme enlightenment under the sacred Bodhi Tree in 534 BCE. Today a UNESCO World Heritage site, its grand 55-meter pyramid spire has inspired temple architecture across Asia."
+            },
+            "hi": {
+                "label": "हिन्दी (Hindi)",
+                "audio_url": "/static/audio/mahabodhi_hi.mp3",
+                "transcript": "बोधगया का महाबोधि मंदिर वह पावन स्थल है जहाँ 534 ईसा पूर्व भगवान बुद्ध को पवित्र बोधि वृक्ष के नीचे ज्ञान की प्राप्ति हुई थी। 55 मीटर ऊँचा यह भव्य स्तूप विश्व धरोहर स्थल है।"
+            }
+        }
+    }
+}
+
+
+def get_place_audio_guide(place_slug):
+    """Retrieve audio guide tracks and multilingual transcripts for a place."""
+    if not place_slug:
+        return None
+    slug_key = place_slug.strip().lower()
+    for key, data in PLACE_AUDIO_GUIDES_DB.items():
+        if key in slug_key or slug_key in key:
+            return data
+    return None
