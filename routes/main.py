@@ -665,3 +665,21 @@ def souvenir_detail(slug):
     if not souvenir:
         abort(404)
     return render_template('souvenir_detail.html', souvenir=souvenir)
+
+@main_bp.route('/intellectual-heritage')
+def intellectual_heritage_directory():
+    """Explore ancient polymaths, mathematicians, and monastic universities: Aryabhata, Chanakya, Nalanda, and Vidyapati."""
+    from models.intellectual_heritage import get_all_scholars, get_all_ancient_universities
+    scholars = get_all_scholars()
+    universities = get_all_ancient_universities()
+    return render_template('scholars.html', scholars=scholars, universities=universities)
+
+
+@main_bp.route('/intellectual-heritage/<slug>')
+def scholar_detail(slug):
+    """View scholar discoveries, classical treatises, and historical impact."""
+    from models.intellectual_heritage import get_scholar_by_slug
+    scholar = get_scholar_by_slug(slug)
+    if not scholar:
+        abort(404)
+    return render_template('scholar_detail.html', scholar=scholar)
