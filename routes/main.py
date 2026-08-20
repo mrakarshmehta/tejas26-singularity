@@ -634,3 +634,34 @@ def trek_detail(slug):
     if not trek:
         abort(404)
     return render_template('trek_detail.html', trek=trek)
+
+@main_bp.route('/souvenirs')
+def souvenirs_directory():
+    """Browse certified GI handicrafts: Mithila paintings, Bhagalpur silk, Sikki grass, and Tikuli art."""
+    from models.souvenirs import get_all_souvenirs, get_souvenirs_by_district, get_souvenirs_by_category
+    district = request.args.get('district')
+    cat = request.args.get('category')
+
+    if district:
+        souvenirs = get_souvenirs_by_district(district)
+    elif cat:
+        souvenirs = get_souvenirs_by_category(cat)
+    else:
+        souvenirs = get_all_souvenirs()
+
+    return render_template(
+        'souvenirs.html',
+        souvenirs=souvenirs,
+        selected_district=district or 'all',
+        selected_category=cat or 'all'
+    )
+
+
+@main_bp.route('/souvenirs/<slug>')
+def souvenir_detail(slug):
+    """View GI certification details, materials, fair-trade pricing, and artisan cluster backstories."""
+    from models.souvenirs import get_souvenir_by_slug
+    souvenir = get_souvenir_by_slug(slug)
+    if not souvenir:
+        abort(404)
+    return render_template('souvenir_detail.html', souvenir=souvenir)
