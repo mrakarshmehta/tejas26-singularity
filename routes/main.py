@@ -553,3 +553,22 @@ def district_weather_detail(slug):
     if not weather:
         abort(404)
     return render_template('weather_detail.html', weather=weather)
+
+@main_bp.route('/performing-arts')
+def performing_arts_directory():
+    """Discover Bihar's rich performing arts: Bidesiya theater, Chhau dance, Kajari, and Sohar songs."""
+    from models.performing_arts import get_all_performing_arts, get_arts_by_region, get_all_folk_instruments
+    region = request.args.get('region')
+    arts = get_arts_by_region(region) if region else get_all_performing_arts()
+    instruments = get_all_folk_instruments()
+    return render_template('performing_arts.html', arts=arts, instruments=instruments, selected_region=region or 'all')
+
+
+@main_bp.route('/performing-arts/<slug>')
+def performing_art_detail(slug):
+    """View cultural backstory, legendary creators, and key performance themes."""
+    from models.performing_arts import get_art_by_slug
+    art = get_art_by_slug(slug)
+    if not art:
+        abort(404)
+    return render_template('art_detail.html', art=art)
