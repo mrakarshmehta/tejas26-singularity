@@ -515,3 +515,56 @@ def api_get_safety_guidelines():
         'status': 'success',
         'guidelines': get_safety_guidelines()
     })
+
+@api_bp.route('/transport/hubs', methods=['GET'])
+def api_get_transport_hubs():
+    """JSON API returning airports, railway junctions, and bus terminals."""
+    from models.transport import get_all_transport_hubs
+    return jsonify({
+        'status': 'success',
+        'hubs': get_all_transport_hubs()
+    })
+
+
+@api_bp.route('/transport/routes', methods=['GET'])
+def api_get_transit_routes():
+    """JSON API returning inter-district transit times and distance matrices."""
+    from models.transport import get_interdistrict_routes
+    origin = request.args.get('origin')
+    destination = request.args.get('destination')
+    routes = get_interdistrict_routes(origin, destination)
+    return jsonify({
+        'status': 'success',
+        'count': len(routes),
+        'routes': routes
+    })
+
+
+@api_bp.route('/transport/estimate-fare', methods=['GET', 'POST'])
+def api_estimate_transport_fare():
+    """JSON API calculating estimated transit fare by vehicle type and distance."""
+    from models.transport import estimate_commute_fare
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        vehicle = data.get('vehicle_type', 'auto_reserved')
+        distance = data.get('distance_km', 5.0)
+        is_night = bool(data.get('is_night', False))
+    else:
+        vehicle = request.args.get('vehicle_type', 'auto_reserved')
+        distance = request.args.get('distance_km', 5.0)
+        is_night = request.args.get('is_night', '').lower() in ['1', 'true', 'yes']
+
+    try:
+        dist_float = float(distance)
+    except (ValueError, TypeError):
+        dist_float = 5.0
+
+    estimate = estimate_commute_fare(
+        vehicle_type=vehicle,
+        distance_km=dist_float,
+        is_night=is_night
+    )
+    return jsonify({
+        'status': 'success',
+        'fare_estimate': estimate
+    })
