@@ -1829,3 +1829,19 @@
 .itin-export-btn:hover {
   background: var(--primary, #6366f1);
 }
+
+/* Offline Network Banner */
+body.is-offline::before {
+  content: "⚠️ You are in offline mode. Some live features may be limited.";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #f59e0b;
+  color: #000;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px;
+  z-index: 99999;
+}
