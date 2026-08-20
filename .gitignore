@@ -1,29 +1,64 @@
 # Environment & Secrets
 .env
-.env.*
+*.env.local
 !.env.example
+!.env.production.example
 
 # Python
 __pycache__/
-*.py[cod]
-*.class
-*.so
-.Python
-env/
+*.pyc
+*.pyo
 venv/
 .venv/
-ENV/
 
-# Node
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Database Data, Backups & Credentials
+*.db
+*.sqlite3
+*.sql
+!scripts/migrations/*.sql
+my.ini
+mysql_data/
+mysql_data_*/
+mysql_data_BACKUP_*/
+mysql84_start_log.txt
+mysql84_stderr.log
 
-# OS & IDE
-.DS_Store
-Thumbs.db
-.idea/
+# Uploads (track verified seed place images; ignore dynamic user uploads)
+static/uploads/submissions/*
+!static/uploads/submissions/.gitkeep
+static/uploads/auth/*
+!static/uploads/auth/.gitkeep
+static/uploads/hosts/*
+!static/uploads/hosts/.gitkeep
+!static/uploads/hosts/listings/
+static/uploads/hosts/listings/*
+!static/uploads/hosts/listings/.gitkeep
+static/hero/*
+!static/hero/.gitkeep
+
+# IDE & OS
 .vscode/
+.idea/
 *.swp
 *.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Gemini & Agent Temporary Workspace Files
+.gemini/
+.agents/
+scratch/
+.tempmediaStorage/
+
+# Temp/test files
+_*.py
+!__init__.py
+!**/__init__.py
+
+# Raw DEM source files — never commit
+dem_input/
+*.hgt
