@@ -28,6 +28,7 @@ def browse_stays():
     max_price = request.args.get('max_price', type=float)
     min_guests = request.args.get('guests', type=int)
     verified_only = request.args.get('verified', '') in ('1', 'true', 'yes')
+    amenity_filter = request.args.get('amenity', '').strip() or None
     query = request.args.get('q', '').strip()
     sort = request.args.get('sort', 'newest').strip()
 
@@ -37,6 +38,7 @@ def browse_stays():
         'price_max': max_price if max_price and max_price > 0 else None,
         'min_guests': min_guests if min_guests and min_guests > 0 else None,
         'verified_only': verified_only,
+        'amenity': amenity_filter,
         'query': query if query else None,
         'sort': sort,
     }
