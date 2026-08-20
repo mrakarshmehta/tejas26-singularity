@@ -1,0 +1,91 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Wildlife Sanctuaries & Nature Reserves - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="wildlife-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #047857;">
+        <span style="display: inline-block; background: rgba(52, 211, 153, 0.2); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🐅 Protected Habitats & River Sanctuaries
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Bihar Wildlife & Nature Reserves</h1>
+        <p style="color: #a7f3d0; font-size: 1.05rem; margin: 0; max-width: 700px;">
+            Encounter the Royal Bengal Tiger in the dense Sal forests of Valmiki, witness blind Gangetic Dolphins in the holy Ganges at Vikramshila, and observe migratory flocks at Asia's largest freshwater oxbow lake.
+        </p>
+    </div>
+
+    <!-- Sanctuaries Grid -->
+    <div style="margin-bottom: 3.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🌿</span> Protected Nature Reserves ({{ sanctuaries | length }})
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.75rem;">
+            {% for s in sanctuaries %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s ease;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(5, 150, 105, 0.1); color: #059669; padding: 0.25rem 0.6rem; border-radius: 6px;">
+                            {{ s.type }}
+                        </span>
+                        {% if s.ramsar_site %}
+                        <span style="font-size: 0.75rem; font-weight: 800; background: rgba(2, 132, 199, 0.1); color: #0284c7; padding: 0.25rem 0.6rem; border-radius: 6px;">
+                            🌊 Ramsar Wetland
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a);">
+                        {{ s.name }}
+                    </h3>
+                    <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0.75rem;">
+                        📍 {{ s.district }} • 📐 {{ s.area_sq_km }} sq. km • 🗓️ {{ s.best_season }}
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                        {{ s.tagline }}
+                    </p>
+
+                    <!-- Key Wildlife Preview -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary, #1e293b); margin-bottom: 0.35rem;">
+                            Key Wildlife & Sighting:
+                        </div>
+                        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                            {% for f in s.key_fauna[:3] %}
+                            <span style="background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">
+                                {{ f }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <a href="/wildlife/{{ s.slug }}" style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.7rem; background: var(--primary, #0284c7); color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: background 0.2s;">
+                    <span>View Safari Guide & Permits</span> ➔
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Safari Guidelines & Conservation Code -->
+    <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 2rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-top: 0; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🛡️</span> Forest Safari & Conservation Guidelines
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+            {% for g in guidelines %}
+            <div style="padding: 1.25rem; background: var(--bg-subtle, #f8fafc); border-radius: 10px; border-left: 4px solid #059669;">
+                <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem; font-weight: 700; color: var(--text-primary, #0f172a);">
+                    {{ g.topic }}
+                </h4>
+                <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted, #475569); line-height: 1.5;">
+                    {{ g.guideline }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
