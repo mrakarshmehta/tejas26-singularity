@@ -308,7 +308,25 @@
         <p class="sd-guarantee">
           🔒 Requests are subject to host approval. No upfront payment required.
         </p>
-      </form>
+      
+      <!-- Stay Booking Quote & Realtime Price Breakdown -->
+      <div class="stay-price-breakdown-card" style="margin-top:20px;padding:16px;background:var(--surface, #1e293b);border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+        <h4 style="margin:0 0 10px 0;font-size:0.95rem;">📋 Estimated Stay Invoice</h4>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px;">
+          <span>Base Nightly Rate</span>
+          <span id="quote-base">₹{{ listing.price_per_night if listing else 1200 }}/night</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px;">
+          <span>Service & Platform Fee (5%)</span>
+          <span id="quote-fee">Included</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px;">
+          <span>Taxes & GST (12%)</span>
+          <span id="quote-tax">Calculated at Checkout</span>
+        </div>
+      </div>
+
+</form>
     </div>
   </div>
 </div>
