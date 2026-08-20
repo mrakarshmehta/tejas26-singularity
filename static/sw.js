@@ -1,7 +1,13 @@
-// HiddenYatra Service Worker — Basic caching for PWA
-const CACHE_NAME = 'hiddenyatra-v4';
+﻿// HiddenYatra Service Worker - Offline Caching for Regional Discovery & Traveler Safety
+const CACHE_NAME = 'hiddenyatra-v5';
 const STATIC_ASSETS = [
   '/',
+  '/offline',
+  '/safety',
+  '/transport',
+  '/circuits',
+  '/festivals',
+  '/crafts',
   '/static/css/main.min.css',
   '/static/css/components.min.css',
   '/static/css/animations.min.css',
@@ -10,7 +16,7 @@ const STATIC_ASSETS = [
   '/static/icon-512.png',
 ];
 
-// Install — cache static assets
+// Install - cache static assets & essential offline guides
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -20,7 +26,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate — clean old caches
+// Activate - clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,19 +38,34 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch — network first, fallback to cache
+// Fetch - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests
   if (event.request.method !== 'GET') return;
 
-  // Skip API requests and admin pages
   const url = new URL(event.request.url);
+  // Skip API requests and admin pages
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin/')) return;
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cached) => cached || caches.match('/offline'));
+        })
+    );
+    return;
+  }
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Cache successful responses for static assets
         if (response.ok && url.pathname.startsWith('/static/')) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -54,17 +75,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() => {
-        // Fallback to cache
         return caches.match(event.request);
       })
   );
-});
-
-// Navigation Offline Fallback
-self.addEventListener('fetch', event => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match('/offline'))
-    );
-  }
 });
