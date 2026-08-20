@@ -187,3 +187,56 @@ def get_ashokan_edicts():
 def get_epigraphy_chronology():
     """Return epigraphical and archaeological era timeline."""
     return EPIGRAPHY_CHRONOLOGY
+
+NUMISMATIC_HOARDS_DB = [
+    {
+        "id": "coin-pataliputra-punch-marked",
+        "slug": "pataliputra-silver-punch-marked-hoard",
+        "name": "Pataliputra Mauryan Imperial Silver Karshapana Hoard",
+        "period": "Mauryan Empire (4th - 3rd Century BCE)",
+        "metal": "Silver (90% Purity)",
+        "weight_standard": "32 Ratti / 3.4 Grams",
+        "mint_location": "Pataliputra Royal Mint",
+        "symbols": ["Sun (Surya)", "Six-armed symbol (Shadara Chakra)", "Hill with crescent", "Elephant", "Bull"],
+        "historical_context": "The standard imperial legal tender of ancient India under Chandragupta Maurya and Ashoka, accepted from Taxila to Bengal.",
+        "museum": "Patna Museum Coin Vault & Reserve Collection"
+    },
+    {
+        "id": "coin-gupta-gold-dinars",
+        "slug": "kumhrar-gupta-gold-dinar-hoard",
+        "name": "Gupta Archer & Ashvamedha Gold Dinar Hoard",
+        "period": "Gupta Empire (4th - 5th Century CE)",
+        "metal": "Gold (High Purity)",
+        "weight_standard": "Dinar / Suvarna Standard (7.8 - 9.2 Grams)",
+        "mint_location": "Imperial Pataliputra & Magadha Mints",
+        "symbols": ["King as Archer holding bow", "Garuda standard", "Queen Dattadevi", "Goddess Lakshmi on lotus"],
+        "historical_context": "Issued by Samudragupta and Chandragupta II 'Vikramaditya'. Celebrated worldwide as the artistic zenith of classical Indian numismatic engraving.",
+        "museum": "Bihar Museum Numismatic Gallery"
+    },
+    {
+        "id": "coin-buxar-terracotta-seals",
+        "slug": "buxar-charitravan-terracotta-hoard",
+        "name": "Buxar & Charitravan Archaic Terracotta Art & Seal Hoard",
+        "period": "Mauryan to Sunga Period (3rd - 1st Century BCE)",
+        "metal": "Terracotta & Baked Clay",
+        "weight_standard": "N/A (Figurine Plaques & Merchant Guild Tokens)",
+        "mint_location": "Ancient Karusha Guild Workshops (Buxar)",
+        "symbols": ["Elaborate coiffure Mother Goddess", "Dancing maiden with heavy armlets", "Nigama guild inscriptions"],
+        "historical_context": "Unearthed on the banks of the Ganges in Buxar, famous for distinct serpentine hairdos, applique jewelry, and maritime trading guild marks.",
+        "museum": "Buxar Heritage Gallery & Patna Museum"
+    }
+]
+
+def get_all_numismatic_hoards():
+    """Return all cataloged ancient coin hoards and terracotta guild tokens."""
+    return NUMISMATIC_HOARDS_DB
+
+def get_coin_hoard_by_slug(slug):
+    """Retrieve coin hoard by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for c in NUMISMATIC_HOARDS_DB:
+        if c["slug"] == s or c["id"] == s:
+            return c
+    return None
