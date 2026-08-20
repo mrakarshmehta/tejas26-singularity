@@ -74,8 +74,60 @@
             📖 Question Explanations & Historical Lore
         </h3>
         <div id="explanations-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+
+        <!-- Certificate Claim Section -->
+        <div id="cert-claim-box" style="margin-top: 2rem; padding: 1.5rem; background: rgba(124, 58, 237, 0.06); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 12px; text-align: center;">
+            <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #5b21b6; font-weight: 700;">
+                📜 Claim Your Official Heritage Explorer Certificate
+            </h4>
+            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: var(--text-muted, #475569);">
+                Enter your name to generate an official digital achievement credential.
+            </p>
+            <div style="display: flex; gap: 0.5rem; max-width: 450px; margin: 0 auto;">
+                <input type="text" id="cert-name" placeholder="Your Full Name" style="flex: 1; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem;">
+                <button type="button" onclick="claimCertificate()" style="padding: 0.6rem 1.2rem; background: #7c3aed; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer;">
+                    Claim Certificate
+                </button>
+            </div>
+            <div id="cert-display" style="display: none; margin-top: 1rem; padding: 1rem; background: #ffffff; border: 2px dashed #7c3aed; border-radius: 8px;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #7c3aed;">OFFICIAL DIGITAL CREDENTIAL</div>
+                <div id="cert-issued-to" style="font-size: 1.2rem; font-weight: 800; margin: 0.3rem 0; color: var(--text-primary, #0f172a);"></div>
+                <div id="cert-issued-badge" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted, #475569);"></div>
+                <div id="cert-issued-id" style="font-size: 0.75rem; color: #64748b; margin-top: 0.4rem;"></div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+function claimCertificate() {
+    var name = document.getElementById('cert-name').value;
+    if (!name || name.trim().length < 2) {
+        alert('Please enter your full name');
+        return;
+    }
+    var score = document.getElementById('res-score').textContent;
+    var total = document.getElementById('res-total').textContent;
+    var badge = document.getElementById('res-badge').textContent;
+
+    fetch('/api/v1/quiz/certificate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, score: score, total: total, badge: badge })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            var c = data.certificate;
+            document.getElementById('cert-issued-to').textContent = c.recipient_name;
+            document.getElementById('cert-issued-badge').textContent = c.badge_title + ' (' + c.score_awarded + ')';
+            document.getElementById('cert-issued-id').textContent = 'Credential ID: ' + c.certificate_id + ' • ' + c.issuer;
+            document.getElementById('cert-display').style.display = 'block';
+        }
+    })
+    .catch(function(err) { console.error('Certificate error:', err); });
+}
+</script>
 
 <script>
 function submitQuiz(e) {
