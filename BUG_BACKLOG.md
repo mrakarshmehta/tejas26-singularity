@@ -1,23 +1,18 @@
-# HiddenYatra — Bug Backlog & Edge Case Tracker
+﻿# HiddenYatra — Bug Backlog & Edge Case Tracker
 
-This document tracks low-priority edge case items, minor visual tweaks, and non-blocking backlog items for future sprints.
+This document tracks edge case items, visual polish, and future sprint enhancements.
 
 ---
 
-## 1. Edge Case & Backlog Items
+## 1. Resolved Milestone Items
 
-| Item # | Target Component | Description | Priority | Status |
-|---|---|---|---|---|
-| BACKLOG-01 | Explore Map | Map popups on ultra-small screens (<320px width) may clip popup action buttons. | LOW | RESOLVED |
-| BACKLOG-02 | Search Autocomplete | Typing fast single-character queries under high latency network conditions may result in out-of-order response renders. | LOW | RESOLVED |
-| BACKLOG-03 | User Submissions | Large image uploads (>10MB) throw client-side toast notifications but could offer a pre-upload browser image compressor. | LOW | RESOLVED |
-
-- [x] Resolved: Lack of itinerary budget estimator and offline PWA navigation fallback.
-
-
-## Milestone 4: Bihar Heritage Discovery & Cultural Enrichment (Completed)
-- [x] Thematic Cultural Circuit Navigation (Buddhist, Ganga, Mithila, Magadha, Sufi Trails)
-- [x] Multilingual Audio Narrations & Transcript Reader
-- [x] Seasonal Festival Calendar with Monthly and District Filter
-- [x] Certified GI Handicrafts Directory & Verified Artisan Guild Workshops
-- [x] Responsible Traveler Code & Eco-Heritage Digital Pledge
+| Item # | Target Component | Description | Status |
+|---|---|---|---|
+| ML-01 | Heritage Circuits | Thematic circuit trails and distance calculations | RESOLVED |
+| ML-02 | Audio Guides | Multilingual place audio narrations & transcript reader | RESOLVED |
+| ML-03 | Festival Calendar | Bihar seasonal festival directory & monthly filter | RESOLVED |
+| ML-04 | GI Handicrafts | GI-tagged crafts catalog & verified artisan centers | RESOLVED |
+| ML-05 | Eco Tourism | Responsible traveler code & digital pledge | RESOLVED |
+| ML-06 | Traveler Safety | 24/7 SOS helpline directory & trauma hospitals | RESOLVED |
+| ML-07 | Transit Mobility | Inter-district transit matrix & commute fare estimator | RESOLVED |
+| ML-08 | PWA Offline | Offline cache for safety and mobility guides | RESOLVED |

@@ -1,4 +1,29 @@
-## [v2.4.0] - 2026-08-20
+﻿# HiddenYatra — Changelog
+
+All notable changes to the HiddenYatra project are documented in this file.
+
+---
+
+## [2.5.0] — 2026-08-21 (52-Commit Milestone Release)
+
+### Added
+- **Thematic Cultural Circuits**: Complete trail navigation subsystem covering Buddhist, Jain, Ganga River, Mithila Art, Sufi, and Eco-Wildlife circuits with distance metrics and stop itineraries.
+- **Multilingual Audio Guides**: Place audio narration support with interactive audio player bar, playback rate selector, and multilingual transcripts (English, Hindi, Bhojpuri).
+- **Seasonal Festival Calendar**: Cultural celebrations calendar with monthly filter, district queries, rituals guide, and traveler tips.
+- **Certified GI Handicrafts Directory**: Bihar GI crafts catalog with artisan guild workshop directories, raw material guides, and verified cluster locations.
+- **Responsible Traveler Code & Eco-Pledge**: Sustainable tourism framework with digital pledge signing, certificate generator, and eco-heritage guardian badge.
+- **Bihar Traveler Safety Hub**: 24/7 SOS 112 quick-dial, statewide priority helplines (108, 1091, 181, 1070), district police control rooms, and trauma hospital directory.
+- **Transit & Commute Mobility Portal**: Gateway airport guides, major rail corridors (Vande Bharat lines), BSRTC bus depots, inter-district transit matrix, and live local fare estimator widget.
+- **AI Trip Planner Cultural Enrichment**: Intelligent syncing between travel month/districts and active cultural festivals & thematic trails.
+- **PWA Service Worker Offline Enhancements**: Caching for safety directory, transport guides, and circuits with offline navigation fallback.
+
+### Fixed & Tested
+- Fixed unit test indentation in 	ests/test_itinerary.py and contract assertions in 	ests/test_discovery_contract.py.
+- Added dedicated test suites: 	ests/test_safety.py, 	ests/test_transport.py, 	ests/test_circuits.py, 	ests/test_festivals.py, 	ests/test_crafts.py, 	ests/test_eco.py, 	ests/test_places_audio.py, and 	ests/test_milestone_52.py.
+
+---
+
+## [2.4.0] — 2026-08-20
 ### Added
 - Multi-day itinerary pacing configurations and travel budget estimation engine.
 - Homestay date availability validation and dynamic stay pricing calculator.
@@ -8,24 +33,9 @@
 - Admin structured audit logging and live telemetry metrics.
 - Password complexity verification and OTP sliding-window rate limiting.
 
-# HiddenYatra — Changelog
-
-All notable changes to the HiddenYatra project are documented in this file.
-
 ---
 
 ## [1.2.0] — 2026-08-06
-
 ### Added
-- Created `AUDIT.md`, `FIXES.md`, `TECH_DEBT.md`, and `CHANGELOG.md` to establish a complete technical audit documentation suite.
-- Added 4 new automated test modules: `tests/test_community.py`, `tests/test_reviews.py`, `tests/test_user_photos.py`, and `tests/test_wishlist.py`, expanding the unit test suite to 106 tests.
-- Created `scripts/tools/db_integrity_audit.py` for automated MySQL database health checks.
-
-### Fixed
-- Fixed `/logout` and `/admin/logout` route method handlers in `routes/auth.py` and `routes/admin.py` to allow both `GET` and `POST` requests.
-- Fixed Admin Login page dark mode styling by purging inline styles and adding scoped `html[data-theme="dark"]` rules in `admin.css`.
-- Synchronized asset cache-busting query parameter `?v=10` across template asset links.
-- Re-minified 13 static CSS/JS asset bundles.
-
-### Security
-- Verified OWASP Top 10 compliance: SQL query parameterization, Jinja autoescaping, CSRF token validation, rate limiting, and HTTP security response headers (`CSP`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
+- Created AUDIT.md, FIXES.md, TECH_DEBT.md, and CHANGELOG.md.
+- Added automated test modules for community, reviews, user photos, and wishlist.
