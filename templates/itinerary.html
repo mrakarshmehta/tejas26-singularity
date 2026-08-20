@@ -142,6 +142,33 @@
 {% endblock %}
 
 {% block content %}
+
+    <!-- AI Budget & Pacing Summary Widget -->
+    <div class="itin-budget-card" id="itin-budget-widget" style="margin:20px 0;padding:18px;background:var(--card-bg, #1e293b);border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:1.1rem;">💰 Estimated Trip Budget & Cost Breakdown</h3>
+        <span class="itin-pace-badge" style="padding:4px 10px;border-radius:20px;font-size:0.78rem;background:rgba(99,102,241,0.2);color:#818cf8;">AI Calculated</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:10px;">
+        <div class="itin-cost-stat" style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Stay</div>
+          <div style="font-weight:600;" id="cost-stay">₹2,400+</div>
+        </div>
+        <div class="itin-cost-stat" style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Food</div>
+          <div style="font-weight:600;" id="cost-food">₹1,800+</div>
+        </div>
+        <div class="itin-cost-stat" style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Travel</div>
+          <div style="font-weight:600;" id="cost-travel">₹1,200+</div>
+        </div>
+        <div class="itin-cost-stat" style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Estimated Total</div>
+          <div style="font-weight:700;color:#10b981;" id="cost-total">₹5,940</div>
+        </div>
+      </div>
+    </div>
+
 <!-- Hero -->
 <div class="planner-hero">
   <div class="ai-badge">
