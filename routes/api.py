@@ -339,3 +339,31 @@ def api_places_nearby_radius():
         'count': len(results),
         'places': results
     })
+
+
+@api_bp.route('/circuits', methods=['GET'])
+def api_get_circuits():
+    """JSON API endpoint returning all curated Bihar thematic circuits."""
+    from models.circuits import get_all_circuits, filter_circuits_by_theme
+    theme = request.args.get('theme')
+    circuits = filter_circuits_by_theme(theme) if theme else get_all_circuits()
+    return jsonify({
+        'status': 'success',
+        'count': len(circuits),
+        'circuits': circuits
+    })
+
+
+@api_bp.route('/circuits/<slug>', methods=['GET'])
+def api_get_circuit_detail(slug):
+    """JSON API endpoint returning specific circuit data, stops, and transit metrics."""
+    from models.circuits import get_circuit_by_slug, calculate_circuit_metrics
+    circuit = get_circuit_by_slug(slug)
+    if not circuit:
+        return jsonify({'status': 'error', 'message': f'Circuit not found: {slug}'}), 404
+    metrics = calculate_circuit_metrics(slug)
+    return jsonify({
+        'status': 'success',
+        'circuit': circuit,
+        'metrics': metrics
+    })
