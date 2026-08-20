@@ -1,3 +1,8 @@
+// Mobile touch gesture helper for interactive explore map
+if (typeof window !== 'undefined' && 'ontouchstart' in window) {
+  window.HY_IS_TOUCH_DEVICE = true;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    HiddenYatra — MapControls (Custom Modular Layer Manager Panel)
    Controls all geographic layers across 7 categories with parent/child
