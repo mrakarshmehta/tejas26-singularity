@@ -162,3 +162,30 @@ def get_treks_by_difficulty(diff):
 def get_trekking_safety_guidelines():
     """Return wilderness trail safety principles."""
     return TREK_SAFETY_GUIDELINES
+
+ECO_CAMPSITES_DB = [
+    {
+        "id": "camp-valmiki-sal-canopy",
+        "name": "Valmiki Sal Forest Eco-Huts & Wilderness Camp",
+        "district": "West Champaran",
+        "near_trek": "Triveni Sangam & Tiger Trail",
+        "tents_available": 12,
+        "amenities": ["Solar Lighting", "Filtered Spring Water", "Campfire Circle", "Local Tharu Meals"],
+        "permit_authority": "Valmiki Tiger Reserve Eco-Tourism Board",
+        "nightly_rate_inr": 1400
+    },
+    {
+        "id": "camp-rohtas-plateau-ridge",
+        "name": "Rohtasgarh Plateau Escarpment Basecamp",
+        "district": "Rohtas",
+        "near_trek": "Rohtasgarh Plateau & Canyon Wilderness Expedition",
+        "tents_available": 8,
+        "amenities": ["Stargazing Deck", "Trek Guide Station", "Pack Lunches", "Emergency Radio"],
+        "permit_authority": "Rohtas District Eco-Tourism Committee",
+        "nightly_rate_inr": 1200
+    }
+]
+
+def get_all_eco_campsites():
+    """Return verified wilderness eco-campsites and tenting grounds."""
+    return ECO_CAMPSITES_DB
