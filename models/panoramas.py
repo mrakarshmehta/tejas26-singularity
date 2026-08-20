@@ -205,3 +205,45 @@ VIRTUAL_PANORAMAS_DB = [
         ]
     }
 ]
+
+def get_all_panoramas():
+    """Return all available 360 virtual panoramas."""
+    return VIRTUAL_PANORAMAS_DB
+
+def get_panorama_by_slug(slug):
+    """Find a panorama by its slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for p in VIRTUAL_PANORAMAS_DB:
+        if p["slug"] == s or p["id"] == s or p["place_slug"] == s:
+            return p
+    return None
+
+def get_panorama_by_id(pano_id):
+    """Find a panorama by its unique ID."""
+    if not pano_id:
+        return None
+    for p in VIRTUAL_PANORAMAS_DB:
+        if p["id"] == pano_id:
+            return p
+    return None
+
+def get_panoramas_by_district(district):
+    """Filter panoramas by district name."""
+    if not district or district.lower() == 'all':
+        return VIRTUAL_PANORAMAS_DB
+    d_clean = district.lower().strip()
+    return [p for p in VIRTUAL_PANORAMAS_DB if d_clean in p["district"].lower()]
+
+def get_panoramas_by_category(category):
+    """Filter panoramas by category theme."""
+    if not category or category.lower() == 'all':
+        return VIRTUAL_PANORAMAS_DB
+    c_clean = category.lower().strip()
+    return [p for p in VIRTUAL_PANORAMAS_DB if c_clean in p["category"].lower()]
+
+def get_panorama_hotspots(slug):
+    """Retrieve all coordinate hotspots for a given panorama."""
+    p = get_panorama_by_slug(slug)
+    return p.get("hotspots", []) if p else []
