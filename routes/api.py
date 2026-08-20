@@ -1291,3 +1291,45 @@ def api_get_nalanda_library_towers():
         'count': len(towers),
         'towers': towers
     })
+
+@api_bp.route('/budget/calculate', methods=['GET', 'POST'])
+def api_calculate_trip_budget():
+    """JSON API to calculate itemized multi-currency trip budget."""
+    from models.budget_planner import calculate_trip_budget
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+    else:
+        data = request.args
+
+    tier = data.get('tier', 'heritage')
+    days = data.get('days', 3)
+    travelers = data.get('travelers', 2)
+    currency = data.get('currency', 'INR')
+
+    result = calculate_trip_budget(tier, days, travelers, currency)
+    return jsonify({
+        'status': 'success',
+        'budget': result
+    })
+
+
+@api_bp.route('/budget/tiers', methods=['GET'])
+def api_get_budget_tiers():
+    """JSON API returning all travel budget tiers and category templates."""
+    from models.budget_planner import get_all_travel_tiers
+    tiers = get_all_travel_tiers()
+    return jsonify({
+        'status': 'success',
+        'tiers': tiers
+    })
+
+
+@api_bp.route('/budget/currencies', methods=['GET'])
+def api_get_budget_currencies():
+    """JSON API returning supported currencies and conversion benchmarks."""
+    from models.budget_planner import get_all_currencies
+    currencies = get_all_currencies()
+    return jsonify({
+        'status': 'success',
+        'currencies': currencies
+    })
