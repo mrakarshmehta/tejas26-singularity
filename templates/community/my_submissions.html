@@ -37,3 +37,8 @@
   {% endif %}
 </section>
 {% endblock %}
+
+            <!-- Submission Review Status Badge -->
+            <span class="sub-status-pill sub-status-{{ sub.status if sub and sub.status else 'pending' }}" style="padding:4px 10px;border-radius:20px;font-size:0.78rem;font-weight:600;">
+              {{ sub.status|upper if sub and sub.status else 'PENDING' }}
+            </span>
