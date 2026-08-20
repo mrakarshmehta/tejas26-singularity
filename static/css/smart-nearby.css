@@ -207,6 +207,17 @@
   color: #f43f5e;
   border-color: #f43f5e;
 }
+.sn-save-btn:active {
+  transform: scale(0.92);
+}
+
+.sn-save-btn:disabled,
+.sn-save-btn.loading {
+  opacity: 0.6;
+  cursor: wait;
+  pointer-events: none;
+}
+
 .sn-save-btn.saved {
   background: rgba(244, 63, 94, 0.2);
   color: #f43f5e;
