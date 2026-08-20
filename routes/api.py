@@ -881,3 +881,41 @@ def api_get_epigraphical_inscription_detail(slug):
         'status': 'success',
         'inscription': ins
     })
+
+@api_bp.route('/weather/districts', methods=['GET'])
+def api_get_all_district_weather():
+    """JSON API returning district meteorological normals, AQI categories, and climate zones."""
+    from models.weather import get_all_district_weather
+    districts = get_all_district_weather()
+    return jsonify({
+        'status': 'success',
+        'count': len(districts),
+        'districts': districts
+    })
+
+
+@api_bp.route('/weather/districts/<slug>', methods=['GET'])
+def api_get_district_weather_detail(slug):
+    """JSON API returning microclimate, rainfall, summer/winter temperatures, and packing advice."""
+    from models.weather import get_district_weather_by_slug
+    weather = get_district_weather_by_slug(slug)
+    if not weather:
+        return jsonify({'status': 'not_found', 'message': f'Weather profile not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'weather': weather
+    })
+
+
+@api_bp.route('/weather/packing-advice', methods=['GET'])
+def api_get_packing_advice():
+    """JSON API returning clothing and gear recommendations based on month and district microclimate."""
+    from models.weather import get_seasonal_packing_advice
+    district = request.args.get('district', 'patna')
+    month = request.args.get('month')
+    advice = get_seasonal_packing_advice(district, month)
+    return jsonify({
+        'status': 'success',
+        'district': district,
+        'advice': advice
+    })
