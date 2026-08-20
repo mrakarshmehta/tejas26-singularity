@@ -91,3 +91,29 @@ class TestClassicalTreatises(unittest.TestCase):
         data = res.get_json()
         self.assertEqual(data['status'], 'success')
         self.assertGreaterEqual(data['count'], 3)
+
+class TestNalandaLibraryTowers(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_library_towers_data(self):
+        """Verify presence of 9-story library towers."""
+        from models.intellectual_heritage import get_nalanda_library_towers
+        towers = get_nalanda_library_towers()
+        self.assertEqual(len(towers), 3)
+        names = [t['tower_name'] for t in towers]
+        self.assertTrue(any('Ratnasagara' in n for n in names))
+        self.assertTrue(any('Ratnodadhi' in n for n in names))
+
+    def test_library_api(self):
+        """Test /api/v1/scholars/nalanda-library endpoint."""
+        res = self.client.get('/api/v1/scholars/nalanda-library')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(data['count'], 3)
