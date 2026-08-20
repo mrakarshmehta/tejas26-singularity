@@ -415,3 +415,19 @@ def api_budget_estimate():
         'budget': estimate,
         'pacing': pacing
     })
+
+
+@itinerary_bp.route('/<int:itinerary_id>/export/json', methods=['GET'])
+def export_itinerary_json(itinerary_id):
+    """Export itinerary details as a formatted JSON document."""
+    itin = get_itinerary_by_id(itinerary_id)
+    if not itin:
+        return jsonify({'error': 'Itinerary not found'}), 404
+    items = get_itinerary_items(itinerary_id)
+    return jsonify({
+        'status': 'success',
+        'itinerary': itin,
+        'items': items,
+        'export_format': 'json',
+        'generator': 'HiddenYatra AI Trip Planner'
+    })
