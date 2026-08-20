@@ -150,3 +150,16 @@ def evaluate_quiz_submission(answers_dict):
         "badge_color": badge_color,
         "results": detailed_results
     }
+
+def generate_quiz_certificate(user_name, score, total, badge_title):
+    """Generate structured digital certificate metadata for heritage quiz achievers."""
+    name_clean = user_name.strip() if user_name else "Heritage Explorer"
+    cert_id = f"HY-CERT-{abs(hash(name_clean + str(score) + str(total))) % 1000000:06d}"
+    return {
+        "certificate_id": cert_id,
+        "recipient_name": name_clean,
+        "score_awarded": f"{score}/{total}",
+        "badge_title": badge_title,
+        "issuer": "HiddenYatra Heritage Preservation Board",
+        "verification_url": f"/quiz/verify-cert?id={cert_id}"
+    }
