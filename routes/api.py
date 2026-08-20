@@ -833,3 +833,27 @@ def api_get_epigraphy_chronology():
         'status': 'success',
         'chronology': get_epigraphy_chronology()
     })
+
+@api_bp.route('/archaeology/coins', methods=['GET'])
+def api_get_numismatic_hoards():
+    """JSON API returning ancient punch-marked silver coins, Gupta gold dinars, and terracotta seals."""
+    from models.archaeology import get_all_numismatic_hoards
+    hoards = get_all_numismatic_hoards()
+    return jsonify({
+        'status': 'success',
+        'count': len(hoards),
+        'hoards': hoards
+    })
+
+
+@api_bp.route('/archaeology/coins/<slug>', methods=['GET'])
+def api_get_numismatic_hoard_detail(slug):
+    """JSON API returning symbols, weight standard, and museum location for a coin hoard."""
+    from models.archaeology import get_coin_hoard_by_slug
+    hoard = get_coin_hoard_by_slug(slug)
+    if not hoard:
+        return jsonify({'status': 'not_found', 'message': f'Coin hoard not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'hoard': hoard
+    })
