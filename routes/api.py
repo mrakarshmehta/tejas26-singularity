@@ -568,3 +568,52 @@ def api_estimate_transport_fare():
         'status': 'success',
         'fare_estimate': estimate
     })
+
+@api_bp.route('/panoramas', methods=['GET'])
+def api_get_panoramas():
+    """JSON API returning all virtual 360 tour viewpoints with optional filters."""
+    from models.panoramas import get_all_panoramas, get_panoramas_by_district, get_panoramas_by_category
+    district = request.args.get('district')
+    category = request.args.get('category')
+
+    if district:
+        panos = get_panoramas_by_district(district)
+    elif category:
+        panos = get_panoramas_by_category(category)
+    else:
+        panos = get_all_panoramas()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(panos),
+        'panoramas': panos
+    })
+
+
+@api_bp.route('/panoramas/<slug>', methods=['GET'])
+def api_get_panorama_detail(slug):
+    """JSON API returning metadata, photo sphere image URL, and audio ties for a 360 viewpoint."""
+    from models.panoramas import get_panorama_by_slug
+    pano = get_panorama_by_slug(slug)
+    if not pano:
+        return jsonify({'status': 'not_found', 'message': f'Panorama viewpoint not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'panorama': pano
+    })
+
+
+@api_bp.route('/panoramas/<slug>/hotspots', methods=['GET'])
+def api_get_panorama_hotspots(slug):
+    """JSON API returning interactive pitch/yaw coordinate hotspots for a 360 viewpoint."""
+    from models.panoramas import get_panorama_hotspots, get_panorama_by_slug
+    pano = get_panorama_by_slug(slug)
+    if not pano:
+        return jsonify({'status': 'not_found', 'message': f'Panorama not found: {slug}'}), 404
+    hotspots = get_panorama_hotspots(slug)
+    return jsonify({
+        'status': 'success',
+        'slug': slug,
+        'count': len(hotspots),
+        'hotspots': hotspots
+    })
