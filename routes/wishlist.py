@@ -23,6 +23,8 @@ def wishlist_page():
 @wishlist_bp.route('/wishlist/<int:place_id>/add', methods=['POST'])
 @csrf_required
 def add_wish(place_id):
+    if place_id <= 0:
+        return jsonify({'error': 'Invalid place ID', 'status': 'error', 'wishlisted': False}), 400
     sid = _get_session_id()
     add_to_wishlist(sid, place_id)
     count = get_wishlist_count(sid)
@@ -33,6 +35,8 @@ def add_wish(place_id):
 @wishlist_bp.route('/wishlist/<int:place_id>/remove', methods=['POST'])
 @csrf_required
 def remove_wish(place_id):
+    if place_id <= 0:
+        return jsonify({'error': 'Invalid place ID', 'status': 'error', 'wishlisted': False}), 400
     sid = _get_session_id()
     remove_from_wishlist(sid, place_id)
     count = get_wishlist_count(sid)
@@ -43,6 +47,8 @@ def remove_wish(place_id):
 @wishlist_bp.route('/wishlist/<int:place_id>/toggle', methods=['POST'])
 @csrf_required
 def toggle_wish(place_id):
+    if place_id <= 0:
+        return jsonify({'error': 'Invalid place ID', 'status': 'error', 'wishlisted': False}), 400
     sid = _get_session_id()
     if is_wishlisted(sid, place_id):
         remove_from_wishlist(sid, place_id)
@@ -59,6 +65,8 @@ def toggle_wish(place_id):
 @wishlist_bp.route('/wishlist/status/<int:place_id>')
 @wishlist_bp.route('/wishlist/<int:place_id>/status')
 def wish_status(place_id):
+    if place_id <= 0:
+        return jsonify({'error': 'Invalid place ID', 'wishlisted': False}), 400
     sid = _get_session_id()
     wishlisted = is_wishlisted(sid, place_id)
     return jsonify({'wishlisted': wishlisted})
