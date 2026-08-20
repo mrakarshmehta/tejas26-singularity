@@ -1,0 +1,94 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Bihar Weather & Air Quality Advisory - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="weather-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #0369a1 0%, #0c4a6e 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #0284c7;">
+        <span style="display: inline-block; background: rgba(56, 189, 248, 0.2); color: #bae6fd; border: 1px solid rgba(56, 189, 248, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🌤️ Microclimate & Meteorological Insights
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Bihar Weather & AQI Advisory</h1>
+        <p style="color: #e0f2fe; font-size: 1.05rem; margin: 0; max-width: 750px;">
+            Plan your travel with confidence. Discover seasonal temperature ranges, monsoon precipitation normals, district-level air quality indices, and customized packing recommendations for each ecological zone.
+        </p>
+    </div>
+
+    <!-- AQI Health Standards Guide -->
+    <div style="margin-bottom: 3rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🍃</span> Air Quality Index (AQI) Reference & Outdoor Travel Guide
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;">
+            {% for aqi in aqi_levels %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.25rem; border-left: 4px solid {{ aqi.color }};">
+                <span style="font-size: 0.75rem; font-weight: 800; color: {{ aqi.color }}; background: rgba(0,0,0,0.04); padding: 0.2rem 0.5rem; border-radius: 4px;">
+                    AQI {{ aqi.range[0] }} - {{ aqi.range[1] }}
+                </span>
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0.4rem 0 0.2rem 0; color: var(--text-primary, #0f172a);">
+                    {{ aqi.label }}
+                </h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted, #64748b); margin: 0; line-height: 1.4;">
+                    {{ aqi.advisory }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Districts Weather Grid -->
+    <div style="margin-bottom: 3.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>📍</span> Regional Microclimate & District Profiles ({{ districts | length }})
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.75rem;">
+            {% for d in districts %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s ease;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(2, 132, 199, 0.1); color: var(--primary, #0284c7); padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            {{ d.climate_zone }}
+                        </span>
+                        <span style="font-size: 0.75rem; font-weight: 700; background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155); padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            ⛰️ {{ d.elevation_m }}m
+                        </span>
+                    </div>
+
+                    <h3 style="font-size: 1.3rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a);">
+                        {{ d.district }} District
+                    </h3>
+                    <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0.75rem;">
+                        🗓️ Best Window: <strong>{{ d.best_travel_window }}</strong>
+                    </div>
+
+                    <!-- Temperature Grid -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="background: rgba(239, 68, 68, 0.08); padding: 0.6rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626;">☀️ Summer Temp</div>
+                            <div style="font-size: 1rem; font-weight: 800; color: #991b1b;">{{ d.summer_temp.min }}°C - {{ d.summer_temp.max }}°C</div>
+                        </div>
+                        <div style="background: rgba(2, 132, 199, 0.08); padding: 0.6rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #0284c7;">❄️ Winter Temp</div>
+                            <div style="font-size: 1rem; font-weight: 800; color: #075985;">{{ d.winter_temp.min }}°C - {{ d.winter_temp.max }}°C</div>
+                        </div>
+                    </div>
+
+                    <p style="font-size: 0.85rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.4;">
+                        {{ d.microclimate_notes }}
+                    </p>
+
+                    <div style="font-size: 0.8rem; background: var(--bg-subtle, #f8fafc); padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 1.25rem;">
+                        <strong>Typical AQI:</strong> {{ d.current_season_aqi_range.typical_category }} ({{ d.current_season_aqi_range.min }}-{{ d.current_season_aqi_range.max }})
+                    </div>
+                </div>
+
+                <a href="/weather/{{ d.slug }}" style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.75rem; background: var(--primary, #0284c7); color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: background 0.2s;">
+                    <span>View Packing Checklist & Climate Guide</span> ➔
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
