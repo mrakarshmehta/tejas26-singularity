@@ -37,7 +37,7 @@ from models.places import (
     get_specialties_by_place, add_specialty, delete_specialty, delete_specialties_by_place,
     get_accommodations_by_place, add_accommodation, delete_accommodations_by_place,
     get_district_foods, get_all_district_foods_by_state, add_district_food,
-    delete_district_food, search_places, search_all, smart_search, nl_search, search_places_simple,
+    delete_district_food, search_places, search_all, smart_search, nl_search, search_places_simple, get_places_by_filter,
     get_nearby_places, get_places_for_map
 )
 from models.districts import (

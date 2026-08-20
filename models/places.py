@@ -788,3 +788,34 @@ def get_places_for_map(category=None, state_id=None):
         query += " GROUP BY p.id ORDER BY p.is_featured DESC, p.name"
         cur.execute(query, params)
         return cur.fetchall()
+
+
+def get_places_by_filter(district_id=None, category=None, sort_by='views', limit=50):
+    """Retrieve places matching multi-criteria filter options."""
+    conn = get_db()
+    with get_cursor(conn) as cur:
+        query = """
+            SELECT p.*, d.name AS district_name, d.slug AS district_slug
+            FROM places p
+            LEFT JOIN districts d ON p.district_id = d.id
+            WHERE p.is_deleted = 0
+        """
+        params = []
+        if district_id:
+            query += " AND p.district_id = %s"
+            params.append(district_id)
+        if category:
+            query += " AND p.category = %s"
+            params.append(category)
+
+        if sort_by == 'rating':
+            query += " ORDER BY p.rating DESC, p.views_count DESC"
+        elif sort_by == 'name':
+            query += " ORDER BY p.name ASC"
+        else:
+            query += " ORDER BY p.views_count DESC, p.id DESC"
+
+        query += " LIMIT %s"
+        params.append(limit)
+        cur.execute(query, tuple(params))
+        return cur.fetchall()
