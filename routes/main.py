@@ -328,3 +328,37 @@ def eco_pledge():
     from models.eco import get_responsible_travel_code
     pillars = get_responsible_travel_code()
     return render_template('eco_pledge.html', pillars=pillars)
+
+
+@main_bp.route('/safety')
+def traveler_safety():
+    """Emergency contacts, tourist police desks, 24/7 hospitals, and traveler safety guidelines."""
+    from models.safety import (
+        get_statewide_helplines,
+        get_all_district_safety,
+        get_district_safety,
+        get_medical_facilities,
+        get_safety_guidelines
+    )
+    district_filter = (request.args.get('district') or '').lower().strip()
+    statewide = get_statewide_helplines()
+    guidelines = get_safety_guidelines()
+    all_districts = get_all_district_safety()
+
+    if district_filter and district_filter in all_districts:
+        selected_district_safety = get_district_safety(district_filter)
+        medical_list = get_medical_facilities(district_filter)
+    else:
+        selected_district_safety = None
+        medical_list = get_medical_facilities()
+        district_filter = 'all'
+
+    return render_template(
+        'safety.html',
+        statewide=statewide,
+        all_districts=all_districts,
+        selected_district=selected_district_safety,
+        active_district=district_filter,
+        medical_facilities=medical_list,
+        guidelines=guidelines
+    )
