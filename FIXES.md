@@ -45,3 +45,6 @@ This document provides a detailed breakdown of all code changes, root causes, fi
 - **Affected Files**: `utils/image.py`, `routes/community.py`, `routes/user_photos.py`, `routes/host.py`, `static/js/app.js`.
 - **Fix Applied**: Added `ImageOps.exif_transpose()`, `compress_image_to_webp()`, `validate_dimensions()`, and HTML5 Canvas pre-compression utility.
 - **Verification**: Added automated test coverage in `tests/test_utils.py`.
+
+### Milestone 43 Commits Update
+- Added full end-to-end trip budget calculations, stay pricing breakdown, offline fallback mode, and OTP security rate limiting.

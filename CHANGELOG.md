@@ -1,3 +1,13 @@
+## [v2.4.0] - 2026-08-20
+### Added
+- Multi-day itinerary pacing configurations and travel budget estimation engine.
+- Homestay date availability validation and dynamic stay pricing calculator.
+- Community submission review workflows and helpful review vote toggles.
+- Haversine proximity radius calculator and custom category SVG map markers.
+- PWA offline navigation fallback with dedicated offline guide route.
+- Admin structured audit logging and live telemetry metrics.
+- Password complexity verification and OTP sliding-window rate limiting.
+
 # HiddenYatra — Changelog
 
 All notable changes to the HiddenYatra project are documented in this file.
