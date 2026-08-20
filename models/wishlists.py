@@ -3,7 +3,12 @@ HiddenYatra — Wishlist & Visited Places Database Operations
 Session-based wishlist bookmarking and visited place tracking.
 """
 import logging
-import pymysql
+try:
+    import pymysql
+    IntegrityError = pymysql.IntegrityError
+except (ImportError, Exception):
+    class IntegrityError(Exception):
+        pass
 from models.connection import get_cursor
 
 logger = logging.getLogger(__name__)
@@ -17,7 +22,7 @@ def add_to_wishlist(session_id, place_id):
                 "INSERT INTO wishlists (session_id, place_id) VALUES (%s, %s)",
                 (session_id, place_id)
             )
-    except pymysql.IntegrityError:
+    except IntegrityError:
         pass
 
 
@@ -82,7 +87,7 @@ def mark_visited(session_id, place_id):
                 "INSERT INTO visited_places (session_id, place_id) VALUES (%s, %s)",
                 (session_id, place_id)
             )
-    except pymysql.IntegrityError:
+    except IntegrityError:
         pass
 
 

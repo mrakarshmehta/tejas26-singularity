@@ -13,8 +13,11 @@ Re-exports all database domain modules for seamless compatibility:
   - models.admin_db (submissions moderation, audit logs, analytics)
 """
 
+from models.text_utils import (
+    slugify, _slugify, _escape_like
+)
 from models.connection import (
-    get_db, get_cursor, init_db, slugify, _slugify, _escape_like
+    get_db, get_cursor, init_db
 )
 from models.constants import (
     PLACE_CATEGORIES, SPECIALTY_CATEGORIES, ACCOMMODATION_TYPES,

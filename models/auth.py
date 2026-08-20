@@ -6,7 +6,12 @@ import hashlib
 import secrets
 import logging
 from datetime import datetime
-import pymysql
+try:
+    import pymysql
+    IntegrityError = pymysql.IntegrityError
+except (ImportError, Exception):
+    class IntegrityError(Exception):
+        pass
 
 from models.connection import get_db, get_cursor, _escape_like
 
@@ -60,7 +65,7 @@ def register_user(username, email, password, display_name='', full_name='', stat
                  display_name or username, full_name.strip(), status)
             )
             return cur.lastrowid
-    except pymysql.IntegrityError:
+    except IntegrityError:
         return None
 
 

@@ -2,7 +2,8 @@
 HiddenYatra — Models Package Initialization
 Exposes domain modules and backward-compatibility exports.
 """
-from models.connection import get_db, get_cursor, init_db, slugify, _slugify, _escape_like
+from models.text_utils import slugify, _slugify, _escape_like
+from models.connection import get_db, get_cursor, init_db
 from models.constants import PLACE_CATEGORIES, SPECIALTY_CATEGORIES, ACCOMMODATION_TYPES, SERVICE_GROUP_ORDER, get_category_label
 from models.auth import *
 from models.places import *

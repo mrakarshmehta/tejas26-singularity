@@ -3,7 +3,12 @@ HiddenYatra — States, Districts, and Blocks Database Operations
 Manages hierarchy: State → District → Block.
 """
 import logging
-import pymysql
+try:
+    import pymysql
+    IntegrityError = pymysql.IntegrityError
+except (ImportError, Exception):
+    class IntegrityError(Exception):
+        pass
 
 from models.connection import get_db, get_cursor, slugify
 
@@ -49,7 +54,7 @@ def create_state(name, description='', image_url=''):
             )
             conn.commit()
             state_id = cur.lastrowid
-        except pymysql.IntegrityError:
+        except IntegrityError:
             conn.rollback()
             cur.execute("SELECT id FROM states WHERE slug = %s", (slug,))
             row = cur.fetchone()
@@ -102,7 +107,7 @@ def create_district(state_id, name, description='', famous_for='', cover_image='
             )
             conn.commit()
             did = cur.lastrowid
-        except pymysql.IntegrityError:
+        except IntegrityError:
             conn.rollback()
             cur.execute(
                 "SELECT id, cover_image FROM districts WHERE state_id = %s AND slug = %s", (state_id, slug)
@@ -304,7 +309,7 @@ def create_block(district_id, name):
             )
             conn.commit()
             bid = cur.lastrowid
-        except pymysql.IntegrityError:
+        except IntegrityError:
             conn.rollback()
             cur.execute(
                 "SELECT id FROM blocks WHERE district_id = %s AND slug = %s", (district_id, slug)

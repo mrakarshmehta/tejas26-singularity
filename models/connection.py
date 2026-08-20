@@ -1,17 +1,23 @@
-"""
+﻿"""
 HiddenYatra — Database Connection Management & Pooling
 Provides MySQL connection pool singleton and transaction-safe cursor context manager.
 """
 import os
-import re
 import logging
 import threading
 from contextlib import contextmanager
 
-import pymysql
-import pymysql.converters
-from pymysql.cursors import DictCursor
-from dbutils.pooled_db import PooledDB
+from models.text_utils import slugify, _slugify, _escape_like
+
+try:
+    import pymysql
+    import pymysql.converters
+    from pymysql.cursors import DictCursor
+    from dbutils.pooled_db import PooledDB
+except ImportError:
+    pymysql = None
+    DictCursor = None
+    PooledDB = None
 
 from config import (
     DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD,
@@ -21,28 +27,9 @@ from config import (
 logger = logging.getLogger(__name__)
 
 
-def _slugify(text):
-    """Convert text to URL-friendly slug."""
-    text = text.lower().strip()
-    text = re.sub(r'[^\w\s-]', '', text)
-    text = re.sub(r'[\s_]+', '-', text)
-    text = re.sub(r'-+', '-', text)
-    return text.strip('-')
-
-
-def slugify(text):
-    """Convert text to URL-safe slug."""
-    return _slugify(text)
-
-
-def _escape_like(value):
-    """Escape special LIKE wildcards in user input to prevent LIKE injection."""
-    return value.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
-
-
-# ──────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────
 # Connection Pool (thread-safe singleton)
-# ──────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────
 _pool = None
 _pool_lock = threading.Lock()
 
@@ -50,6 +37,11 @@ _pool_lock = threading.Lock()
 def _get_pool():
     """Get or create the global connection pool (thread-safe)."""
     global _pool
+    if pymysql is None or PooledDB is None:
+        raise RuntimeError(
+            "pymysql / dbutils is required for database operations. "
+            "Please install pymysql (e.g. pip install pymysql dbutils)."
+        )
     if _pool is None:
         with _pool_lock:
             if _pool is None:

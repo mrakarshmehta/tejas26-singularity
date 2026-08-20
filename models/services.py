@@ -5,7 +5,12 @@ Manages nearby services, hero slideshow, homepage section order, and auth page a
 import os
 import math
 import logging
-import pymysql
+try:
+    import pymysql
+    IntegrityError = pymysql.IntegrityError
+except (ImportError, Exception):
+    class IntegrityError(Exception):
+        pass
 
 from models.connection import get_db, get_cursor, _escape_like
 
@@ -177,7 +182,7 @@ def add_to_trending(place_id):
             conn.commit()
             cur.close()
             return True
-        except pymysql.IntegrityError:
+        except IntegrityError:
             conn.rollback()
             cur.close()
             return False
