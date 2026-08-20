@@ -663,3 +663,56 @@ def api_get_culinary_trails():
         'status': 'success',
         'trails': get_culinary_trails()
     })
+
+@api_bp.route('/wildlife/sanctuaries', methods=['GET'])
+def api_get_sanctuaries():
+    """JSON API returning Bihar national parks, tiger reserves, and bird sanctuaries."""
+    from models.wildlife import get_all_sanctuaries, get_sanctuaries_by_district, get_ramsar_wetlands
+    district = request.args.get('district')
+    ramsar_only = request.args.get('ramsar', '').lower() in ['1', 'true', 'yes']
+
+    if ramsar_only:
+        sanctuaries = get_ramsar_wetlands()
+    elif district:
+        sanctuaries = get_sanctuaries_by_district(district)
+    else:
+        sanctuaries = get_all_sanctuaries()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(sanctuaries),
+        'sanctuaries': sanctuaries
+    })
+
+
+@api_bp.route('/wildlife/sanctuaries/<slug>', methods=['GET'])
+def api_get_sanctuary_detail(slug):
+    """JSON API returning key fauna, safari options, and permit details for a sanctuary."""
+    from models.wildlife import get_sanctuary_by_slug
+    sanctuary = get_sanctuary_by_slug(slug)
+    if not sanctuary:
+        return jsonify({'status': 'not_found', 'message': f'Sanctuary not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'sanctuary': sanctuary
+    })
+
+
+@api_bp.route('/wildlife/guidelines', methods=['GET'])
+def api_get_safari_guidelines():
+    """JSON API returning safari and forest conservation guidelines."""
+    from models.wildlife import get_safari_guidelines
+    return jsonify({
+        'status': 'success',
+        'guidelines': get_safari_guidelines()
+    })
+
+
+@api_bp.route('/wildlife/species', methods=['GET'])
+def api_get_species_list():
+    """JSON API returning tracked key wildlife and endangered species."""
+    from models.wildlife import get_endangered_species_list
+    return jsonify({
+        'status': 'success',
+        'species': get_endangered_species_list()
+    })
