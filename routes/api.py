@@ -464,3 +464,54 @@ def api_submit_eco_pledge():
         'badge': '🌿 Bihar Eco-Heritage Guardian',
         'certificate_code': f'HY-ECO-{abs(hash(email)) % 100000:05d}'
     })
+
+
+@api_bp.route('/safety/emergency', methods=['GET'])
+def api_get_emergency_contacts():
+    """JSON API returning statewide helplines and district police/tourist desk contacts."""
+    from models.safety import get_statewide_helplines, get_district_safety, get_all_district_safety
+    district = request.args.get('district')
+    statewide = get_statewide_helplines()
+
+    if district:
+        dist_info = get_district_safety(district)
+        if not dist_info:
+            return jsonify({
+                'status': 'not_found',
+                'message': f'Safety information not found for district: {district}'
+            }), 404
+        return jsonify({
+            'status': 'success',
+            'statewide_helplines': statewide,
+            'district_safety': dist_info
+        })
+
+    return jsonify({
+        'status': 'success',
+        'statewide_helplines': statewide,
+        'districts': get_all_district_safety()
+    })
+
+
+@api_bp.route('/safety/medical', methods=['GET'])
+def api_get_medical_facilities():
+    """JSON API returning 24/7 hospitals and trauma centers with optional district filter."""
+    from models.safety import get_medical_facilities
+    district = request.args.get('district')
+    facilities = get_medical_facilities(district)
+    return jsonify({
+        'status': 'success',
+        'count': len(facilities),
+        'district': district or 'all',
+        'facilities': facilities
+    })
+
+
+@api_bp.route('/safety/guidelines', methods=['GET'])
+def api_get_safety_guidelines():
+    """JSON API returning traveler safety tips and seasonal advisories."""
+    from models.safety import get_safety_guidelines
+    return jsonify({
+        'status': 'success',
+        'guidelines': get_safety_guidelines()
+    })
