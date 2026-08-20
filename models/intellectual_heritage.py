@@ -166,3 +166,28 @@ CLASSICAL_TREATISES_DB = [
 def get_all_treatises():
     """Return catalog of classical scientific and philosophical treatises."""
     return CLASSICAL_TREATISES_DB
+
+NALANDA_LIBRARY_TOWERS_DB = [
+    {
+        "tower_name": "Ratnasagara ('Sea of Jewels')",
+        "height_stories": 9,
+        "specialization": "Sacred Mahayana sutras, Prajnaparamita manuscripts, and illuminated palm-leaf codices",
+        "historical_note": "A soaring multi-storied architectural wonder capped with gilded finials visible across the Rajgir valley."
+    },
+    {
+        "tower_name": "Ratnodadhi ('Ocean of Jewels')",
+        "height_stories": 9,
+        "specialization": "Astronomy, Ayurveda medicine, Sanskrit grammar (Vyakarana), and mathematical treatises",
+        "historical_note": "Preserved the original astronomical calculation charts and medicinal herb classifications."
+    },
+    {
+        "tower_name": "Ratnaranjaka ('Jeweled Delight')",
+        "height_stories": 9,
+        "specialization": "Epistemology (Pramana), Hetuvidya logic, and Yogacara philosophy",
+        "historical_note": "Where foreign master scholars like Xuanzang and Yijing spent years translating texts from Sanskrit into Chinese."
+    }
+]
+
+def get_nalanda_library_towers():
+    """Return historical architecture and manuscript specialties of Nalanda's Dharmaganja library towers."""
+    return NALANDA_LIBRARY_TOWERS_DB
