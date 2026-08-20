@@ -617,3 +617,49 @@ def api_get_panorama_hotspots(slug):
         'count': len(hotspots),
         'hotspots': hotspots
     })
+
+@api_bp.route('/gastronomy/dishes', methods=['GET'])
+def api_get_dishes():
+    """JSON API returning traditional Bihar culinary specialties and GI delicacies."""
+    from models.gastronomy import get_all_dishes, get_dishes_by_district, get_dishes_by_dietary, get_gi_tagged_dishes
+    district = request.args.get('district')
+    dietary = request.args.get('dietary')
+    gi_only = request.args.get('gi', '').lower() in ['1', 'true', 'yes']
+
+    if gi_only:
+        dishes = get_gi_tagged_dishes()
+    elif district:
+        dishes = get_dishes_by_district(district)
+    elif dietary:
+        dishes = get_dishes_by_dietary(dietary)
+    else:
+        dishes = get_all_dishes()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(dishes),
+        'dishes': dishes
+    })
+
+
+@api_bp.route('/gastronomy/dishes/<slug>', methods=['GET'])
+def api_get_dish_detail(slug):
+    """JSON API returning ingredients, history, and verified eateries for a dish."""
+    from models.gastronomy import get_dish_by_slug
+    dish = get_dish_by_slug(slug)
+    if not dish:
+        return jsonify({'status': 'not_found', 'message': f'Dish not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'dish': dish
+    })
+
+
+@api_bp.route('/gastronomy/trails', methods=['GET'])
+def api_get_culinary_trails():
+    """JSON API returning curated regional gastronomy trail itineraries."""
+    from models.gastronomy import get_culinary_trails
+    return jsonify({
+        'status': 'success',
+        'trails': get_culinary_trails()
+    })
