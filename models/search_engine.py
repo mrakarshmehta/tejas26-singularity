@@ -1417,4 +1417,21 @@ def search_cross_domain_heritage(query, limit=12):
     except Exception:
         pass
 
+    # 8. Folk Performing Arts
+    try:
+        from models.performing_arts import get_all_performing_arts
+        for art in get_all_performing_arts():
+            if q in art.get('title', '').lower() or q in art.get('summary', '').lower() or q in art.get('creator', '').lower():
+                matches.append({
+                    'type': 'performing_arts',
+                    'category_label': 'Folk Performing Art',
+                    'title': art['title'],
+                    'slug': art['slug'],
+                    'url': f"/performing-arts/{art['slug']}",
+                    'description': art.get('category', '') + ' • ' + art.get('region', ''),
+                    'icon': '🎭'
+                })
+    except Exception:
+        pass
+
     return matches[:limit]
