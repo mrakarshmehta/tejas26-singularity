@@ -67,7 +67,7 @@ def suggest_place():
         lng = request.form.get('longitude', '')
 
         # Handle image uploads (using shared utility)
-        from utils.image import process_and_save_image
+        from utils.image import process_and_save_image, compress_image_to_webp, validate_dimensions
         uploaded_filenames = []
         files = request.files.getlist('photos')
         for f in files:
@@ -170,7 +170,7 @@ def upload_temp():
     if not f or not allowed_file(f.filename) or not validate_image_file(f) or not check_file_size(f):
         return jsonify({'error': 'Invalid file'}), 400
 
-    from utils.image import process_and_save_image
+    from utils.image import process_and_save_image, compress_image_to_webp, validate_dimensions
     fname = process_and_save_image(f, SUBMISSION_UPLOAD, prefix='temp', max_width=1600, quality=80)
     if not fname:
         return jsonify({'error': 'Failed to process image'}), 400
