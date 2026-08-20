@@ -1434,4 +1434,21 @@ def search_cross_domain_heritage(query, limit=12):
     except Exception:
         pass
 
+    # 9. Certified Tour Guides
+    try:
+        from models.guides import get_all_guides
+        for g in get_all_guides():
+            if q in g.get('name', '').lower() or q in g.get('bio', '').lower() or any(q in lang.lower() for lang in g.get('languages', [])):
+                matches.append({
+                    'type': 'guide',
+                    'category_label': 'Verified Heritage Guide',
+                    'title': g['name'],
+                    'slug': g['slug'],
+                    'url': f"/guides/{g['slug']}",
+                    'description': g.get('license_tier', '') + ' • ' + ', '.join(g.get('languages', [])),
+                    'icon': '🧭'
+                })
+    except Exception:
+        pass
+
     return matches[:limit]
