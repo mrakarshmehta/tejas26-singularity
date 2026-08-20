@@ -110,3 +110,29 @@ class TestSeasonalPhenomenaAndVisibility(unittest.TestCase):
         self.assertEqual(data['status'], 'success')
         self.assertGreaterEqual(data['count'], 1)
         self.assertTrue(any('Waterfall' in p['name'] for p in data['phenomena']))
+
+class TestWeatherEmergencyAlerts(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_weather_alerts_database(self):
+        """Verify presence of lightning, flood, and fog emergency alerts."""
+        from models.weather import get_all_weather_emergency_alerts
+        alerts = get_all_weather_emergency_alerts()
+        self.assertGreaterEqual(len(alerts), 3)
+        hazards = [a['hazard_type'] for a in alerts]
+        self.assertTrue(any('Lightning' in h or 'Vajrapat' in h for h in hazards))
+        self.assertTrue(any('Flood' in h for h in hazards))
+
+    def test_weather_alerts_api(self):
+        """Test /api/v1/weather/alerts API endpoint."""
+        res = self.client.get('/api/v1/weather/alerts')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 3)
