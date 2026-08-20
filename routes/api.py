@@ -1344,3 +1344,14 @@ def api_get_district_cost_index():
         'count': len(index),
         'cost_index': index
     })
+
+@api_bp.route('/budget/tipping-guidelines', methods=['GET'])
+def api_get_tipping_guidelines():
+    """JSON API returning tipping etiquette, cash handling, and UPI digital payment guide."""
+    from models.budget_planner import get_tipping_and_cash_guidelines
+    guidelines = get_tipping_and_cash_guidelines()
+    return jsonify({
+        'status': 'success',
+        'count': len(guidelines),
+        'guidelines': guidelines
+    })
