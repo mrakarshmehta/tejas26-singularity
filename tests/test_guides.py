@@ -122,3 +122,33 @@ class TestGuideEthicsStandards(unittest.TestCase):
         data = res.get_json()
         self.assertEqual(data['status'], 'success')
         self.assertGreaterEqual(data['count'], 3)
+
+class TestGuideLicenseVerification(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_license_verification_logic(self):
+        """Verify license number validation logic."""
+        from models.guides import verify_guide_license
+        valid, info = verify_guide_license('ASI-BR-GY-2018-044')
+        self.assertTrue(valid)
+        self.assertEqual(info['guide_name'], 'Ven. Tenzin Dharmapala')
+
+        invalid, msg = verify_guide_license('FAKE-LIC-999')
+        self.assertFalse(invalid)
+
+    def test_verify_license_api(self):
+        """Test /api/v1/guides/verify-license endpoint."""
+        res = self.client.get('/api/v1/guides/verify-license?license=ASI-BR-NL-2015-012')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'verified')
+        self.assertEqual(data['details']['guide_name'], 'Dr. Alok Kumar Mishra')
+
+        res_inv = self.client.get('/api/v1/guides/verify-license?license=INVALID-LIC')
+        self.assertEqual(res_inv.status_code, 404)
