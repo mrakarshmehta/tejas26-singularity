@@ -1,0 +1,106 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ dish.name }} ({{ dish.hindi_name }}) - Bihar Culinary Heritage - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="dish-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/gastronomy" style="color: inherit; text-decoration: none;">Culinary Heritage</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ dish.name }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #451a03 0%, #78350f 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #92400e;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            {% if dish.gi_status %}
+            <span style="background: rgba(234, 179, 8, 0.2); color: #fef08a; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(234, 179, 8, 0.4);">
+                🏅 Certified GI (Geographical Indication)
+            </span>
+            {% endif %}
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                📍 {{ dish.origin_district }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                👅 {{ dish.taste_profile }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.3rem; font-weight: 800; margin: 0 0 0.25rem 0; line-height: 1.2;">
+            {{ dish.icon }} {{ dish.name }}
+        </h1>
+        <div style="font-size: 1.3rem; font-weight: 700; color: #fed7aa; margin-bottom: 0.5rem;">
+            {{ dish.hindi_name }}
+        </div>
+        <p style="font-size: 1.05rem; color: #ffedd5; margin: 0; max-width: 750px;">
+            {{ dish.description }}
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Backstory & Ingredients -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    📜 Historical Origins & Lore
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin: 0;">
+                    {{ dish.cultural_backstory }}
+                </p>
+            </div>
+
+            <!-- Verified Iconic Eateries -->
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1.25rem; color: var(--text-primary, #0f172a);">
+                    🏪 Verified Iconic Eateries & Sweetmakers
+                </h2>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for eatery in dish.iconic_eateries %}
+                    <div style="padding: 1rem; background: var(--bg-subtle, #f8fafc); border-radius: 8px; border-left: 3px solid #d97706; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <h4 style="margin: 0 0 0.25rem 0; font-size: 1.05rem; font-weight: 700; color: var(--text-primary, #0f172a);">
+                                {{ eatery.name }}
+                            </h4>
+                            <div style="font-size: 0.85rem; color: var(--text-muted, #64748b);">
+                                📍 {{ eatery.location }} ({{ eatery.district }})
+                            </div>
+                        </div>
+                        <span style="background: rgba(217, 119, 6, 0.1); color: #d97706; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">
+                            Heritage Vendor
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Ingredients & Dietary Facts -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--primary, #0284c7);">
+                    🌾 Key Ingredients
+                </h3>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-primary, #1e293b);">
+                    {% for ing in dish.key_ingredients %}
+                    <li>{{ ing }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div style="background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 0.75rem; color: #16a34a);">
+                    🌱 Dietary Classifications
+                </h3>
+                <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                    {% for tag in dish.dietary_tags %}
+                    <span style="background: rgba(22, 163, 74, 0.1); color: #15803d; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">
+                        ✓ {{ tag }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
