@@ -456,3 +456,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+
+// Explore Map Radius Control
+window.HY_setSearchRadius = function(radiusKm) {
+  if (!window.HY_MAP_INSTANCE) return;
+  console.log('[Map] Updating search radius:', radiusKm, 'km');
+  if (window.HY_RADIUS_CIRCLE) {
+    window.HY_RADIUS_CIRCLE.setRadius(radiusKm * 1000);
+  }
+};
