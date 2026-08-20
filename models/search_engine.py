@@ -1,4 +1,4 @@
-"""
+﻿"""
 HiddenYatra — Ultimate AI Search Engine (Phase 2.5)
 Production-grade intelligent search with:
   - Fuzzy matching (Levenshtein ≤ 2)
@@ -1396,6 +1396,23 @@ def search_cross_domain_heritage(query, limit=12):
                     'url': f"/virtual-tour/{p['slug']}",
                     'description': p.get('tagline', ''),
                     'icon': '🌐'
+                })
+    except Exception:
+        pass
+
+    # 7. Archaeology & Excavation Sites
+    try:
+        from models.archaeology import get_all_archaeological_sites
+        for a in get_all_archaeological_sites():
+            if q in a.get('title', '').lower() or q in a.get('description', '').lower() or q in a.get('ruler', '').lower():
+                matches.append({
+                    'type': 'archaeology',
+                    'category_label': 'Archaeological Site',
+                    'title': a['title'],
+                    'slug': a['slug'],
+                    'url': f"/archaeology/{a['slug']}",
+                    'description': a.get('period', '') + ' • ' + a.get('ruler', ''),
+                    'icon': '🏛️'
                 })
     except Exception:
         pass
