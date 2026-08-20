@@ -111,3 +111,32 @@ GET /api/v1/budget/currencies
 
 #### 4. Get District Cost Index
 GET /api/v1/budget/district-cost-index
+### Heritage Trivia Quiz & Explorer Badge API
+
+#### 1. Get Quiz Questions
+GET /api/v1/quiz/questions (Optional: ?category=history|culture|archaeology|gastronomy|wildlife)
+
+#### 2. Get Quiz Categories
+GET /api/v1/quiz/categories
+
+#### 3. Evaluate Quiz Answers & Unlock Badge
+POST /api/v1/quiz/evaluate
+
+Payload:
+{
+  "answers": {
+    "q-aryabhata-discovery": 1,
+    "q-nalanda-library": 0
+  }
+}
+
+#### 4. Issue Digital Certificate
+POST /api/v1/quiz/certificate
+
+Payload:
+{
+  "name": "Priya Sharma",
+  "score": 6,
+  "total": 6,
+  "badge": "Grand Magadha Mahapandit"
+}
