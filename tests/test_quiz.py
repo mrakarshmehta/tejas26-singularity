@@ -85,3 +85,34 @@ class TestQuizModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestQuizDigitalCertificate(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_certificate_generation_logic(self):
+        """Verify certificate creation and unique ID generation."""
+        from models.quiz import generate_quiz_certificate
+        cert = generate_quiz_certificate("Priya Sharma", 6, 6, "Grand Magadha Mahapandit")
+        self.assertEqual(cert['recipient_name'], "Priya Sharma")
+        self.assertEqual(cert['score_awarded'], "6/6")
+        self.assertIn("HY-CERT-", cert['certificate_id'])
+
+    def test_certificate_api(self):
+        """Test /api/v1/quiz/certificate endpoint."""
+        payload = {
+            "name": "Rohan Verma",
+            "score": 5,
+            "total": 6,
+            "badge": "Nalanda Scholar"
+        }
+        res = self.client.post('/api/v1/quiz/certificate', json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(data['certificate']['recipient_name'], "Rohan Verma")
