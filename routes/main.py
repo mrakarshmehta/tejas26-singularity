@@ -603,3 +603,34 @@ def guide_detail(slug):
     if not guide:
         abort(404)
     return render_template('guide_detail.html', guide=guide)
+
+@main_bp.route('/treks')
+def treks_directory():
+    """Discover scenic hill treks, monolithic granite climbs, and canyon eco-trails across Bihar."""
+    from models.treks import get_all_treks, get_treks_by_district, get_treks_by_difficulty
+    district = request.args.get('district')
+    diff = request.args.get('difficulty')
+
+    if district:
+        treks = get_treks_by_district(district)
+    elif diff:
+        treks = get_treks_by_difficulty(diff)
+    else:
+        treks = get_all_treks()
+
+    return render_template(
+        'treks.html',
+        treks=treks,
+        selected_district=district or 'all',
+        selected_difficulty=diff or 'all'
+    )
+
+
+@main_bp.route('/treks/<slug>')
+def trek_detail(slug):
+    """View trek elevation profile, difficulty, distance, gear checklist, and route landmarks."""
+    from models.treks import get_trek_by_slug
+    trek = get_trek_by_slug(slug)
+    if not trek:
+        abort(404)
+    return render_template('trek_detail.html', trek=trek)
