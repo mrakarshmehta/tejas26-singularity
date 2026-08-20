@@ -175,3 +175,31 @@ def get_guild_by_id(guild_id):
         if g["id"] == g_clean or g_clean in g["name"].lower():
             return g
     return None
+
+PERFORMANCE_SEASONS_MATRIX = [
+    {
+        "season_title": "Shravana Monsoon Folk Ballad Season",
+        "months": ["July", "August"],
+        "key_genres": ["Kajari", "Jhumar", "Biraha"],
+        "primary_districts": ["Bhojpur", "Buxar", "Rohtas"],
+        "festival_context": "Sawan Somwar village swings and Ganga riverbank troubadour gatherings."
+    },
+    {
+        "season_title": "Sonpur Mela Open-Air Folk Theater Season",
+        "months": ["November", "December"],
+        "key_genres": ["Bidesiya Theater", "Launda Naach", "Alha-Udal Recitals"],
+        "primary_districts": ["Saran", "Vaishali", "Patna"],
+        "festival_context": "World's largest historic cattle fair hosting all-night traditional folk dramas."
+    },
+    {
+        "season_title": "Mithilanchal Kojagara & Marriage Melodies",
+        "months": ["October", "November", "February"],
+        "key_genres": ["Sohar", "Samdauni", "Maithili Batgamani"],
+        "primary_districts": ["Madhubani", "Darbhanga", "Sitamarhi"],
+        "festival_context": "Harvest full moon celebrations and traditional Maithil matrimonial rites."
+    }
+]
+
+def get_performance_seasons():
+    """Return seasonal calendar of folk performances across Bihar."""
+    return PERFORMANCE_SEASONS_MATRIX
