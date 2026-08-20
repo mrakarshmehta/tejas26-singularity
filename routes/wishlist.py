@@ -39,6 +39,23 @@ def remove_wish(place_id):
     return jsonify({'status': 'removed', 'count': count, 'wishlisted': False})
 
 
+@wishlist_bp.route('/wishlist/toggle/<int:place_id>', methods=['POST'])
+@wishlist_bp.route('/wishlist/<int:place_id>/toggle', methods=['POST'])
+@csrf_required
+def toggle_wish(place_id):
+    sid = _get_session_id()
+    if is_wishlisted(sid, place_id):
+        remove_from_wishlist(sid, place_id)
+        wishlisted = False
+        status = 'removed'
+    else:
+        add_to_wishlist(sid, place_id)
+        wishlisted = True
+        status = 'added'
+    count = get_wishlist_count(sid)
+    return jsonify({'status': status, 'count': count, 'wishlisted': wishlisted})
+
+
 @wishlist_bp.route('/wishlist/status/<int:place_id>')
 @wishlist_bp.route('/wishlist/<int:place_id>/status')
 def wish_status(place_id):
