@@ -475,15 +475,20 @@
       btnEl.classList.toggle('saved');
       return;
     }
-    fetch(`/wishlist/${rawId}/add`, {
+    fetch(`/wishlist/${rawId}/toggle`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-Token': window.HY_CSRF_TOKEN || ''
       }
     })
-      .then(r => r.json())
-      .then(() => {
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`Wishlist request failed with HTTP status ${r.status}`);
+        }
+        return r.json();
+      })
+      .then((data) => {
         btnEl.classList.toggle('saved');
       })
       .catch((err) => {
