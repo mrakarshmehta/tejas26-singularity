@@ -169,3 +169,44 @@ def get_seasonal_packing_advice(slug, month=None):
         "microclimate": weather.get("microclimate_notes", ""),
         "best_window": weather.get("best_travel_window", "")
     }
+
+SEASONAL_PHENOMENA_DB = [
+    {
+        "id": "phenom-winter-fog",
+        "name": "Winter Gangetic Radiation Fog & Dawn Visibility",
+        "active_months": ["December", "January"],
+        "affected_regions": ["Patna", "Vaishali", "Begusarai", "Bhagalpur"],
+        "visibility_impact": "Morning visibility 50m - 300m until 09:30 AM",
+        "travel_tip": "Schedule river cruises and highway driving between 10:00 AM and 04:30 PM for clear panoramic vistas.",
+        "photography_rating": "Spectacular misty dawn silhouette shots over ancient stupas and river ghats."
+    },
+    {
+        "id": "phenom-monsoon-waterfalls",
+        "name": "Monsoon Rohtas-Kaimur Waterfall Surge",
+        "active_months": ["July", "August", "September", "October"],
+        "affected_regions": ["Rohtas", "Kaimur", "Nawada"],
+        "visibility_impact": "High cascade volume; crystal-clear canyon air",
+        "travel_tip": "Visit Telhar Kund and Kakolat Falls during post-rain sunny mornings. Follow marked safety railings.",
+        "photography_rating": "Peak emerald green vegetation and thunderous multi-tiered waterfall cascades."
+    },
+    {
+        "id": "phenom-summer-heatwave",
+        "name": "Mid-Summer 'Loo' Heatwave & Evening Micro-Breeze",
+        "active_months": ["May", "June"],
+        "affected_regions": ["Gaya", "Aurangabad", "Bhojpur", "Buxar"],
+        "visibility_impact": "Intense afternoon solar irradiance; high thermal contrast",
+        "travel_tip": "Explore open monuments at sunrise (05:30 AM - 08:30 AM); enjoy chilled Sattu Sherbet and Aam Panna coolers.",
+        "photography_rating": "Golden hour twilight illumination on sandstone monuments."
+    }
+]
+
+def get_all_seasonal_phenomena():
+    """Return all special meteorological and seasonal travel phenomena."""
+    return SEASONAL_PHENOMENA_DB
+
+def get_phenomena_by_month(month_name):
+    """Filter seasonal phenomena by current or planned travel month."""
+    if not month_name:
+        return SEASONAL_PHENOMENA_DB
+    m_clean = month_name.capitalize().strip()
+    return [p for p in SEASONAL_PHENOMENA_DB if m_clean in p.get("active_months", [])]
