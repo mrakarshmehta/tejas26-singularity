@@ -100,3 +100,29 @@ class TestFolkArtistGuilds(unittest.TestCase):
         res_single = self.client.get('/api/v1/performing-arts/guilds/guild-bhikhari-thakur-trust')
         self.assertEqual(res_single.status_code, 200)
         self.assertEqual(res_single.get_json()['guild']['district'], 'Saran')
+
+class TestFolkPerformanceSeasons(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_performance_seasons_data(self):
+        """Verify performance seasons data structure."""
+        from models.performing_arts import get_performance_seasons
+        seasons = get_performance_seasons()
+        self.assertGreaterEqual(len(seasons), 3)
+        titles = [s['season_title'] for s in seasons]
+        self.assertTrue(any('Monsoon' in t for t in titles))
+        self.assertTrue(any('Sonpur' in t for t in titles))
+
+    def test_seasons_api(self):
+        """Test /api/v1/performing-arts/seasons endpoint."""
+        res = self.client.get('/api/v1/performing-arts/seasons')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 3)
