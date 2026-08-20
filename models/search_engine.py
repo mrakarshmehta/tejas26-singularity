@@ -1285,3 +1285,119 @@ def get_filter_options():
     if not idx._built:
         idx.build()
     return idx.get_filter_options()
+
+
+def search_cross_domain_heritage(query, limit=12):
+    """
+    Search across all non-place regional heritage domains:
+    Circuits, Festivals, Crafts, Gastronomy, Wildlife, Virtual Tours, and Volunteer Programs.
+    """
+    if not query or not query.strip():
+        return []
+    
+    q = query.lower().strip()
+    matches = []
+
+    # 1. Circuits
+    try:
+        from models.circuits import get_all_circuits
+        for c in get_all_circuits():
+            if q in c.get('title', '').lower() or q in c.get('tagline', '').lower() or q in c.get('theme', '').lower():
+                matches.append({
+                    'type': 'circuit',
+                    'category_label': 'Thematic Circuit',
+                    'title': c['title'],
+                    'slug': c['slug'],
+                    'url': f"/circuit/{c['slug']}",
+                    'description': c.get('tagline', ''),
+                    'icon': '🧭'
+                })
+    except Exception:
+        pass
+
+    # 2. Festivals
+    try:
+        from models.festivals import get_all_festivals
+        for f in get_all_festivals():
+            if q in f.get('name', '').lower() or q in f.get('tagline', '').lower() or q in f.get('month', '').lower():
+                matches.append({
+                    'type': 'festival',
+                    'category_label': 'Cultural Festival',
+                    'title': f['name'],
+                    'slug': f['slug'],
+                    'url': f"/festival/{f['slug']}",
+                    'description': f.get('tagline', ''),
+                    'icon': '🎉'
+                })
+    except Exception:
+        pass
+
+    # 3. Crafts
+    try:
+        from models.crafts import get_all_crafts
+        for cr in get_all_crafts():
+            if q in cr.get('name', '').lower() or q in cr.get('description', '').lower():
+                matches.append({
+                    'type': 'craft',
+                    'category_label': 'GI Handicraft',
+                    'title': cr['name'],
+                    'slug': cr['slug'],
+                    'url': f"/craft/{cr['slug']}",
+                    'description': cr.get('description', '')[:100] + '...',
+                    'icon': '🎨'
+                })
+    except Exception:
+        pass
+
+    # 4. Gastronomy
+    try:
+        from models.gastronomy import get_all_dishes
+        for d in get_all_dishes():
+            if q in d.get('name', '').lower() or q in d.get('hindi_name', '').lower() or q in d.get('description', '').lower():
+                matches.append({
+                    'type': 'dish',
+                    'category_label': 'Culinary Heritage',
+                    'title': d['name'],
+                    'slug': d['slug'],
+                    'url': f"/gastronomy/{d['slug']}",
+                    'description': d.get('description', '')[:100] + '...',
+                    'icon': d.get('icon', '🍲')
+                })
+    except Exception:
+        pass
+
+    # 5. Wildlife
+    try:
+        from models.wildlife import get_all_sanctuaries
+        for w in get_all_sanctuaries():
+            if q in w.get('name', '').lower() or q in w.get('tagline', '').lower() or any(q in f.lower() for f in w.get('key_fauna', [])):
+                matches.append({
+                    'type': 'wildlife',
+                    'category_label': 'Wildlife Sanctuary',
+                    'title': w['name'],
+                    'slug': w['slug'],
+                    'url': f"/wildlife/{w['slug']}",
+                    'description': w.get('tagline', ''),
+                    'icon': '🐅'
+                })
+    except Exception:
+        pass
+
+    # 6. Virtual Tours
+    try:
+        from models.panoramas import get_all_panoramas
+        for p in get_all_panoramas():
+            if q in p.get('title', '').lower() or q in p.get('tagline', '').lower():
+                matches.append({
+                    'type': 'virtual_tour',
+                    'category_label': '360° Virtual Tour',
+                    'title': p['title'],
+                    'slug': p['slug'],
+                    'url': f"/virtual-tour/{p['slug']}",
+                    'description': p.get('tagline', ''),
+                    'icon': '🌐'
+                })
+    except Exception:
+        pass
+
+    return matches[:limit]

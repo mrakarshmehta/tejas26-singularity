@@ -773,3 +773,17 @@ def api_apply_volunteer_program():
         'skill_match_score_pct': match_score,
         'program_slug': prog_slug
     })
+
+@api_bp.route('/universal-search', methods=['GET'])
+def api_universal_search():
+    """Universal cross-domain search endpoint matching places, circuits, crafts, food, and wildlife."""
+    from models.search_engine import search_cross_domain_heritage
+    q = request.args.get('q', '').strip()
+    limit = request.args.get('limit', 12, type=int)
+    results = search_cross_domain_heritage(q, limit=limit)
+    return jsonify({
+        'status': 'success',
+        'query': q,
+        'count': len(results),
+        'results': results
+    })
