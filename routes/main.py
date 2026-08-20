@@ -707,3 +707,17 @@ def budget_planner_view():
         selected_travelers=int(travelers) if str(travelers).isdigit() else 2,
         selected_currency=currency
     )
+
+@main_bp.route('/quiz')
+def heritage_quiz_view():
+    """Interactive Bihar heritage and history trivia quiz with digital badge rewards."""
+    from models.quiz import get_all_quiz_questions, get_quiz_categories
+    category = request.args.get('category')
+    questions = get_all_quiz_questions(category)
+    categories = get_quiz_categories()
+    return render_template(
+        'quiz.html',
+        questions=questions,
+        categories=categories,
+        selected_category=category or 'all'
+    )
