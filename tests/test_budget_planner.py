@@ -103,3 +103,29 @@ class TestDistrictCostIndex(unittest.TestCase):
         data = res.get_json()
         self.assertEqual(data['status'], 'success')
         self.assertGreaterEqual(data['count'], 4)
+
+class TestTippingAndCashGuidelines(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_tipping_guidelines_data(self):
+        """Verify tipping guidelines list."""
+        from models.budget_planner import get_tipping_and_cash_guidelines
+        tips = get_tipping_and_cash_guidelines()
+        self.assertGreaterEqual(len(tips), 3)
+        services = [t['service'] for t in tips]
+        self.assertTrue(any('Guides' in s for s in services))
+        self.assertTrue(any('UPI' in s for s in services))
+
+    def test_tipping_api(self):
+        """Test /api/v1/budget/tipping-guidelines endpoint."""
+        res = self.client.get('/api/v1/budget/tipping-guidelines')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 3)
