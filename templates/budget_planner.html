@@ -1,0 +1,144 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Trip Budget Planner & Multi-Currency Estimator - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="budget-planner-container" style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #065f46 0%, #064e3b 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #10b981;">
+        <span style="display: inline-block; background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            💳 Transparent Multi-Currency Travel Planning
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Trip Budget Estimator</h1>
+        <p style="color: #d1fae5; font-size: 1.05rem; margin: 0; max-width: 750px;">
+            Estimate your exact travel expenditure across Bihar. Customize trip duration, group size, comfort tier, and view itemized cost breakdowns in 7 global currencies.
+        </p>
+    </div>
+
+    <!-- Planner Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 3.5rem;">
+        <!-- Left: Interactive Form Controls -->
+        <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.75rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h2 style="font-size: 1.3rem; font-weight: 700; margin-top: 0; margin-bottom: 1.25rem; color: var(--text-primary, #0f172a);">
+                ⚙️ Configure Trip Parameters
+            </h2>
+
+            <!-- Travel Tier -->
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">Comfort Tier</label>
+                <select id="b-tier" onchange="recalculateBudget()" style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem; background: var(--bg-subtle, #f8fafc);">
+                    {% for key, t in tiers.items() %}
+                    <option value="{{ key }}" {% if key == selected_tier %}selected{% endif %}>
+                        {{ t.tier_name }} (₹{{ t.daily_rate_inr }}/day)
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Currency -->
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">Currency</label>
+                <select id="b-currency" onchange="recalculateBudget()" style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem; background: var(--bg-subtle, #f8fafc);">
+                    {% for c_code, c in currencies.items() %}
+                    <option value="{{ c_code }}" {% if c_code == selected_currency %}selected{% endif %}>
+                        {{ c.symbol }} {{ c_code }} - {{ c.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Days Slider -->
+            <div style="margin-bottom: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Trip Duration:</span>
+                    <span id="days-val" style="color: var(--primary, #0284c7);">{{ selected_days }} Days</span>
+                </div>
+                <input type="range" id="b-days" min="1" max="30" value="{{ selected_days }}" oninput="updateDays(this.value)" onchange="recalculateBudget()" style="width: 100%;">
+            </div>
+
+            <!-- Travelers Count -->
+            <div style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem;">
+                    <span>Travelers:</span>
+                    <span id="travelers-val" style="color: var(--primary, #0284c7);">{{ selected_travelers }} Persons</span>
+                </div>
+                <input type="range" id="b-travelers" min="1" max="15" value="{{ selected_travelers }}" oninput="updateTravelers(this.value)" onchange="recalculateBudget()" style="width: 100%;">
+            </div>
+        </div>
+
+        <!-- Right: Real-time Budget Result -->
+        <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #059669; background: rgba(5, 150, 105, 0.1); padding: 0.25rem 0.6rem; border-radius: 6px;">
+                    Estimated Total Trip Cost
+                </span>
+
+                <div style="margin: 0.75rem 0 0.25rem 0;">
+                    <span id="res-symbol" style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary, #0f172a);">{{ budget.currency_symbol }}</span>
+                    <span id="res-total" style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary, #0f172a);">{{ budget.total_amount }}</span>
+                    <span id="res-code" style="font-size: 1.1rem; font-weight: 600; color: var(--text-muted, #64748b);"> {{ budget.currency }}</span>
+                </div>
+
+                <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 1.5rem;">
+                    (<span id="res-inr">₹{{ budget.total_amount_inr }}</span> Total • <span id="res-daily">{{ budget.currency_symbol }}{{ budget.daily_per_person }}</span> / person / day)
+                </div>
+
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary, #0f172a);">
+                    📊 Itemized Cost Breakdown
+                </h3>
+
+                <div id="breakdown-list" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
+                    {% for cat, val in budget.itemized_breakdown.items() %}
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: var(--bg-subtle, #f8fafc); border-radius: 6px; font-size: 0.85rem;">
+                        <span style="text-transform: capitalize; color: var(--text-primary, #334155); font-weight: 600;">{{ cat.replace('_', ' ') }}</span>
+                        <strong style="color: #059669;">{{ budget.currency_symbol }}{{ val.amount }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 1rem; font-size: 0.8rem; color: var(--text-muted, #64748b);">
+                Includes: <span id="res-stay">{{ budget.stay_type }}</span>, <span id="res-transit">{{ budget.transit_type }}</span>.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateDays(val) { document.getElementById('days-val').textContent = val + ' Days'; }
+function updateTravelers(val) { document.getElementById('travelers-val').textContent = val + ' Persons'; }
+
+function recalculateBudget() {
+    var tier = document.getElementById('b-tier').value;
+    var currency = document.getElementById('b-currency').value;
+    var days = document.getElementById('b-days').value;
+    var travelers = document.getElementById('b-travelers').value;
+
+    fetch('/api/v1/budget/calculate?tier=' + tier + '&currency=' + currency + '&days=' + days + '&travelers=' + travelers)
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            var b = data.budget;
+            document.getElementById('res-symbol').textContent = b.currency_symbol;
+            document.getElementById('res-total').textContent = b.total_amount;
+            document.getElementById('res-code').textContent = ' ' + b.currency;
+            document.getElementById('res-inr').textContent = '₹' + b.total_amount_inr;
+            document.getElementById('res-daily').textContent = b.currency_symbol + b.daily_per_person;
+            document.getElementById('res-stay').textContent = b.stay_type;
+            document.getElementById('res-transit').textContent = b.transit_type;
+
+            var listHtml = '';
+            for (var cat in b.itemized_breakdown) {
+                var item = b.itemized_breakdown[cat];
+                listHtml += '<div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: var(--bg-subtle, #f8fafc); border-radius: 6px; font-size: 0.85rem;">';
+                listHtml += '<span style="text-transform: capitalize; color: var(--text-primary, #334155); font-weight: 600;">' + cat.replace('_', ' ') + '</span>';
+                listHtml += '<strong style="color: #059669;">' + b.currency_symbol + item.amount + '</strong>';
+                listHtml += '</div>';
+            }
+            document.getElementById('breakdown-list').innerHTML = listHtml;
+        }
+    })
+    .catch(function(err) { console.error('Budget calc error:', err); });
+}
+</script>
+{% endblock %}
