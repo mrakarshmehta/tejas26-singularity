@@ -105,3 +105,31 @@ def get_festival_by_slug(slug):
         if f['slug'] == slug_clean:
             return f
     return None
+
+
+def get_festivals_by_month(month_num):
+    """Return festivals celebrated in a given calendar month number (1-12)."""
+    if not month_num:
+        return BIHAR_FESTIVALS
+    try:
+        m = int(month_num)
+        return [f for f in BIHAR_FESTIVALS if f.get('month_num') == m]
+    except (ValueError, TypeError):
+        return BIHAR_FESTIVALS
+
+
+def get_festivals_by_district(district_name):
+    """Return festivals associated with a given district."""
+    if not district_name:
+        return BIHAR_FESTIVALS
+    d_clean = district_name.strip().lower()
+    return [
+        f for f in BIHAR_FESTIVALS
+        if any(d_clean in dist.lower() for dist in f.get('primary_districts', []))
+        or d_clean in f.get('region', '').lower()
+    ]
+
+
+def get_upcoming_featured_festivals(limit=3):
+    """Get top highlighted festivals sorted for cultural showcase."""
+    return BIHAR_FESTIVALS[:limit]
