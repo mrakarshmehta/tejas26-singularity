@@ -68,3 +68,35 @@ class TestPerformingArtsModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestFolkArtistGuilds(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_folk_guilds_database(self):
+        """Verify presence of signature folk artist troupes."""
+        from models.performing_arts import get_all_folk_guilds, get_guild_by_id
+        guilds = get_all_folk_guilds()
+        self.assertGreaterEqual(len(guilds), 3)
+
+        bhikhari_guild = get_guild_by_id('guild-bhikhari-thakur-trust')
+        self.assertIsNotNone(bhikhari_guild)
+        self.assertEqual(bhikhari_guild['district'], 'Saran')
+
+    def test_guilds_api_endpoints(self):
+        """Test /api/v1/performing-arts/guilds API endpoints."""
+        res = self.client.get('/api/v1/performing-arts/guilds')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(data['count'], 0)
+
+        # Single guild
+        res_single = self.client.get('/api/v1/performing-arts/guilds/guild-bhikhari-thakur-trust')
+        self.assertEqual(res_single.status_code, 200)
+        self.assertEqual(res_single.get_json()['guild']['district'], 'Saran')
