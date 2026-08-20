@@ -91,3 +91,10 @@
   src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&map_id={{ google_maps_map_id }}&libraries=marker&v=weekly">
 </script>
 {% endif %}
+
+      <!-- Radius Quick Selection Pills -->
+      <div class="radius-filter-pills" style="display:flex;gap:6px;margin:8px 0;">
+        <button type="button" class="radius-pill active" onclick="window.HY_setSearchRadius(10)" style="padding:3px 8px;border-radius:12px;font-size:0.75rem;background:rgba(255,255,255,0.08);border:none;color:#fff;">10 km</button>
+        <button type="button" class="radius-pill" onclick="window.HY_setSearchRadius(25)" style="padding:3px 8px;border-radius:12px;font-size:0.75rem;background:rgba(255,255,255,0.08);border:none;color:#fff;">25 km</button>
+        <button type="button" class="radius-pill" onclick="window.HY_setSearchRadius(50)" style="padding:3px 8px;border-radius:12px;font-size:0.75rem;background:rgba(255,255,255,0.08);border:none;color:#fff;">50 km</button>
+      </div>
