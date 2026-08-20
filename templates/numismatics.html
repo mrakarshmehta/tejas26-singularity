@@ -1,0 +1,62 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Ancient Numismatics & Coin Hoards of Bihar - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="numismatics-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #1c1917 0%, #292524 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #d97706;">
+        <span style="display: inline-block; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🪙 Imperial Currency & Minting Heritage
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Bihar Ancient Numismatics</h1>
+        <p style="color: #fef3c7; font-size: 1.05rem; margin: 0; max-width: 750px;">
+            Explore the monetary history of ancient India — from the silver punch-marked Karshapanas of the Mauryan Empire to the classical gold Dinars of Samudragupta and archaic terracotta trade guild tokens.
+        </p>
+    </div>
+
+    <!-- Coin Hoards Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.75rem; margin-bottom: 3.5rem;">
+        {% for h in hoards %}
+        <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.1); color: #d97706; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                        {{ h.period }}
+                    </span>
+                    <span style="font-size: 0.75rem; font-weight: 800; background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #1e293b); padding: 0.2rem 0.6rem; border-radius: 6px;">
+                        {{ h.metal }}
+                    </span>
+                </div>
+
+                <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a); line-height: 1.3;">
+                    {{ h.name }}
+                </h3>
+                <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0.75rem;">
+                    ⚖️ Standard: {{ h.weight_standard }} • 📍 Mint: {{ h.mint_location }}
+                </div>
+
+                <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                    {{ h.historical_context }}
+                </p>
+
+                <div style="background: var(--bg-subtle, #f8fafc); padding: 0.75rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.85rem;">
+                    <strong style="color: var(--text-primary, #1e293b); display: block; margin-bottom: 0.35rem;">Engraved Symbols / Iconography:</strong>
+                    <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                        {% for sym in h.symbols %}
+                        <span style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                            {{ sym }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 0.75rem; font-size: 0.85rem; color: var(--primary, #0284c7); font-weight: 600;">
+                🏛️ Housed at: {{ h.museum }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
