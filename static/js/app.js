@@ -200,3 +200,45 @@ window.addEventListener('offline', function() {
   console.log('[Network] Connection lost');
   document.body.classList.add('is-offline');
 });
+
+
+// ── MULTILINGUAL AUDIO GUIDE CONTROLLER ──
+(function() {
+  let isPlaying = false;
+  let currentSpeed = 1.0;
+  const speeds = [1.0, 1.25, 1.5];
+  let speedIdx = 0;
+
+  window.HY_toggleAudioPlay = function() {
+    const btn = document.getElementById('audio-play-btn');
+    if (!btn) return;
+    isPlaying = !isPlaying;
+    if (isPlaying) {
+      btn.textContent = '⏸ Pause Audio';
+      btn.style.background = '#059669';
+    } else {
+      btn.textContent = '▶ Play Audio';
+      btn.style.background = 'var(--accent-orange, #ff7a18)';
+    }
+  };
+
+  window.HY_switchAudioLang = function(lang) {
+    console.log('[AudioGuide] Switching language to:', lang);
+    const transcriptEl = document.getElementById('audio-transcript-text');
+    if (!transcriptEl) return;
+    if (lang === 'hi') {
+      transcriptEl.textContent = 'लोड हो रहा है... ऐतिहासिक वृत्तांत और पावन इतिहास।';
+    } else if (lang === 'bho') {
+      transcriptEl.textContent = 'सुनीं भोजपुरी में... एह ऐतिहासिक स्थल के पावन कथा।';
+    } else {
+      transcriptEl.textContent = 'Loading audio narration and verified historical records...';
+    }
+  };
+
+  window.HY_toggleAudioSpeed = function() {
+    speedIdx = (speedIdx + 1) % speeds.length;
+    currentSpeed = speeds[speedIdx];
+    const btn = document.getElementById('audio-speed-btn');
+    if (btn) btn.textContent = currentSpeed + 'x';
+  };
+})();
