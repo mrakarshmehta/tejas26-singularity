@@ -214,5 +214,51 @@ class TestSmartNearby(unittest.TestCase):
         self.assertIn("libraries=marker", tmpl)
 
 
+    def test_smart_nearby_js_toggle_save_error_resilience(self):
+        """Verify static/js/smart-nearby.js and minified JS do not toggle save state on API/network failure."""
+        import os
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        
+        for fname in ['smart-nearby.js', 'smart-nearby.min.js']:
+            js_path = os.path.join(base_dir, 'static', 'js', fname)
+            self.assertTrue(os.path.exists(js_path), f"Missing {js_path}")
+
+            with open(js_path, 'r', encoding='utf-8') as f:
+                src = f.read()
+
+            # Ensure toggleSave exists
+            self.assertIn('toggleSave', src)
+
+            # Ensure HTTP status validation
+            self.assertTrue('!r.ok' in src or 'status' in src)
+
+            # Ensure no blind toggle in catch
+            toggle_idx = src.find('toggleSave')
+            self.assertGreater(toggle_idx, -1)
+            toggle_fn = src[toggle_idx:toggle_idx+1200]
+            
+            # Catch block must not toggle the saved class
+            catch_idx = toggle_fn.find('.catch')
+            self.assertGreater(catch_idx, -1)
+            catch_block = toggle_fn[catch_idx:catch_idx+250]
+            self.assertNotIn("classList.toggle('saved')", catch_block)
+            self.assertNotIn('classList.toggle("saved")', catch_block)
+
+    def test_smart_nearby_css_save_button_states(self):
+        """Verify CSS defines save button loading, active, and saved states."""
+        import os
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        css_path = os.path.join(base_dir, 'static', 'css', 'smart-nearby.css')
+        self.assertTrue(os.path.exists(css_path), f"Missing {css_path}")
+
+        with open(css_path, 'r', encoding='utf-8') as f:
+            css = f.read()
+
+        self.assertIn('.sn-save-btn', css)
+        self.assertIn('.sn-save-btn.saved', css)
+        self.assertIn('.sn-save-btn.loading', css)
+        self.assertIn('.sn-save-btn:active', css)
+
+
 if __name__ == '__main__':
     unittest.main()
