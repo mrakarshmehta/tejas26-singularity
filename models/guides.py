@@ -91,3 +91,59 @@ VERIFIED_GUIDES_DB = [
         "avatar_icon": "🏛️"
     }
 ]
+
+def get_all_guides():
+    """Return all verified licensed tourist guides."""
+    return VERIFIED_GUIDES_DB
+
+def get_guide_by_slug(slug):
+    """Retrieve guide profile by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for g in VERIFIED_GUIDES_DB:
+        if g["slug"] == s or g["id"] == s:
+            return g
+    return None
+
+def get_guides_by_district(district):
+    """Filter guides by base district."""
+    if not district or district.lower() == 'all':
+        return VERIFIED_GUIDES_DB
+    d_clean = district.lower().strip()
+    return [g for g in VERIFIED_GUIDES_DB if d_clean in g["district"].lower()]
+
+def get_guides_by_language(language):
+    """Filter guides speaking a particular language."""
+    if not language or language.lower() == 'all':
+        return VERIFIED_GUIDES_DB
+    l_clean = language.lower().strip()
+    return [g for g in VERIFIED_GUIDES_DB if any(l_clean in lang.lower() for lang in g.get("languages", []))]
+
+def get_guides_by_specialization(spec):
+    """Filter guides by thematic specialization (e.g. Buddhist, Wildlife)."""
+    if not spec or spec.lower() == 'all':
+        return VERIFIED_GUIDES_DB
+    s_clean = spec.lower().strip()
+    return [g for g in VERIFIED_GUIDES_DB if any(s_clean in sp.lower() for sp in g.get("specializations", []))]
+
+def validate_guide_inquiry(traveler_name, email, phone, guide_slug, travel_date, group_size=1):
+    """Validate tourist guide booking inquiry parameters."""
+    if not traveler_name or len(traveler_name.strip()) < 3:
+        return False, "Please enter your full name (minimum 3 characters)."
+    if not email or '@' not in email or '.' not in email:
+        return False, "Please provide a valid email address."
+    if not phone or len(phone.strip()) < 8:
+        return False, "Please provide a valid contact number."
+    if not guide_slug or not get_guide_by_slug(guide_slug):
+        return False, f"Invalid or non-existent guide selected: {guide_slug}"
+    if not travel_date:
+        return False, "Please specify your planned travel date."
+    try:
+        size = int(group_size)
+        if size < 1 or size > 50:
+            return False, "Group size must be between 1 and 50 persons."
+    except (ValueError, TypeError):
+        return False, "Invalid group size specified."
+
+    return True, "Booking inquiry successfully validated."
