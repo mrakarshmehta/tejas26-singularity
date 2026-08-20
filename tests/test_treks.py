@@ -97,3 +97,30 @@ class TestEcoCampsites(unittest.TestCase):
         data = res.get_json()
         self.assertEqual(data['status'], 'success')
         self.assertGreaterEqual(data['count'], 2)
+
+class TestTrekFitnessGuidelines(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_fitness_levels_data(self):
+        """Verify fitness level grades."""
+        from models.treks import get_trek_fitness_levels
+        levels = get_trek_fitness_levels()
+        self.assertEqual(len(levels), 3)
+        grades = [l['grade'] for l in levels]
+        self.assertIn('Easy', grades)
+        self.assertIn('Moderate', grades)
+        self.assertIn('Challenging', grades)
+
+    def test_fitness_api(self):
+        """Test /api/v1/treks/fitness endpoint."""
+        res = self.client.get('/api/v1/treks/fitness')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(data['count'], 3)
