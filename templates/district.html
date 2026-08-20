@@ -1,0 +1,712 @@
+{% extends "base.html" %}
+{% block title %}{{ district.name }} District — Tourist Directory — {{ app_name }}{% endblock %}
+{% block meta_desc %}Explore all {{ total }} verified tourist places in {{ district.name }} district, {{ state.name }}. Discover temples, hill stations, waterfalls, historical monuments, local foods, and hidden gems.{% if district.famous_for %} Famous for {{ district.famous_for }}.{% endif %}{% endblock %}
+{% block og_title %}{{ district.name }} District Tourist Guide — {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ═══ DISTRICT HERO ═══ */
+.dist-hero {
+  position: relative;
+  min-height: 320px;
+  display: flex; align-items: flex-end;
+  padding: 0 var(--space-lg) var(--space-2xl);
+  overflow: hidden;
+}
+.dist-hero-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 8s ease;
+}
+.dist-hero:hover .dist-hero-bg { transform: scale(1.03); }
+.dist-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.85) 75%, var(--bg-body) 100%);
+}
+.dist-hero-content {
+  position: relative; z-index: 2;
+  max-width: 1000px; width: 100%;
+  margin: 0 auto;
+}
+.dist-hero-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.8rem; color: rgba(255,255,255,0.6);
+  margin-bottom: var(--space-md);
+}
+.dist-hero-breadcrumb a { color: rgba(255,255,255,0.7); text-decoration: none; }
+.dist-hero-breadcrumb a:hover { color: var(--primary); }
+.dist-hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 800; color: white;
+  margin-bottom: var(--space-xs);
+  line-height: 1.15;
+}
+.dist-hero-sub {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.95rem;
+  max-width: 650px;
+  line-height: 1.5;
+  margin-bottom: var(--space-lg);
+}
+.dist-hero-tags {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.dist-hero-tag {
+  padding: 6px 16px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem; color: rgba(255,255,255,0.9);
+  font-weight: 500;
+}
+
+/* ═══ STAT PILLS ═══ */
+.dist-stats-row {
+  display: flex; gap: var(--space-md); flex-wrap: wrap;
+  max-width: 1000px; margin: calc(-1 * var(--space-lg)) auto var(--space-xl);
+  padding: 0 var(--space-lg);
+  position: relative; z-index: 3;
+}
+.dist-stat-pill {
+  flex: 1; min-width: 130px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+.dist-stat-pill-val {
+  font-family: var(--font-heading);
+  font-size: 1.6rem; font-weight: 700;
+}
+.dist-stat-pill-lbl {
+  font-size: 0.75rem; color: var(--text-muted); font-weight: 500;
+}
+
+/* ═══ MAIN CONTAINER ═══ */
+.dist-main {
+  max-width: 1000px; margin: 0 auto;
+  padding: 0 var(--space-lg) var(--space-3xl);
+}
+
+/* ═══ HEADER & CONTROLS TOOLBAR ═══ */
+.dist-header-box {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+.dist-title-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.dist-title-row h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem; font-weight: 700;
+  margin: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.dist-count-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 12px;
+  background: var(--primary-50, rgba(255,122,24,0.1));
+  color: var(--primary);
+  border: 1px solid rgba(255,122,24,0.25);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem; font-weight: 600;
+}
+
+/* SEARCH & SORT BAR */
+.dist-controls-bar {
+  display: flex; gap: var(--space-md); flex-wrap: wrap;
+  align-items: center; margin-bottom: var(--space-lg);
+}
+.dist-search-wrap {
+  flex: 1; min-width: 260px; position: relative;
+}
+.dist-search-input {
+  width: 100%;
+  padding: 12px 18px 12px 42px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  outline: none;
+  transition: all 0.3s;
+}
+.dist-search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255,122,24,0.15);
+}
+.dist-search-icon {
+  position: absolute; left: 15px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted); font-size: 1rem;
+  pointer-events: none;
+}
+.dist-sort-wrap {
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.dist-sort-label {
+  font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
+}
+.dist-sort-select {
+  padding: 10px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.85rem; font-weight: 500;
+  outline: none; cursor: pointer;
+  font-family: var(--font-body);
+}
+.dist-sort-select:focus { border-color: var(--primary); }
+
+/* FILTER CHIPS */
+.dist-chips-wrap {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  align-items: center; margin-bottom: var(--space-xl);
+}
+.dist-chip {
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+  user-select: none;
+}
+.dist-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.dist-chip.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 2px 10px rgba(255,122,24,0.3);
+}
+
+/* ═══ NAVIGATION TABS ═══ */
+.dist-tabs {
+  display: flex; gap: 4px;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: var(--space-xl);
+  overflow-x: auto;
+}
+.dist-tab {
+  padding: 12px 22px;
+  font-size: 0.88rem; font-weight: 600;
+  color: var(--text-muted);
+  background: none; border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-family: var(--font-body);
+}
+.dist-tab:hover { color: var(--text-primary); }
+.dist-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* ═══ CONTENT PANELS ═══ */
+.dist-panel { display: none; }
+.dist-panel.active { display: block; }
+
+/* ═══ PLACES DIRECTORY GRID ═══ */
+.dist-places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-xl);
+}
+
+/* ═══ BLOCKS & FOOD GRIDS ═══ */
+.dist-blocks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+.dist-block-card {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-decoration: none; color: var(--text-primary);
+  transition: all 0.3s;
+}
+.dist-block-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+}
+.dist-block-icon {
+  width: 42px; height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--primary-50, rgba(255,122,24,0.1));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.dist-block-name { font-weight: 600; font-size: 0.9rem; }
+.dist-block-count { font-size: 0.75rem; color: var(--text-muted); }
+
+.dist-food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-md);
+}
+.dist-food-card {
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.3s;
+}
+.dist-food-card:hover { border-color: var(--primary); }
+.dist-food-emoji { font-size: 2.2rem; margin-bottom: 8px; }
+.dist-food-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.dist-food-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+/* ═══ RELATED DISTRICTS ═══ */
+.dist-related {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border-color);
+}
+.dist-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+.dist-related-card {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-decoration: none; color: var(--text-primary);
+  transition: all 0.3s;
+}
+.dist-related-card:hover { border-color: var(--secondary); transform: translateY(-2px); }
+.dist-related-thumb {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  background-size: cover; background-position: center;
+  flex-shrink: 0;
+}
+.dist-related-name { font-weight: 600; font-size: 0.85rem; }
+.dist-related-meta { font-size: 0.72rem; color: var(--text-muted); }
+
+/* ═══ EMPTY STATE ═══ */
+.dist-empty {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+  color: var(--text-muted);
+}
+.dist-empty-icon { font-size: 3rem; margin-bottom: var(--space-md); }
+
+@media (max-width: 640px) {
+  .dist-hero { min-height: 250px; }
+  .dist-stats-row { gap: var(--space-sm); }
+  .dist-stat-pill { min-width: 90px; padding: var(--space-xs) var(--space-sm); }
+  .dist-stat-pill-val { font-size: 1.3rem; }
+  .dist-controls-bar { flex-direction: column; align-items: stretch; }
+  .dist-sort-wrap { justify-content: space-between; }
+  .dist-places-grid { grid-template-columns: 1fr; }
+  .dist-blocks-grid { grid-template-columns: 1fr; }
+  .dist-food-grid { grid-template-columns: 1fr; }
+  .dist-related-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ═══ HERO BANNER ═══ -->
+{% set dist_colors = ['#FF7A18', '#00BFA6', '#6366F1', '#F43F5E', '#8B5CF6', '#3B82F6'] %}
+{% set hero_color = dist_colors[district.id % 6] %}
+<section class="dist-hero">
+  <div class="dist-hero-bg" style="background: {% if district.cover_image %}url('{% if district.cover_image.startswith('http') %}{{ district.cover_image }}{% else %}{{ url_for('static', filename='uploads/districts/' + district.cover_image) }}{% endif %}'){% elif district.image_url %}url('{{ district.image_url }}'){% else %}linear-gradient(135deg, {{ hero_color }}33, {{ hero_color }}11){% endif %}; background-size:cover; background-position:center;"></div>
+  <div class="dist-hero-overlay"></div>
+  <div class="dist-hero-content">
+    <div class="dist-hero-breadcrumb">
+      <a href="{{ url_for('main.index') }}">Home</a> /
+      <a href="{{ url_for('main.state_detail', slug=state.slug) }}">{{ state.name }}</a> /
+      <span style="color:rgba(255,255,255,0.9);">{{ district.name }}</span>
+    </div>
+    <h1>{{ district.name }} <span class="text-gradient-saffron">District Directory</span></h1>
+    <div class="dist-hero-sub">
+      {% if district.description %}{{ district.description }}{% else %}Complete verified guide to tourist destinations, ancient temples, natural spots, and culture in {{ district.name }} district.{% endif %}
+    </div>
+    <div class="dist-hero-tags">
+      {% if district.famous_for %}<span class="dist-hero-tag">🌟 {{ district.famous_for }}</span>{% endif %}
+      <span class="dist-hero-tag">📍 {{ total }} Verified Places</span>
+      <span class="dist-hero-tag">🏘️ {{ blocks|length }} Blocks</span>
+      {% if foods %}<span class="dist-hero-tag">🍛 {{ foods|length }} Local Specialties</span>{% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STAT PILLS ═══ -->
+<div class="dist-stats-row">
+  <div class="dist-stat-pill">
+    <div class="dist-stat-pill-val" style="color:var(--primary);">{{ category_counts.total if category_counts else total }}</div>
+    <div class="dist-stat-pill-lbl">Total Tourist Places</div>
+  </div>
+  <div class="dist-stat-pill">
+    <div class="dist-stat-pill-val" style="color:#d97706;">{{ category_counts.temples if category_counts else 0 }}</div>
+    <div class="dist-stat-pill-lbl">Total Temples</div>
+  </div>
+  <div class="dist-stat-pill">
+    <div class="dist-stat-pill-val" style="color:#6366f1;">{{ category_counts.hills if category_counts else 0 }}</div>
+    <div class="dist-stat-pill-lbl">Total Hills</div>
+  </div>
+  <div class="dist-stat-pill">
+    <div class="dist-stat-pill-val" style="color:#06b6d4;">{{ category_counts.waterfalls if category_counts else 0 }}</div>
+    <div class="dist-stat-pill-lbl">Total Waterfalls</div>
+  </div>
+  <div class="dist-stat-pill">
+    <div class="dist-stat-pill-val" style="color:#e11d48;">{{ category_counts.historical if category_counts else 0 }}</div>
+    <div class="dist-stat-pill-lbl">Total Historical Places</div>
+  </div>
+  <div class="dist-stat-pill">
+    <div class="dist-stat-pill-val" style="color:#8b5cf6;">{{ category_counts.religious if category_counts else 0 }}</div>
+    <div class="dist-stat-pill-lbl">Total Religious Places</div>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="dist-main">
+
+  <!-- Navigation Tabs -->
+  <div class="dist-tabs">
+    <button class="dist-tab active" data-tab="places">📍 Places Directory ({{ total }})</button>
+    <button class="dist-tab" data-tab="blocks">🏘️ Blocks ({{ blocks|length }})</button>
+    {% if foods %}<button class="dist-tab" data-tab="foods">🍛 Food & Culture ({{ foods|length }})</button>{% endif %}
+  </div>
+
+  <!-- ═══ PLACES DIRECTORY PANEL ═══ -->
+  <div class="dist-panel active" id="panel-places">
+
+    <!-- Header & Count -->
+    <div class="dist-header-box">
+      <div class="dist-title-row">
+        <h2>📍 Tourist Places in {{ district.name }}</h2>
+        <span class="dist-count-badge" id="count-badge-text">
+          Showing <strong id="visible-count">{{ places|length }}</strong> of {{ total }} Places
+        </span>
+      </div>
+
+      <!-- Controls: Search & Sort -->
+      <div class="dist-controls-bar">
+        <div class="dist-search-wrap">
+          <span class="dist-search-icon">🔍</span>
+          <input type="text" id="dist-search-input" class="dist-search-input" placeholder="Search places in {{ district.name }} by name, category..." autocomplete="off">
+        </div>
+        <div class="dist-sort-wrap">
+          <span class="dist-sort-label">Sort by:</span>
+          <select id="dist-sort-select" class="dist-sort-select">
+            <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>🔥 Most Popular</option>
+            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>🔤 Alphabetical (A-Z)</option>
+            <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>🆕 Recently Added</option>
+            <option value="nearest">📍 Nearest (Location)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Filter Chips -->
+      <div class="dist-chips-wrap" id="category-chips">
+        <button class="dist-chip active" data-cat="all">All Places</button>
+        <button class="dist-chip" data-cat="temple">🛕 Temples & Spiritual</button>
+        <button class="dist-chip" data-cat="nature">🌿 Nature & Wildlife</button>
+        <button class="dist-chip" data-cat="waterfall">🌊 Waterfalls & Lakes</button>
+        <button class="dist-chip" data-cat="mountain">⛰️ Hills & Mountains</button>
+        <button class="dist-chip" data-cat="historical">🏰 Heritage & Historical</button>
+        <button class="dist-chip" data-cat="picnic">🧺 Picnic Spots</button>
+        <button class="dist-chip" data-cat="cultural">🎭 Cultural & Adventure</button>
+      </div>
+    </div>
+
+    <!-- ═══ MAP SECTION ═══ -->
+    {% if places %}
+    <div style="margin-bottom:var(--space-2xl);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-sm);flex-wrap:wrap;gap:8px;">
+        <h3 style="font-family:var(--font-heading);font-size:1rem;font-weight:600;margin:0;">🗺️ {{ district.name }} Interactive Map</h3>
+        <a href="{{ url_for('main.explore_map') }}?district={{ district.name }}" style="font-size:0.8rem;color:var(--primary);text-decoration:none;font-weight:500;">Open Fullscreen Map ↗</a>
+      </div>
+      <div id="district-map" style="height:320px;border-radius:var(--radius-xl);border:1px solid var(--border-color);overflow:hidden;position:relative;z-index:1;"
+           data-places='{{ places | tojson }}'></div>
+    </div>
+    {% endif %}
+
+    <!-- ═══ UNIFIED PLACES GRID ═══ -->
+    {% if places %}
+    <div class="dist-places-grid" id="places-container">
+      {% for place in places %}
+      <div class="place-directory-item"
+           data-name="{{ place.name | lower }}"
+           data-category="{{ place.category | lower }}"
+           data-desc="{{ (place.description or '') | lower }}"
+           data-history="{{ (place.history or '') | lower }}"
+           data-views="{{ place.view_count or 0 }}"
+           data-created="{{ place.created_at or '' }}"
+           data-lat="{{ place.latitude or '' }}"
+           data-lng="{{ place.longitude or '' }}">
+        {% include "partials/place_card.html" %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Dynamic Empty Filter State -->
+    <div class="dist-empty" id="places-empty" style="display:none;">
+      <div class="dist-empty-icon">🔎</div>
+      <h3 style="font-size:1.1rem;margin-bottom:8px;">No places found matching your filter</h3>
+      <p style="font-size:0.88rem;margin-bottom:var(--space-md);">Try clearing your search query or selecting a different category filter.</p>
+      <button class="btn btn-secondary" id="btn-reset-filters">Reset All Filters</button>
+    </div>
+    {% else %}
+    <div class="dist-empty">
+      <div class="dist-empty-icon">🗺️</div>
+      <h3>No places listed in {{ district.name }} yet</h3>
+      <p>Know a hidden gem? <a href="{{ url_for('community.suggest_place') }}" style="color:var(--primary);">Suggest a place →</a></p>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- ═══ BLOCKS PANEL ═══ -->
+  <div class="dist-panel" id="panel-blocks">
+    {% if blocks %}
+    <div class="dist-blocks-grid">
+      {% for block in blocks %}
+      <a href="{{ url_for('main.block_detail', state_slug=state.slug, district_slug=district.slug, block_slug=block.slug) }}" class="dist-block-card">
+        <div class="dist-block-icon">🏘️</div>
+        <div>
+          <div class="dist-block-name">{{ block.name }}</div>
+          <div class="dist-block-count">{{ block.place_count }} places</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="dist-empty">
+      <div class="dist-empty-icon">🏘️</div>
+      <h3>No blocks added for {{ district.name }} yet</h3>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ═══ FOOD PANEL ═══ -->
+  {% if foods %}
+  <div class="dist-panel" id="panel-foods">
+    <h3 style="font-family:var(--font-heading);font-size:1.1rem;margin-bottom:var(--space-lg);display:flex;align-items:center;gap:8px;">
+      🍛 {{ district.name }}'s Local Specialties
+    </h3>
+    <div class="dist-food-grid">
+      {% for food in foods %}
+      <div class="dist-food-card">
+        <div class="dist-food-emoji">
+          {% if food.category == 'sweet' %}🍬{% elif food.category == 'drink' %}🥤{% elif food.category == 'snack' %}🥠{% elif food.category == 'craft' %}🎨{% else %}🍛{% endif %}
+        </div>
+        <div class="dist-food-name">{{ food.name }}</div>
+        {% if food.description %}<div class="dist-food-desc">{{ food.description }}</div>{% endif %}
+        {% if food.best_places_to_eat %}<div class="dist-food-where" style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);">📍 {{ food.best_places_to_eat }}</div>{% endif %}
+        {% if food.famous_shops %}<div class="dist-food-where" style="font-size:0.75rem;color:var(--text-muted);">🏪 {{ food.famous_shops }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ═══ RELATED DISTRICTS ═══ -->
+  {% if related_districts %}
+  <div class="dist-related">
+    <h3 style="font-family:var(--font-heading);font-size:1.05rem;margin-bottom:var(--space-lg);">🗺️ Explore Neighboring Districts</h3>
+    <div class="dist-related-grid">
+      {% for rd in related_districts[:6] %}
+      <a href="{{ url_for('main.district_detail', state_slug=state.slug, district_slug=rd.slug) }}" class="dist-related-card">
+        {% if rd.cover_image %}
+        <div class="dist-related-thumb" style="background-image:url('{{ url_for('static', filename='uploads/districts/' + rd.cover_image) }}');"></div>
+        {% else %}
+        <div class="dist-related-thumb" style="background:linear-gradient(135deg, {{ dist_colors[rd.id % 6] }}33, {{ dist_colors[(rd.id + 2) % 6] }}22);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏔️</div>
+        {% endif %}
+        <div>
+          <div class="dist-related-name">{{ rd.name }}</div>
+          <div class="dist-related-meta">{{ rd.place_count }} places</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ── TAB SWITCHING ──
+  document.querySelectorAll('.dist-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dist-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.dist-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.getElementById('panel-' + btn.dataset.tab);
+      if (target) target.classList.add('active');
+    });
+  });
+
+  // ── FILTERING & SORTING LOGIC ──
+  const searchInput = document.getElementById('dist-search-input');
+  const sortSelect = document.getElementById('dist-sort-select');
+  const chips = document.querySelectorAll('.dist-chip');
+  const container = document.getElementById('places-container');
+  const emptyState = document.getElementById('places-empty');
+  const visibleCountEl = document.getElementById('visible-count');
+  const resetBtn = document.getElementById('btn-reset-filters');
+
+  let activeCategory = 'all';
+  let userLat = null, userLng = null;
+
+  function filterAndSort() {
+    if (!container) return;
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const items = Array.from(container.querySelectorAll('.place-directory-item'));
+    let visibleCount = 0;
+
+    items.forEach(item => {
+      const name = item.dataset.name || '';
+      const cat = item.dataset.category || '';
+      const desc = item.dataset.desc || '';
+      const history = item.dataset.history || '';
+
+      // Category matching
+      let matchesCategory = (activeCategory === 'all');
+      if (!matchesCategory) {
+        if (activeCategory === 'temple') matchesCategory = ['temple', 'religious', 'spiritual'].some(c => cat.includes(c));
+        else if (activeCategory === 'nature') matchesCategory = ['nature', 'park', 'wildlife', 'sanctuary'].some(c => cat.includes(c));
+        else if (activeCategory === 'waterfall') matchesCategory = ['waterfall', 'lake', 'river'].some(c => cat.includes(c));
+        else if (activeCategory === 'mountain') matchesCategory = ['mountain', 'hill', 'hill_station'].some(c => cat.includes(c));
+        else if (activeCategory === 'historical') matchesCategory = ['historical', 'fort', 'heritage', 'monument'].some(c => cat.includes(c));
+        else if (activeCategory === 'picnic') matchesCategory = ['picnic', 'tourist_spot'].some(c => cat.includes(c));
+        else if (activeCategory === 'cultural') matchesCategory = ['cultural', 'adventure'].some(c => cat.includes(c));
+        else matchesCategory = cat.includes(activeCategory);
+      }
+
+      // Search matching
+      const matchesSearch = !query || name.includes(query) || cat.includes(query) || desc.includes(query) || history.includes(query);
+
+      if (matchesCategory && matchesSearch) {
+        item.style.display = '';
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    // Update count badge
+    if (visibleCountEl) visibleCountEl.textContent = visibleCount;
+
+    // Show/hide empty state
+    if (emptyState) {
+      emptyState.style.display = (visibleCount === 0) ? 'block' : 'none';
+    }
+
+    // Sort visible items
+    const sortVal = sortSelect ? sortSelect.value : 'popular';
+    items.sort((a, b) => {
+      if (sortVal === 'name') {
+        return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+      } else if (sortVal === 'newest') {
+        return (b.dataset.created || '').localeCompare(a.dataset.created || '');
+      } else if (sortVal === 'nearest' && userLat && userLng) {
+        const distA = getDistance(userLat, userLng, parseFloat(a.dataset.lat), parseFloat(a.dataset.lng));
+        const distB = getDistance(userLat, userLng, parseFloat(b.dataset.lat), parseFloat(b.dataset.lng));
+        return distA - distB;
+      } else {
+        // 'popular'
+        return parseInt(b.dataset.views || 0, 10) - parseInt(a.dataset.views || 0, 10);
+      }
+    });
+
+    // Re-append items in sorted order
+    items.forEach(item => container.appendChild(item));
+  }
+
+  // Haversine distance calculation helper
+  function getDistance(lat1, lon1, lat2, lon2) {
+    if (isNaN(lat2) || isNaN(lon2)) return 99999;
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  // Search Listener
+  if (searchInput) {
+    searchInput.addEventListener('input', filterAndSort);
+  }
+
+  // Sort Listener
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function() {
+      if (this.value === 'nearest' && (!userLat || !userLng)) {
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            pos => {
+              userLat = pos.coords.latitude;
+              userLng = pos.coords.longitude;
+              filterAndSort();
+            },
+            err => {
+              alert('Could not get your location for nearest sorting.');
+            }
+          );
+        }
+      } else {
+        filterAndSort();
+      }
+    });
+  }
+
+  // Category Chip Listeners
+  chips.forEach(chip => {
+    chip.addEventListener('click', function() {
+      chips.forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      activeCategory = this.dataset.cat || 'all';
+      filterAndSort();
+    });
+  });
+
+  // Reset Filters Button
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      activeCategory = 'all';
+      chips.forEach(c => c.classList.remove('active'));
+      const firstChip = document.querySelector('.dist-chip[data-cat="all"]');
+      if (firstChip) firstChip.classList.add('active');
+      if (sortSelect) sortSelect.value = 'popular';
+      filterAndSort();
+    });
+  }
+
+});
+</script>
+{% endblock %}
