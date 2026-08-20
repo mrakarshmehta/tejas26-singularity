@@ -71,3 +71,29 @@ class TestSouvenirsModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestArtisanWorkshops(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_workshops_database(self):
+        """Verify presence of signature artisan village workshops."""
+        from models.souvenirs import get_all_artisan_workshops
+        workshops = get_all_artisan_workshops()
+        self.assertGreaterEqual(len(workshops), 2)
+        districts = [w['district'] for w in workshops]
+        self.assertIn('Madhubani', districts)
+        self.assertIn('Bhagalpur', districts)
+
+    def test_workshops_api(self):
+        """Test /api/v1/souvenirs/workshops API endpoint."""
+        res = self.client.get('/api/v1/souvenirs/workshops')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 2)
