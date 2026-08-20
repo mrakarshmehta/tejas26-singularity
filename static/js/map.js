@@ -13,6 +13,16 @@ if (typeof L !== 'undefined' && L.Icon && L.Icon.Default) {
   });
 }
 
+// Mobile popup options helper
+function _getResponsivePopupOptions(customMaxWidth) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 480;
+  return {
+    maxWidth: isMobile ? 240 : (customMaxWidth || 300),
+    autoPanPadding: isMobile ? [12, 12] : [30, 30],
+    closeButton: true
+  };
+}
+
 // HTML escape utility — prevents XSS in Leaflet popups
 function _escHtml(str) {
   if (str === null || str === undefined) return '';
@@ -351,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               L.marker([lat, lng], { icon: markerIcon })
                 .addTo(map)
-                .bindPopup(popupHtml);
+                .bindPopup(popupHtml, _getResponsivePopupOptions());
 
               bounds.extend([lat, lng]);
             }
@@ -416,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               L.marker([lat, lng], { icon: numberIcon })
                 .addTo(map)
-                .bindPopup(popupHtml);
+                .bindPopup(popupHtml, _getResponsivePopupOptions());
 
               bounds.extend([lat, lng]);
             }
