@@ -1,0 +1,80 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ site.title }} - Bihar Archaeology & Epigraphy - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="archaeology-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/archaeology" style="color: inherit; text-decoration: none;">Archaeology & Epigraphy</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ site.title }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #1f140e 0%, #3f2c20 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #78350f;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            <span style="background: rgba(217, 119, 6, 0.2); color: #fde68a; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(217, 119, 6, 0.3);">
+                🏛️ {{ site.period }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                📍 {{ site.district }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                📜 Script: {{ site.script }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">
+            {{ site.title }}
+        </h1>
+        <p style="font-size: 1.05rem; color: #fed7aa; margin: 0;">
+            Patron / Era: <strong>{{ site.ruler }}</strong> • Category: <strong>{{ site.category }}</strong>
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Description & Finds -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    Site History & Epigraphical Significance
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin: 0 0 1.5rem 0;">
+                    {{ site.description }}
+                </p>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary, #0f172a);">
+                    🔍 Excavation Findings & Artefacts
+                </h3>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.95rem; line-height: 1.7; color: var(--text-muted, #334155);">
+                    {% for item in site.excavation_highlights %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right: Museum & Visitor Info -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: #b45309;">
+                    🏛️ Museum Preservation
+                </h3>
+                <p style="font-size: 0.9rem; color: var(--text-primary, #1e293b); margin: 0 0 1rem 0; line-height: 1.5;">
+                    {{ site.museum_preservation }}
+                </p>
+
+                <div style="border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 1rem; font-size: 0.85rem;">
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>Visiting Hours:</strong> {{ site.visiting_hours }}
+                    </div>
+                    <div>
+                        <strong>Coordinates:</strong> {{ site.coordinates.lat }}, {{ site.coordinates.lng }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
