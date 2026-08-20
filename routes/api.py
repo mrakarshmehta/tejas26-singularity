@@ -415,3 +415,31 @@ def api_get_festivals():
         'count': len(festivals),
         'festivals': festivals
     })
+
+
+@api_bp.route('/crafts', methods=['GET'])
+def api_get_crafts():
+    """JSON API endpoint returning Bihar GI-tagged crafts and artisan directories."""
+    from models.crafts import get_all_crafts, get_crafts_by_district
+    district = request.args.get('district')
+    crafts = get_crafts_by_district(district) if district else get_all_crafts()
+    return jsonify({
+        'status': 'success',
+        'count': len(crafts),
+        'crafts': crafts
+    })
+
+
+@api_bp.route('/crafts/<slug>', methods=['GET'])
+def api_get_craft_detail(slug):
+    """JSON API endpoint returning craft details and verified artisan workshops."""
+    from models.crafts import get_craft_by_slug, get_artisan_centers_for_craft
+    craft = get_craft_by_slug(slug)
+    if not craft:
+        return jsonify({'status': 'not_found', 'message': f'Craft not found: {slug}'}), 404
+    centers = get_artisan_centers_for_craft(slug)
+    return jsonify({
+        'status': 'success',
+        'craft': craft,
+        'artisan_centers': centers
+    })
