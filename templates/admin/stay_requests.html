@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Stay Requests Moderation — Admin — {{ app_name }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-md);max-width:1200px;margin:0 auto;padding:0 var(--space-lg);">
+    <div>
+      <h1 class="page-title">🏠 Homestay <span class="text-gradient-saffron">Requests</span></h1>
+      <p class="page-subtitle">{{ total }} total booking request(s) across Bihar</p>
+    </div>
+    <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap;">
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">← Admin Dashboard</a>
+      <a href="{{ url_for('admin.hosts_management') }}" class="btn btn-outline">👤 Host Profiles</a>
+    </div>
+  </div>
+</section>
+
+<!-- Filters -->
+<section style="max-width:1200px;margin:0 auto;padding:0 var(--space-lg) var(--space-xl);">
+  <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap;">
+    <a href="{{ url_for('admin.stay_requests_management') }}" class="btn btn-sm {% if not current_status %}btn-primary{% else %}btn-outline{% endif %}">All</a>
+    <a href="{{ url_for('admin.stay_requests_management', status='pending') }}" class="btn btn-sm {% if current_status == 'pending' %}btn-primary{% else %}btn-outline{% endif %}">⏳ Pending</a>
+    <a href="{{ url_for('admin.stay_requests_management', status='accepted') }}" class="btn btn-sm {% if current_status == 'accepted' %}btn-primary{% else %}btn-outline{% endif %}">✅ Accepted</a>
+    <a href="{{ url_for('admin.stay_requests_management', status='rejected') }}" class="btn btn-sm {% if current_status == 'rejected' %}btn-primary{% else %}btn-outline{% endif %}">❌ Declined</a>
+    <a href="{{ url_for('admin.stay_requests_management', status='cancelled_by_traveller') }}" class="btn btn-sm {% if current_status == 'cancelled_by_traveller' %}btn-primary{% else %}btn-outline{% endif %}">🚫 Traveller Cancelled</a>
+    <a href="{{ url_for('admin.stay_requests_management', status='cancelled_by_host') }}" class="btn btn-sm {% if current_status == 'cancelled_by_host' %}btn-primary{% else %}btn-outline{% endif %}">⚠️ Host Cancelled</a>
+  </div>
+</section>
+
+<!-- Table -->
+<section class="section" style="max-width:1200px;margin:0 auto;padding:0 var(--space-lg);">
+  {% if requests and requests|length > 0 %}
+  <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-xl);overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;text-align:left;font-size:0.9rem;">
+      <thead>
+        <tr style="background:var(--bg-elevated);border-bottom:1px solid var(--border-color);font-size:0.75rem;text-transform:uppercase;color:var(--text-muted);">
+          <th style="padding:14px 16px;">#ID</th>
+          <th style="padding:14px 16px;">Stay & District</th>
+          <th style="padding:14px 16px;">Traveller</th>
+          <th style="padding:14px 16px;">Host</th>
+          <th style="padding:14px 16px;">Dates & Guests</th>
+          <th style="padding:14px 16px;">Total</th>
+          <th style="padding:14px 16px;">Status</th>
+          <th style="padding:14px 16px;text-align:right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in requests %}
+        <tr style="border-bottom:1px solid var(--border-color);">
+          <td style="padding:14px 16px;font-weight:700;">#{{ r.id }}</td>
+          <td style="padding:14px 16px;">
+            <a href="{{ url_for('stays.stay_detail_slug', slug=r.listing_slug) }}" style="font-weight:700;color:inherit;text-decoration:none;">
+              {{ r.listing_title }}
+            </a>
+            <div style="font-size:0.78rem;color:var(--text-muted);">📍 {{ r.district_name or 'Bihar' }}</div>
+          </td>
+          <td style="padding:14px 16px;">
+            <div style="font-weight:600;">{{ r.traveller_display_name or 'Traveller' }}</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">{{ r.traveller_email }}</div>
+          </td>
+          <td style="padding:14px 16px;">
+            <div style="font-weight:600;">{{ r.host_display_name or 'Host' }}</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">{{ r.host_email }}</div>
+          </td>
+          <td style="padding:14px 16px;">
+            <div>{{ r.check_in_date }} → {{ r.check_out_date }}</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">{{ r.nights }} night(s) · {{ r.num_guests }} guest(s)</div>
+          </td>
+          <td style="padding:14px 16px;">
+            {% if r.listing_type == 'free_stay' %}
+              <span style="color:#10b981;font-weight:700;">Free</span>
+            {% else %}
+              <span style="color:var(--primary);font-weight:700;">₹{{ r.total_price|int }}</span>
+            {% endif %}
+          </td>
+          <td style="padding:14px 16px;">
+            {% if r.status == 'pending' %}
+              <span style="padding:3px 8px;border-radius:12px;font-size:0.75rem;font-weight:700;background:rgba(245,158,11,0.15);color:var(--accent-amber);">Pending</span>
+            {% elif r.status == 'accepted' or r.status == 'confirmed' %}
+              <span style="padding:3px 8px;border-radius:12px;font-size:0.75rem;font-weight:700;background:rgba(16,185,129,0.15);color:#10b981;">Accepted</span>
+            {% elif r.status == 'rejected' %}
+              <span style="padding:3px 8px;border-radius:12px;font-size:0.75rem;font-weight:700;background:rgba(239,68,68,0.15);color:#ef4444;">Declined</span>
+            {% else %}
+              <span style="padding:3px 8px;border-radius:12px;font-size:0.75rem;font-weight:700;background:rgba(148,163,184,0.15);color:#94a3b8;">{{ r.status }}</span>
+            {% endif %}
+          </td>
+          <td style="padding:14px 16px;text-align:right;">
+            {% if r.status in ('pending', 'accepted', 'confirmed') %}
+            <button type="button" class="btn btn-outline btn-sm" style="color:#ef4444;border-color:rgba(239,68,68,0.4);" onclick="openAdminCancelModal({{ r.id }}, '{{ r.listing_title }}')">
+              Force Cancel
+            </button>
+            {% else %}
+            <span style="color:var(--text-muted);font-size:0.8rem;">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if total_pages > 1 %}
+  <div style="display:flex;justify-content:center;gap:var(--space-xs);margin-top:var(--space-xl);">
+    {% for p in range(1, total_pages + 1) %}
+    <a href="{{ url_for('admin.stay_requests_management', status=current_status, page=p) }}"
+       class="btn btn-sm {% if p == page %}btn-primary{% else %}btn-outline{% endif %}">
+      {{ p }}
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div style="text-align:center;padding:var(--space-3xl);background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-xl);">
+    <span style="font-size:3rem;display:block;margin-bottom:var(--space-md);">📭</span>
+    <h3>No stay requests found</h3>
+    <p style="color:var(--text-muted);">No booking records match the selected filter.</p>
+  </div>
+  {% endif %}
+</section>
+
+<!-- Admin Force Cancel Modal -->
+<div id="admin-cancel-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-2xl);padding:var(--space-xl);max-width:440px;width:90%;">
+    <h3 style="font-family:var(--font-heading);font-size:1.2rem;margin-bottom:var(--space-xs);">Admin Force Cancellation</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:var(--space-md);" id="admin-modal-desc"></p>
+
+    <form method="POST" id="admin-cancel-form">
+      {{ csrf_input() }}
+      <div style="margin-bottom:var(--space-lg);">
+        <label style="font-size:0.8rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">Reason for Admin Cancellation *</label>
+        <textarea name="reason" class="form-input" rows="3" required placeholder="Policy violation, host unresponsiveness, emergency, etc..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:var(--space-md);justify-content:flex-end;">
+        <button type="button" class="btn btn-outline" onclick="closeAdminCancelModal()">Back</button>
+        <button type="submit" class="btn btn-primary" style="background:#ef4444;border-color:#ef4444;">Confirm Cancellation</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openAdminCancelModal(reqId, listingTitle) {
+  const modal = document.getElementById('admin-cancel-modal');
+  const form = document.getElementById('admin-cancel-form');
+  form.action = '/admin/stay-requests/' + reqId + '/cancel';
+  document.getElementById('admin-modal-desc').textContent = 'Are you sure you want to administratively cancel booking #' + reqId + ' for "' + listingTitle + '"?';
+  modal.style.display = 'flex';
+}
+function closeAdminCancelModal() {
+  document.getElementById('admin-cancel-modal').style.display = 'none';
+}
+</script>
+{% endblock %}

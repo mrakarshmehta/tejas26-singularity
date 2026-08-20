@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block title %}Host Management — Admin — {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<style>
+.hosts-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: var(--space-xl);
+}
+.hosts-header h1 {
+  font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;
+}
+
+/* Filter Tabs */
+.host-filter-tabs {
+  display: flex; gap: var(--space-xs); flex-wrap: wrap;
+  margin-bottom: var(--space-xl);
+}
+.host-filter-tab {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem; font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-muted);
+}
+.host-filter-tab:hover { border-color: var(--primary); color: var(--primary); }
+.host-filter-tab.active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.host-filter-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  border-radius: 999px; font-size: 0.7rem; font-weight: 700;
+  margin-left: 4px;
+}
+.host-filter-tab.active .host-filter-badge { background: rgba(255,255,255,0.25); color: #fff; }
+.host-filter-tab:not(.active) .host-filter-badge { background: var(--bg-elevated); }
+
+/* Stats Row */
+.host-admin-stats {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-sm); margin-bottom: var(--space-xl);
+}
+.host-admin-stat {
+  padding: var(--space-md);
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius-md); text-align: center;
+}
+.host-admin-stat-val { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; }
+.host-admin-stat-lbl { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+
+/* Host Cards */
+.host-card {
+  display: flex; align-items: flex-start; gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-md);
+  transition: box-shadow 0.2s;
+}
+.host-card:hover { box-shadow: var(--shadow-md); }
+.host-card-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 2px solid var(--border-color);
+}
+.host-card-avatar-emoji {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--bg-elevated);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; flex-shrink: 0;
+}
+.host-card-info { flex: 1; }
+.host-card-name {
+  font-family: var(--font-heading); font-size: 1rem; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 2px;
+}
+.host-card-meta {
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+}
+.host-card-status {
+  display: inline-block; padding: 2px 8px;
+  border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-under_review { background: #dbeafe; color: #1e40af; }
+.status-approved { background: #d1fae5; color: #065f46; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+.status-suspended { background: #fce7f3; color: #9d174d; }
+
+.host-card-actions {
+  display: flex; gap: var(--space-xs); flex-shrink: 0;
+}
+.host-action-btn {
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-size: 0.78rem; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border-color); background: var(--bg-card);
+  color: var(--text-primary); transition: all 0.2s;
+  text-decoration: none;
+}
+.host-action-btn:hover { border-color: var(--primary); }
+.host-action-btn.approve { background: #10b981; color: #fff; border-color: #10b981; }
+.host-action-btn.reject { background: #ef4444; color: #fff; border-color: #ef4444; }
+.host-action-btn.suspend { background: #f59e0b; color: #fff; border-color: #f59e0b; }
+.host-action-btn.reinstate { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+.host-empty-admin {
+  text-align: center; padding: var(--space-3xl);
+  color: var(--text-muted);
+}
+.host-empty-admin .icon { font-size: 3rem; margin-bottom: var(--space-md); }
+
+@media (max-width: 768px) {
+  .host-card { flex-direction: column; }
+  .host-card-actions { width: 100%; justify-content: flex-start; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container" style="max-width:1000px;margin:0 auto;padding:var(--space-xl) var(--space-lg);">
+
+  <div class="hosts-header">
+    <h1>🏠 Host Management</h1>
+    <a href="{{ url_for('admin.dashboard') }}" class="host-action-btn">← Admin Dashboard</a>
+  </div>
+
+  {# Stats #}
+  <div class="host-admin-stats">
+    <div class="host-admin-stat">
+      <div class="host-admin-stat-val">{{ counts.total or 0 }}</div>
+      <div class="host-admin-stat-lbl">Total Hosts</div>
+    </div>
+    <div class="host-admin-stat">
+      <div class="host-admin-stat-val" style="color:#f59e0b;">{{ counts.pending or 0 }}</div>
+      <div class="host-admin-stat-lbl">Pending</div>
+    </div>
+    <div class="host-admin-stat">
+      <div class="host-admin-stat-val" style="color:#3b82f6;">{{ counts.under_review or 0 }}</div>
+      <div class="host-admin-stat-lbl">Under Review</div>
+    </div>
+    <div class="host-admin-stat">
+      <div class="host-admin-stat-val" style="color:#10b981;">{{ counts.approved or 0 }}</div>
+      <div class="host-admin-stat-lbl">Approved</div>
+    </div>
+    <div class="host-admin-stat">
+      <div class="host-admin-stat-val" style="color:#ef4444;">{{ counts.rejected or 0 }}</div>
+      <div class="host-admin-stat-lbl">Rejected</div>
+    </div>
+    <div class="host-admin-stat">
+      <div class="host-admin-stat-val" style="color:#ec4899;">{{ counts.suspended or 0 }}</div>
+      <div class="host-admin-stat-lbl">Suspended</div>
+    </div>
+  </div>
+
+  {# Filter Tabs #}
+  <div class="host-filter-tabs">
+    <a href="{{ url_for('admin.hosts_management') }}" class="host-filter-tab {% if not current_filter %}active{% endif %}">
+      All <span class="host-filter-badge">{{ counts.total or 0 }}</span>
+    </a>
+    <a href="{{ url_for('admin.hosts_management', status='pending') }}" class="host-filter-tab {% if current_filter == 'pending' %}active{% endif %}">
+      ⏳ Pending <span class="host-filter-badge">{{ counts.pending or 0 }}</span>
+    </a>
+    <a href="{{ url_for('admin.hosts_management', status='under_review') }}" class="host-filter-tab {% if current_filter == 'under_review' %}active{% endif %}">
+      🔍 Under Review <span class="host-filter-badge">{{ counts.under_review or 0 }}</span>
+    </a>
+    <a href="{{ url_for('admin.hosts_management', status='approved') }}" class="host-filter-tab {% if current_filter == 'approved' %}active{% endif %}">
+      ✅ Approved <span class="host-filter-badge">{{ counts.approved or 0 }}</span>
+    </a>
+    <a href="{{ url_for('admin.hosts_management', status='rejected') }}" class="host-filter-tab {% if current_filter == 'rejected' %}active{% endif %}">
+      ❌ Rejected <span class="host-filter-badge">{{ counts.rejected or 0 }}</span>
+    </a>
+  </div>
+
+  {# Host List #}
+  {% if hosts %}
+    {% for h in hosts %}
+    <div class="host-card">
+      {% if h.profile_photo %}
+      <img src="{{ url_for('static', filename='uploads/hosts/profiles/' + h.profile_photo) }}" class="host-card-avatar" alt="">
+      {% else %}
+      <div class="host-card-avatar-emoji">🏠</div>
+      {% endif %}
+
+      <div class="host-card-info">
+        <div class="host-card-name">
+          {{ h.full_name or h.display_name or h.username }}
+          <span class="host-card-status status-{{ h.verification_status }}">{{ h.verification_status }}</span>
+        </div>
+        <div class="host-card-meta">
+          📧 {{ h.email }} · 📱 {{ h.phone or 'No phone' }}<br>
+          📍 {{ h.district_name or 'Unknown district' }} · 📮 {{ h.pin_code or '—' }}<br>
+          🪪 ID Type: {{ h.id_type or '—' }} · Applied: {{ h.created_at.strftime('%d %b %Y') if h.created_at else '—' }}
+          {% if h.rejection_reason %}<br>❗ Reason: {{ h.rejection_reason }}{% endif %}
+        </div>
+      </div>
+
+      <div class="host-card-actions">
+        {% if h.verification_status == 'pending' %}
+          <form method="POST" action="{{ url_for('admin.host_review', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <button type="submit" class="host-action-btn" title="Mark as under review">🔍 Review</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin.host_approve', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <button type="submit" class="host-action-btn approve">✅ Approve</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin.host_reject', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <input type="hidden" name="reason" value="Application incomplete">
+            <button type="submit" class="host-action-btn reject">❌ Reject</button>
+          </form>
+        {% elif h.verification_status == 'under_review' %}
+          <form method="POST" action="{{ url_for('admin.host_approve', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <button type="submit" class="host-action-btn approve">✅ Approve</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin.host_reject', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <input type="hidden" name="reason" value="Does not meet requirements">
+            <button type="submit" class="host-action-btn reject">❌ Reject</button>
+          </form>
+        {% elif h.verification_status == 'approved' %}
+          <form method="POST" action="{{ url_for('admin.host_suspend', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <input type="hidden" name="reason" value="Policy violation">
+            <button type="submit" class="host-action-btn suspend" onclick="return confirm('Suspend this host?')">⚠️ Suspend</button>
+          </form>
+        {% elif h.verification_status == 'suspended' %}
+          <form method="POST" action="{{ url_for('admin.host_reinstate', host_id=h.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <button type="submit" class="host-action-btn reinstate">🔄 Reinstate</button>
+          </form>
+        {% elif h.verification_status == 'rejected' %}
+          <span style="font-size:0.8rem;color:var(--text-muted);">User can reapply</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="host-empty-admin">
+      <div class="icon">📭</div>
+      <p>No host applications {% if current_filter %}with status "{{ current_filter }}"{% endif %}.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
