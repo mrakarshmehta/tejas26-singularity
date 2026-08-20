@@ -140,3 +140,16 @@ Payload:
   "total": 6,
   "badge": "Grand Magadha Mahapandit"
 }
+## Complete Subsystems API Map (v2.7.0)
+
+| Subsystem | Endpoints | Description |
+|-----------|-----------|-------------|
+| **Archaeology & Epigraphy** | /api/v1/archaeology/sites, /api/v1/archaeology/chronology, /api/v1/archaeology/coins, /api/v1/archaeology/inscriptions | Excavation records, Ashokan pillars, Gupta gold dinars, Brahmi rock edicts. |
+| **Weather & Microclimate** | /api/v1/weather/districts, /api/v1/weather/packing-advice, /api/v1/weather/phenomena, /api/v1/weather/alerts | 38 district normals, AQI categories, winter fog index, severe weather protocols. |
+| **Folk Performing Arts** | /api/v1/performing-arts, /api/v1/performing-arts/instruments, /api/v1/performing-arts/guilds, /api/v1/performing-arts/seasons | Bidesiya theater, Chhau dance, Kajari/Sohar ballads, instrument gallery. |
+| **Verified Tour Guides** | /api/v1/guides, /api/v1/guides/inquire, /api/v1/guides/ethics, /api/v1/guides/verify-license | Certified ASI guides, multilingual storytellers, zero-commission inquiries. |
+| **Eco-Trails & Treks** | /api/v1/treks, /api/v1/treks/safety, /api/v1/treks/campsites, /api/v1/treks/fitness | Mandar Hill, Rohtasgarh canyon, elevation gains, Leave No Trace protocols. |
+| **GI Souvenirs & Crafts** | /api/v1/souvenirs, /api/v1/souvenirs/guidelines, /api/v1/souvenirs/workshops, /api/v1/souvenirs/authenticity | Madhubani silk, Bhagalpuri weaves, Sikki grass, artisan guild workshops. |
+| **Ancient Intellectual Heritage** | /api/v1/scholars, /api/v1/scholars/universities, /api/v1/scholars/treatises, /api/v1/scholars/nalanda-library | Aryabhata, Chanakya, Nalanda 9-story library towers (Dharmaganja). |
+| **Trip Budget Planner** | /api/v1/budget/calculate, /api/v1/budget/tiers, /api/v1/budget/currencies, /api/v1/budget/district-cost-index, /api/v1/budget/tipping-guidelines | Multi-currency (7 currencies) itemized cost calculator and tipping guide. |
+| **Heritage Trivia Quiz** | /api/v1/quiz/questions, /api/v1/quiz/categories, /api/v1/quiz/evaluate, /api/v1/quiz/certificate | Cultural gamification question bank, badge rewards, and digital certificates. |
