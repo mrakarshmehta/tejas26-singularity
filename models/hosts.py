@@ -303,3 +303,47 @@ def create_notification(user_id, notif_type, title, message, link=''):
     """Create a notification for a user."""
     with get_cursor(commit=True) as cur:
         _notify(cur, user_id, notif_type, title, message, link)
+
+
+def validate_stay_dates(check_in_str, check_out_str, max_advance_days=180):
+    """Validate check-in and check-out dates.
+
+    Returns:
+        tuple (is_valid: bool, error_message: str or None, total_nights: int)
+    """
+    from datetime import datetime, date
+    if not check_in_str or not check_out_str:
+        return False, "Check-in and check-out dates are required.", 0
+    try:
+        cin = datetime.strptime(str(check_in_str).strip(), '%Y-%m-%d').date()
+        cout = datetime.strptime(str(check_out_str).strip(), '%Y-%m-%d').date()
+    except ValueError:
+        return False, "Invalid date format. Expected YYYY-MM-DD.", 0
+
+    today = date.today()
+    if cin < today:
+        return False, "Check-in date cannot be in the past.", 0
+    if cout <= cin:
+        return False, "Check-out date must be after check-in date.", 0
+
+    nights = (cout - cin).days
+    if nights > 30:
+        return False, "Maximum stay duration is 30 nights per booking.", 0
+    if (cin - today).days > max_advance_days:
+        return False, f"Bookings can only be made up to {max_advance_days} days in advance.", 0
+
+    return True, None, nights
+
+
+def check_listing_capacity(max_guests, requested_guests):
+    """Validate requested guests against max listing capacity."""
+    try:
+        rg = int(requested_guests)
+        mg = int(max_guests or 1)
+        if rg < 1:
+            return False, "Guest count must be at least 1."
+        if rg > mg:
+            return False, f"Requested {rg} guests exceeds max capacity of {mg}."
+        return True, None
+    except (TypeError, ValueError):
+        return False, "Invalid guest count."
