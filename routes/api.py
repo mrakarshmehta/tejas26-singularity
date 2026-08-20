@@ -367,3 +367,30 @@ def api_get_circuit_detail(slug):
         'circuit': circuit,
         'metrics': metrics
     })
+
+
+@api_bp.route('/places/<slug>/audio-guide', methods=['GET'])
+def api_get_place_audio_guide(slug):
+    """JSON API returning audio guide stream links and transcripts for multiple languages."""
+    from models.places import get_place_audio_guide, PLACE_AUDIO_GUIDES_DB
+    guide = get_place_audio_guide(slug)
+    if not guide:
+        return jsonify({
+            'status': 'not_found',
+            'message': f'No audio guide currently available for: {slug}',
+            'available_places': list(PLACE_AUDIO_GUIDES_DB.keys())
+        }), 404
+
+    lang = request.args.get('lang', 'en')
+    selected_track = guide['languages'].get(lang) or guide['languages'].get('en')
+
+    return jsonify({
+        'status': 'success',
+        'title': guide['title'],
+        'district': guide['district'],
+        'duration_sec': guide['duration_sec'],
+        'narrator': guide['narrator'],
+        'selected_language': lang,
+        'track': selected_track,
+        'supported_languages': list(guide['languages'].keys())
+    })
