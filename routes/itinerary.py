@@ -2,6 +2,7 @@
 import logging
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 
+from models.itineraries import calculate_itinerary_budget, get_pacing_config
 from models.database import (
     save_itinerary, create_itinerary, get_itineraries, get_itinerary_by_id,
     get_itinerary_items, add_itinerary_item, remove_itinerary_item,
@@ -397,3 +398,20 @@ def api_save_generated():
 
     return jsonify({'id': iid, 'redirect': url_for('itinerary.view_trip', itinerary_id=iid)})
 
+
+
+@itinerary_bp.route('/api/budget-estimate', methods=['GET'])
+def api_budget_estimate():
+    """API endpoint to calculate estimated trip budget."""
+    days = request.args.get('days', 3, type=int)
+    companion = request.args.get('companion', 'solo')
+    budget_tier = request.args.get('tier', 'moderate')
+    pace = request.args.get('pace', 'balanced')
+
+    estimate = calculate_itinerary_budget(days=days, companion_type=companion, budget_tier=budget_tier)
+    pacing = get_pacing_config(pace)
+    return jsonify({
+        'status': 'success',
+        'budget': estimate,
+        'pacing': pacing
+    })
