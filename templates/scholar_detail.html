@@ -1,0 +1,78 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ scholar.name }} - Bihar Intellectual Heritage - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="scholar-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/intellectual-heritage" style="color: inherit; text-decoration: none;">Intellectual Heritage</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ scholar.name }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #4f46e5;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            <span style="background: rgba(99, 102, 241, 0.2); color: #c7d2fe; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(99, 102, 241, 0.3);">
+                💡 {{ scholar.field }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                ⏳ {{ scholar.era }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">
+            {{ scholar.icon }} {{ scholar.name }}
+        </h1>
+        <p style="font-size: 1.05rem; color: #c7d2fe; margin: 0;">
+            Primary Treatise: <strong>{{ scholar.primary_treatise }}</strong> • Base: <strong>{{ scholar.birthplace_connection }}</strong>
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Biography & Discoveries -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    Intellectual Biography & Historical Impact
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin: 0 0 1.5rem 0;">
+                    {{ scholar.biography }}
+                </p>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary, #0f172a);">
+                    🔬 Foundational Discoveries & Formulations
+                </h3>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.95rem; line-height: 1.7; color: var(--text-muted, #334155);">
+                    {% for b in scholar.breakthrough_discoveries %}
+                    <li>{{ b }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right: Treatise Details -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 0.75rem; color: #4f46e5;">
+                    📖 Primary Treatise
+                </h3>
+                <p style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary, #0f172a); margin: 0 0 0.5rem 0;">
+                    {{ scholar.primary_treatise }}
+                </p>
+                <p style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin: 0 0 1rem 0; line-height: 1.5;">
+                    Studied and translated across the Silk Road, Tibet, East Asia, and the Islamic Golden Age.
+                </p>
+
+                <div style="border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 1rem; font-size: 0.85rem;">
+                    <strong>Historical Geographic Base:</strong>
+                    <div style="color: var(--text-muted, #334155); margin-top: 0.2rem;">
+                        📍 {{ scholar.birthplace_connection }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
