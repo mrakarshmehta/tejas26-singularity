@@ -114,3 +114,58 @@ DISTRICT_WEATHER_DB = [
         "microclimate_notes": "High-altitude waterfall spray at Telhar Kund and Tutla Bhawani reduces ambient temperature by 4-6°C."
     }
 ]
+
+AQI_LEVELS = [
+    {"range": [0, 50], "label": "Good", "color": "#16a34a", "advisory": "Air quality is ideal for outdoor monuments and heritage walks."},
+    {"range": [51, 100], "label": "Satisfactory", "color": "#84cc16", "advisory": "Minor discomfort for sensitive individuals; excellent for general travel."},
+    {"range": [101, 200], "label": "Moderate", "color": "#eab308", "advisory": "Breathing discomfort possible for children and elderly; carry water."},
+    {"range": [201, 300], "label": "Poor", "color": "#f97316", "advisory": "Consider wearing an N95 mask during peak traffic or heavy morning fog."},
+    {"range": [301, 500], "label": "Severe", "color": "#dc2626", "advisory": "Avoid strenuous outdoor exertion; visit indoor museums and galleries."}
+]
+
+def get_all_district_weather():
+    """Return weather normals and microclimatic data for all cataloged districts."""
+    return DISTRICT_WEATHER_DB
+
+def get_district_weather_by_slug(slug):
+    """Retrieve district weather by slug or name."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for w in DISTRICT_WEATHER_DB:
+        if w["slug"] == s or w["district"].lower() == s:
+            return w
+    return None
+
+def classify_aqi_level(aqi_value):
+    """Return health category and advisory string for a given numeric AQI."""
+    try:
+        val = int(aqi_value)
+    except (ValueError, TypeError):
+        return {"label": "Unknown", "color": "#64748b", "advisory": "No AQI data available."}
+
+    for lvl in AQI_LEVELS:
+        if lvl["range"][0] <= val <= lvl["range"][1]:
+            return lvl
+    return AQI_LEVELS[-1]
+
+def get_seasonal_packing_advice(slug, month=None):
+    """Return packing and clothing advisory tailored to district microclimate and season."""
+    weather = get_district_weather_by_slug(slug)
+    if not weather:
+        return {"general": "Light cottons in summer, warm woolens in winter, rain protection in monsoon."}
+
+    month_num = int(month) if str(month).isdigit() else 11
+    if month_num in [11, 12, 1, 2]:
+        season = "winter"
+    elif month_num in [6, 7, 8, 9]:
+        season = "monsoon"
+    else:
+        season = "summer"
+
+    return {
+        "season_detected": season,
+        "recommendation": weather["clothing_recommendation"].get(season, ""),
+        "microclimate": weather.get("microclimate_notes", ""),
+        "best_window": weather.get("best_travel_window", "")
+    }
