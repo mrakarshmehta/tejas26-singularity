@@ -979,3 +979,27 @@ def api_get_folk_instruments():
         'count': len(instruments),
         'instruments': instruments
     })
+
+@api_bp.route('/performing-arts/guilds', methods=['GET'])
+def api_get_folk_guilds():
+    """JSON API returning traditional folk performance troupes, repertories, and artist mandalis."""
+    from models.performing_arts import get_all_folk_guilds
+    guilds = get_all_folk_guilds()
+    return jsonify({
+        'status': 'success',
+        'count': len(guilds),
+        'guilds': guilds
+    })
+
+
+@api_bp.route('/performing-arts/guilds/<guild_id>', methods=['GET'])
+def api_get_folk_guild_detail(guild_id):
+    """JSON API returning troupe contact notes, lead exponents, and performance seasons."""
+    from models.performing_arts import get_guild_by_id
+    guild = get_guild_by_id(guild_id)
+    if not guild:
+        return jsonify({'status': 'not_found', 'message': f'Artist guild not found: {guild_id}'}), 404
+    return jsonify({
+        'status': 'success',
+        'guild': guild
+    })
