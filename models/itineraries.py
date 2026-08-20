@@ -188,3 +188,40 @@ def calculate_itinerary_budget(days=3, companion_type='solo', budget_tier='moder
         'daily_average': int(total / days) if days > 0 else total,
         'total_estimated_inr': total
     }
+
+
+def get_itinerary_cultural_highlights(travel_month=None, districts=None):
+    """
+    Find relevant cultural festivals and thematic circuits matching travel month and districts.
+    """
+    highlights = {
+        'festivals': [],
+        'circuits': []
+    }
+    try:
+        from models.festivals import get_festivals_by_month, get_all_festivals
+        if travel_month:
+            festivals = get_festivals_by_month(travel_month)
+        else:
+            festivals = get_all_festivals()[:3]
+        highlights['festivals'] = festivals
+    except Exception:
+        pass
+
+    try:
+        from models.circuits import get_all_circuits
+        all_circuits = get_all_circuits()
+        if districts:
+            dist_set = set(d.lower().strip() for d in districts if d)
+            matched = []
+            for c in all_circuits:
+                c_districts = {s['district'].lower().strip() for s in c.get('stops', [])}
+                if any(any(d in cd for cd in c_districts) for d in dist_set):
+                    matched.append(c)
+            highlights['circuits'] = matched if matched else all_circuits[:2]
+        else:
+            highlights['circuits'] = all_circuits[:2]
+    except Exception:
+        pass
+
+    return highlights

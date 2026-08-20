@@ -431,3 +431,18 @@ def export_itinerary_json(itinerary_id):
         'export_format': 'json',
         'generator': 'HiddenYatra AI Trip Planner'
     })
+
+
+@itinerary_bp.route('/api/cultural-highlights', methods=['GET'])
+def api_cultural_highlights():
+    """API endpoint to get festivals and thematic circuits matching travel parameters."""
+    from models.itineraries import get_itinerary_cultural_highlights
+    month = request.args.get('month')
+    districts = request.args.getlist('district') or request.args.get('districts', '').split(',')
+    districts = [d.strip() for d in districts if d.strip()]
+
+    highlights = get_itinerary_cultural_highlights(travel_month=month, districts=districts)
+    return jsonify({
+        'status': 'success',
+        'highlights': highlights
+    })
