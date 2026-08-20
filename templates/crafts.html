@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Geographical Indication (GI) Crafts & Handlooms — HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="crafts-page" style="max-width:1200px;margin:40px auto;padding:0 20px;">
+
+  <!-- Hero Header -->
+  <div style="text-align:center;margin-bottom:40px;">
+    <div style="font-size:2.5rem;margin-bottom:8px;">🎨</div>
+    <h1 style="font-size:2.2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">GI-Tagged Handicrafts & Artisan Handlooms</h1>
+    <p style="color:var(--text-muted);font-size:1.1rem;max-width:750px;margin:0 auto 24px;">
+      Explore Bihar's globally celebrated folk art traditions, certified Geographical Indication (GI) handicrafts, and support rural artisan clusters directly.
+    </p>
+
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,122,24,0.12);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,122,24,0.25);">
+      <span style="font-size:0.85rem;color:var(--accent-orange, #ff7a18);font-weight:700;">🛡️ 100% Verified Authentic GI Craft Heritage</span>
+    </div>
+  </div>
+
+  <!-- Crafts Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));gap:24px;">
+    {% for c in crafts %}
+    <div class="craft-card" style="background:var(--bg-card, #1e293b);border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+      <div style="padding:24px;flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:2rem;">{{ c.icon }}</span>
+          <span style="font-size:0.75rem;padding:4px 10px;border-radius:12px;background:rgba(5,150,105,0.15);color:#10b981;font-weight:700;">{{ c.gi_status }}</span>
+        </div>
+
+        <h2 style="font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:6px;">{{ c.name }}</h2>
+        <div style="font-size:0.85rem;color:var(--accent-orange, #ff7a18);font-weight:600;margin-bottom:12px;">📍 Origin: {{ c.origin_district }} ({{ c.region }})</div>
+
+        <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.55;margin-bottom:16px;">{{ c.description }}</p>
+
+        <!-- Prominent Artisan Villages -->
+        <div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:6px;">Artisan Villages:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            {% for v in c.prominent_villages %}
+            <span style="font-size:0.8rem;background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:6px;color:#cbd5e1;">🏡 {{ v }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px;background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.8rem;color:var(--text-muted);">🏷️ {{ c.type }}</span>
+        <a href="/explore-map?district={{ c.origin_district }}" class="btn btn-sm btn-primary" style="font-size:0.82rem;padding:6px 14px;border-radius:8px;text-decoration:none;background:var(--accent-orange, #ff7a18);color:#fff;font-weight:600;">Find Guilds on Map →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
