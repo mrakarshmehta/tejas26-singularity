@@ -1,0 +1,85 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ souvenir.name }} - Authentic Bihar GI Craft - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="souvenir-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/souvenirs" style="color: inherit; text-decoration: none;">GI Souvenirs</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ souvenir.name }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #431407 0%, #7c2d12 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #c2410c;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            <span style="background: rgba(251, 146, 60, 0.2); color: #ffedd5; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(251, 146, 60, 0.3);">
+                🏺 {{ souvenir.gi_tag_status }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                📍 {{ souvenir.district }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">
+            {{ souvenir.icon }} {{ souvenir.name }}
+        </h1>
+        <p style="font-size: 1.05rem; color: #fed7aa; margin: 0;">
+            Cluster: <strong>{{ souvenir.artisan_cluster }}</strong> • Category: <strong>{{ souvenir.craft_category }}</strong>
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Backstory & Materials -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    Craft History & Heritage Technique
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin: 0 0 1.5rem 0;">
+                    {{ souvenir.description }}
+                </p>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary, #0f172a);">
+                    🌿 Raw Materials & Organic Pigments
+                </h3>
+                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted, #475569); margin: 0 0 1.25rem 0;">
+                    {{ souvenir.materials }}
+                </p>
+
+                <div style="padding: 1rem; background: rgba(22, 163, 74, 0.08); border-radius: 8px; border-left: 4px solid #16a34a;">
+                    <strong style="color: #15803d;">Fair-Trade Impact:</strong>
+                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #166534;">
+                        {{ souvenir.ethical_impact }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Authenticity Seal & Pricing -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 0.5rem; color: #c2410c;">
+                    💰 Fair-Trade Price Benchmark
+                </h3>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary, #0f172a); margin-bottom: 0.75rem;">
+                    ₹{{ souvenir.price_range_inr.min }} - ₹{{ souvenir.price_range_inr.max }}
+                </div>
+
+                <div style="border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 1rem; font-size: 0.85rem;">
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>Authenticity Seal:</strong>
+                        <div style="color: #059669; font-weight: 600; margin-top: 0.2rem;">
+                            🛡️ {{ souvenir.authenticity_seal }}
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Cooperative:</strong> {{ souvenir.artisan_cluster }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
