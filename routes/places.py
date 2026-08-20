@@ -2,6 +2,7 @@
 import logging
 from flask import Blueprint, render_template, session
 from models.database import (
+    get_places_by_filter,
     get_place_by_slug, get_photos_by_place,
     get_specialties_by_place, get_nearby_places,
     get_accommodations_by_place, get_reviews_by_place,

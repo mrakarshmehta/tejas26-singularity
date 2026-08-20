@@ -1,6 +1,7 @@
 """Public page routes — home, browse, search, district, block, explore map, food & culture."""
 from flask import Blueprint, render_template, request
 from models.database import (
+    get_places_by_filter,
     get_all_states, get_state_by_slug, get_featured_places,
     get_recent_places, get_places_by_state, get_districts_by_state,
     get_blocks_by_district, get_blocks_grouped_by_district,
