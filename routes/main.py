@@ -572,3 +572,34 @@ def performing_art_detail(slug):
     if not art:
         abort(404)
     return render_template('art_detail.html', art=art)
+
+@main_bp.route('/guides')
+def guides_directory():
+    """Browse licensed local heritage guides, multilingual storytellers, and naturalist trackers."""
+    from models.guides import get_all_guides, get_guides_by_district, get_guides_by_language
+    district = request.args.get('district')
+    language = request.args.get('language')
+
+    if district:
+        guides = get_guides_by_district(district)
+    elif language:
+        guides = get_guides_by_language(language)
+    else:
+        guides = get_all_guides()
+
+    return render_template(
+        'guides.html',
+        guides=guides,
+        selected_district=district or 'all',
+        selected_language=language or 'all'
+    )
+
+
+@main_bp.route('/guides/<slug>')
+def guide_detail(slug):
+    """View guide credentials, license tier, daily rate, and inquiry form."""
+    from models.guides import get_guide_by_slug
+    guide = get_guide_by_slug(slug)
+    if not guide:
+        abort(404)
+    return render_template('guide_detail.html', guide=guide)
