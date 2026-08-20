@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+{% block title %}Become a Host — {{ app_name }}{% endblock %}
+{% block meta_desc %}Register as a local host on HiddenYatra. Offer homestays, free stays, or local experiences to travellers exploring Bihar.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Become Host Page ── */
+.host-hero {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-amber) 100%);
+  border-radius: var(--radius-xl);
+  color: #fff;
+  margin-bottom: var(--space-2xl);
+  position: relative;
+  overflow: hidden;
+}
+.host-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.host-hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+  position: relative;
+}
+.host-hero p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Status Banner */
+.host-status-banner {
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-2xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.host-status-banner.pending {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 1px solid #f59e0b;
+  color: #92400e;
+}
+.host-status-banner.under_review {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border: 1px solid #3b82f6;
+  color: #1e40af;
+}
+.host-status-banner.rejected {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  border: 1px solid #ef4444;
+  color: #991b1b;
+}
+.host-status-banner.suspended {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  border: 1px solid #ec4899;
+  color: #9d174d;
+}
+.host-status-icon { font-size: 2rem; }
+.host-status-text h3 { margin: 0 0 4px; font-weight: 700; }
+.host-status-text p { margin: 0; font-size: 0.9rem; opacity: 0.85; }
+
+/* Benefits Grid */
+.host-benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
+.host-benefit {
+  padding: var(--space-xl);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.host-benefit:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.host-benefit-icon { font-size: 2.5rem; margin-bottom: var(--space-sm); }
+.host-benefit h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+.host-benefit p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Registration Form */
+.host-form-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.host-form-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+.host-form-section h2 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.host-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+@media (max-width: 600px) {
+  .host-form-row { grid-template-columns: 1fr; }
+}
+.host-form-group {
+  margin-bottom: var(--space-md);
+}
+.host-form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+.host-form-group label .required {
+  color: var(--accent-rose);
+}
+.host-form-group input,
+.host-form-group select,
+.host-form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.host-form-group input:focus,
+.host-form-group select:focus,
+.host-form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255,122,24,0.15);
+}
+.host-form-group textarea { resize: vertical; min-height: 100px; }
+.host-form-group .help-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Photo Upload */
+.photo-upload-area {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.photo-upload-area:hover {
+  border-color: var(--primary);
+  background: rgba(255,122,24,0.03);
+}
+.photo-upload-area .upload-icon { font-size: 2rem; margin-bottom: var(--space-xs); }
+.photo-upload-area p { font-size: 0.85rem; color: var(--text-muted); }
+
+/* Submit Button */
+.host-submit-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-amber));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.host-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255,122,24,0.3);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container" style="max-width:900px;margin:0 auto;padding:var(--space-xl) var(--space-lg);">
+
+  {# ── STATUS BANNER (if already applied) ── #}
+  {% if host %}
+    {% if host.verification_status == 'pending' %}
+    <div class="host-status-banner pending">
+      <span class="host-status-icon">⏳</span>
+      <div class="host-status-text">
+        <h3>Application Submitted</h3>
+        <p>Your host application is awaiting admin review. We'll notify you once it's processed.</p>
+      </div>
+    </div>
+    {% elif host.verification_status == 'under_review' %}
+    <div class="host-status-banner under_review">
+      <span class="host-status-icon">🔍</span>
+      <div class="host-status-text">
+        <h3>Under Review</h3>
+        <p>An admin is currently reviewing your host application. Hang tight!</p>
+      </div>
+    </div>
+    {% elif host.verification_status == 'rejected' %}
+    <div class="host-status-banner rejected">
+      <span class="host-status-icon">❌</span>
+      <div class="host-status-text">
+        <h3>Application Needs Updates</h3>
+        <p>{{ host.rejection_reason or 'Your application was not approved. Please update and resubmit.' }}</p>
+      </div>
+    </div>
+    {% elif host.verification_status == 'suspended' %}
+    <div class="host-status-banner suspended">
+      <span class="host-status-icon">🚫</span>
+      <div class="host-status-text">
+        <h3>Account Suspended</h3>
+        <p>{{ host.rejection_reason or 'Your host account has been suspended. Please contact support.' }}</p>
+      </div>
+    </div>
+    {% endif %}
+  {% endif %}
+
+  {# ── HERO SECTION ── #}
+  {% if not host or host.verification_status == 'rejected' %}
+  <div class="host-hero">
+    <h1>🏠 Become a Local Host</h1>
+    <p>Open your home to travellers. Offer paid homestays, free local stays, or unique cultural experiences to visitors exploring Bihar.</p>
+  </div>
+
+  {# ── BENEFITS ── #}
+  <div class="host-benefits">
+    <div class="host-benefit">
+      <div class="host-benefit-icon">💰</div>
+      <h3>Paid Homestay</h3>
+      <p>Set your own nightly price and earn income by hosting travellers in your home.</p>
+    </div>
+    <div class="host-benefit">
+      <div class="host-benefit-icon">🤝</div>
+      <h3>Free Local Stay</h3>
+      <p>Voluntarily offer a room or space at no cost. Help travellers and share your culture.</p>
+    </div>
+    <div class="host-benefit">
+      <div class="host-benefit-icon">🎭</div>
+      <h3>Local Experiences</h3>
+      <p>Offer guided tours, local food experiences, village walks, and cultural activities.</p>
+    </div>
+  </div>
+
+  {# ── REGISTRATION FORM ── #}
+  <div class="host-form-container">
+    <form method="POST" action="{{ url_for('host.register_host') }}" enctype="multipart/form-data">
+      {{ csrf_input() }}
+
+      {# Personal Info #}
+      <div class="host-form-section">
+        <h2>👤 Personal Information</h2>
+        <div class="host-form-group">
+          <label>About You <span class="required">*</span></label>
+          <textarea name="bio" placeholder="Tell travellers about yourself, your home, and why you want to host (min 20 characters)..." required minlength="20" maxlength="2000">{{ host.bio if host else '' }}</textarea>
+          <p class="help-text">This will be visible on your public host profile.</p>
+        </div>
+        <div class="host-form-row">
+          <div class="host-form-group">
+            <label>Languages Spoken <span class="required">*</span></label>
+            <input type="text" name="languages" value="{{ host.languages if host else 'Hindi' }}" placeholder="Hindi, English, Bhojpuri..." required>
+          </div>
+          <div class="host-form-group">
+            <label>Profile Photo</label>
+            <div class="photo-upload-area" onclick="document.getElementById('profile_photo').click()">
+              <div class="upload-icon">📷</div>
+              <p>Click to upload your photo</p>
+              <p style="font-size:0.75rem;">JPG, PNG, or WebP (max 5MB)</p>
+            </div>
+            <input type="file" id="profile_photo" name="profile_photo" accept="image/*" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      {# Location #}
+      <div class="host-form-section">
+        <h2>📍 Location</h2>
+        <div class="host-form-group">
+          <label>Full Address <span class="required">*</span></label>
+          <textarea name="address_line" rows="2" placeholder="Village/Town, Landmark, Post Office..." required>{{ host.address_line if host else '' }}</textarea>
+          <p class="help-text">Your exact address is kept private. Only your district is shown publicly.</p>
+        </div>
+        <div class="host-form-row">
+          <div class="host-form-group">
+            <label>District <span class="required">*</span></label>
+            <select name="district_id" required id="host-district-select">
+              <option value="">Select District</option>
+              {% for d in districts %}
+              <option value="{{ d.id }}" {% if host and host.district_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="host-form-group">
+            <label>PIN Code <span class="required">*</span></label>
+            <input type="text" name="pin_code" pattern="[0-9]{6}" maxlength="6" placeholder="800001" value="{{ host.pin_code if host else '' }}" required>
+          </div>
+        </div>
+        <input type="hidden" name="latitude" id="host-lat">
+        <input type="hidden" name="longitude" id="host-lng">
+      </div>
+
+      {# Identity Verification #}
+      <div class="host-form-section">
+        <h2>🪪 Identity Verification</h2>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:var(--space-md);">
+          Your ID is required for trust & safety. It is <strong>never</strong> shown publicly and is stored securely.
+        </p>
+        <div class="host-form-row">
+          <div class="host-form-group">
+            <label>ID Type <span class="required">*</span></label>
+            <select name="id_type" required>
+              <option value="">Select ID Type</option>
+              <option value="aadhaar">Aadhaar Card</option>
+              <option value="voter_id">Voter ID</option>
+              <option value="pan">PAN Card</option>
+              <option value="driving_license">Driving License</option>
+              <option value="passport">Passport</option>
+            </select>
+          </div>
+          <div class="host-form-group">
+            <label>ID Number <span class="required">*</span></label>
+            <input type="text" name="id_number" placeholder="Enter your ID number" required minlength="4" maxlength="30">
+            <p class="help-text">Stored as a secure hash. Admin cannot see the full number.</p>
+          </div>
+        </div>
+      </div>
+
+      {# Emergency Contact #}
+      <div class="host-form-section">
+        <h2>🆘 Emergency Contact</h2>
+        <div class="host-form-row">
+          <div class="host-form-group">
+            <label>Contact Name <span class="required">*</span></label>
+            <input type="text" name="emergency_name" placeholder="Emergency contact person" value="{{ host.emergency_name if host else '' }}" required>
+          </div>
+          <div class="host-form-group">
+            <label>Contact Phone <span class="required">*</span></label>
+            <input type="tel" name="emergency_phone" placeholder="+91 98XXXXXXXX" value="{{ host.emergency_phone if host else '' }}" required minlength="10">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="host-submit-btn">
+        🚀 Submit Host Application
+      </button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
