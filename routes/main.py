@@ -683,3 +683,27 @@ def scholar_detail(slug):
     if not scholar:
         abort(404)
     return render_template('scholar_detail.html', scholar=scholar)
+
+@main_bp.route('/budget-planner')
+def budget_planner_view():
+    """Interactive multi-currency trip budget estimator for backpackers, heritage explorers, and luxury travelers."""
+    from models.budget_planner import get_all_travel_tiers, get_all_currencies, calculate_trip_budget
+    tier = request.args.get('tier', 'heritage')
+    days = request.args.get('days', 3)
+    travelers = request.args.get('travelers', 2)
+    currency = request.args.get('currency', 'INR')
+
+    initial_budget = calculate_trip_budget(tier, days, travelers, currency)
+    tiers = get_all_travel_tiers()
+    currencies = get_all_currencies()
+
+    return render_template(
+        'budget_planner.html',
+        budget=initial_budget,
+        tiers=tiers,
+        currencies=currencies,
+        selected_tier=tier,
+        selected_days=int(days) if str(days).isdigit() else 3,
+        selected_travelers=int(travelers) if str(travelers).isdigit() else 2,
+        selected_currency=currency
+    )
