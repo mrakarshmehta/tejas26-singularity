@@ -536,3 +536,20 @@ def numismatics_gallery():
     from models.archaeology import get_all_numismatic_hoards
     hoards = get_all_numismatic_hoards()
     return render_template('numismatics.html', hoards=hoards)
+
+@main_bp.route('/weather')
+def weather_directory():
+    """Browse district seasonal climate forecasts, AQI air quality indexes, and travel window advice."""
+    from models.weather import get_all_district_weather, AQI_LEVELS
+    districts = get_all_district_weather()
+    return render_template('weather.html', districts=districts, aqi_levels=AQI_LEVELS)
+
+
+@main_bp.route('/weather/<slug>')
+def district_weather_detail(slug):
+    """View district microclimate, seasonal temperatures, rainfall, and packing recommendations."""
+    from models.weather import get_district_weather_by_slug
+    weather = get_district_weather_by_slug(slug)
+    if not weather:
+        abort(404)
+    return render_template('weather_detail.html', weather=weather)
