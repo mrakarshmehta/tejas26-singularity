@@ -59,3 +59,12 @@ self.addEventListener('fetch', (event) => {
       })
   );
 });
+
+// Navigation Offline Fallback
+self.addEventListener('fetch', event => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match('/offline'))
+    );
+  }
+});
