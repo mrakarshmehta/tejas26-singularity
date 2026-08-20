@@ -1378,3 +1378,18 @@ def api_get_quiz_categories():
         'status': 'success',
         'categories': categories
     })
+
+@api_bp.route('/quiz/evaluate', methods=['POST'])
+def api_evaluate_quiz():
+    """JSON API to submit user answers, evaluate score, and unlock a digital explorer badge."""
+    from models.quiz import evaluate_quiz_submission
+    data = request.get_json(silent=True) or request.form
+    answers = data.get('answers') if isinstance(data, dict) else {}
+    if not answers and isinstance(data, dict):
+        answers = {k: v for k, v in data.items() if k.startswith('q-')}
+
+    result = evaluate_quiz_submission(answers)
+    return jsonify({
+        'status': 'success',
+        'evaluation': result
+    })
