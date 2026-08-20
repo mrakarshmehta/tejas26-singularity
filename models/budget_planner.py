@@ -133,3 +133,23 @@ def calculate_trip_budget(tier="heritage", days=3, travelers=2, currency="INR"):
         "transit_type": t_data["transit_type"],
         "dining_type": t_data["dining_type"]
     }
+
+DISTRICT_COST_INDEX_DB = {
+    "patna": {"factor": 1.15, "tier": "Metro Hub", "notes": "Higher hotel and private cab rates along Ganga riverfront."},
+    "gaya": {"factor": 1.10, "tier": "International Pilgrimage", "notes": "Seasonal surge during Pitripaksha and Kalachakra periods."},
+    "nalanda": {"factor": 1.05, "tier": "Heritage Valley", "notes": "Moderate rates for Rajgir ropeway and local tongas."},
+    "west-champaran": {"factor": 1.12, "tier": "Wilderness Safari", "notes": "Forest department gypsy permits and remote logistics."},
+    "madhubani": {"factor": 0.85, "tier": "Rural Artisan Cluster", "notes": "Highly economical village homestays and organic food."}
+}
+
+def get_district_cost_index():
+    """Return district relative cost of living and tourism expense multipliers."""
+    return DISTRICT_COST_INDEX_DB
+
+def get_district_adjusted_budget(base_daily_inr, district_slug):
+    """Adjust daily rate with district-specific price multiplier."""
+    if not district_slug:
+        return base_daily_inr
+    d_clean = district_slug.lower().strip()
+    factor = DISTRICT_COST_INDEX_DB.get(d_clean, {}).get("factor", 1.0)
+    return round(base_daily_inr * factor, 2)
