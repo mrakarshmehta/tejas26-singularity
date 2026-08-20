@@ -1099,3 +1099,48 @@ def api_verify_guide_license():
         'status': 'verified',
         'details': info
     })
+
+@api_bp.route('/treks', methods=['GET'])
+def api_get_treks():
+    """JSON API returning eco-trails, hill climbs, elevation gains, and difficulties."""
+    from models.treks import get_all_treks, get_treks_by_district, get_treks_by_difficulty
+    district = request.args.get('district')
+    diff = request.args.get('difficulty')
+
+    if district:
+        treks = get_treks_by_district(district)
+    elif diff:
+        treks = get_treks_by_difficulty(diff)
+    else:
+        treks = get_all_treks()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(treks),
+        'treks': treks
+    })
+
+
+@api_bp.route('/treks/<slug>', methods=['GET'])
+def api_get_trek_detail(slug):
+    """JSON API returning trail type, distance, elevation gain, gear list, and highlights."""
+    from models.treks import get_trek_by_slug
+    trek = get_trek_by_slug(slug)
+    if not trek:
+        return jsonify({'status': 'not_found', 'message': f'Trek not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'trek': trek
+    })
+
+
+@api_bp.route('/treks/safety', methods=['GET'])
+def api_get_trek_safety():
+    """JSON API returning wilderness safety guidelines and Leave No Trace principles."""
+    from models.treks import get_trekking_safety_guidelines
+    guidelines = get_trekking_safety_guidelines()
+    return jsonify({
+        'status': 'success',
+        'count': len(guidelines),
+        'guidelines': guidelines
+    })
