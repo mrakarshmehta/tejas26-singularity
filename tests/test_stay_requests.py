@@ -1,4 +1,4 @@
-"""
+﻿"""
 HiddenYatra — Homestay / Local Stay Request Workflow Test Suite
 Comprehensive automated test suite covering:
 1. Free Stay Request Creation (Price = 0, status = pending, host notified)
@@ -21,7 +21,7 @@ import sys
 import os
 from datetime import date, timedelta
 
-sys.path.insert(0, r'd:\HiddenYatra')
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dotenv import load_dotenv
 load_dotenv()
 

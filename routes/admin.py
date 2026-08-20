@@ -1,4 +1,4 @@
-"""Admin panel routes — login, dashboard, add/edit/delete places, moderation."""
+﻿"""Admin panel routes — login, dashboard, add/edit/delete places, moderation."""
 import os
 import uuid
 import time as _time
@@ -1582,6 +1582,7 @@ def stay_request_admin_cancel(req_id):
 
 
 @admin_bp.route('/api/system-telemetry', methods=['GET'])
+@admin_required
 def admin_system_telemetry():
     """Return live system telemetry and health metrics."""
     import sys, platform
