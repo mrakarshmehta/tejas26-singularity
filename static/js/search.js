@@ -1,3 +1,7 @@
+// Search autocomplete request abort controller and sequence tracking
+let activeSearchAbortController = null;
+let searchSequenceNumber = 0;
+
 /**
  * HiddenYatra — Production-Grade Ultimate AI Search Module (Phase 2.5)
  * Requirements fulfilled:
