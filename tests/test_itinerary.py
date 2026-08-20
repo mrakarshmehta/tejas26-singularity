@@ -54,5 +54,24 @@ class TestItineraryScoring(unittest.TestCase):
         self.assertAlmostEqual(dist, 0, places=4)
 
 
+def test_pacing_config_presets(self):
+        """Verify pacing config returns valid parameters for all presets."""
+        from models.itineraries import get_pacing_config, calculate_daily_slots
+        relaxed = get_pacing_config('relaxed')
+        self.assertEqual(relaxed['places_per_day'], 2)
+        fast = get_pacing_config('fast')
+        self.assertEqual(fast['places_per_day'], 5)
+
+        slots = calculate_daily_slots(total_days=3, pace='balanced')
+        self.assertEqual(len(slots), 3)
+
+    def test_itinerary_budget_breakdown(self):
+        """Verify calculate_itinerary_budget calculates subtotal and contingency."""
+        from models.itineraries import calculate_itinerary_budget
+        budget = calculate_itinerary_budget(days=3, companion_type='solo', budget_tier='moderate')
+        self.assertIn('breakdown', budget)
+        self.assertGreater(budget['total_estimated_inr'], 0)
+        self.assertEqual(budget['days'], 3)
+
 if __name__ == '__main__':
     unittest.main()
