@@ -5,7 +5,7 @@ from flask import Blueprint, request, redirect, url_for, flash, session
 from config import UPLOAD_FOLDER, allowed_file, validate_image_file, check_file_size
 from models.database import add_user_photo, get_place_by_id
 from utils import csrf_required, get_session_id as _get_session_id
-from utils.image import process_and_save_image
+from utils.image import process_and_save_image, compress_image_to_webp
 
 logger = logging.getLogger(__name__)
 user_photos_bp = Blueprint('user_photos', __name__)
