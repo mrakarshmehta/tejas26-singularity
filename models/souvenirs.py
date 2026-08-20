@@ -81,3 +81,50 @@ GI_SOUVENIRS_DB = [
         "ethical_impact": "Preserves rare classical hand-chiseling techniques passed down across 8 generations."
     }
 ]
+
+FAIR_TRADE_GUIDELINES = [
+    {
+        "title": "Look for Official Authenticity Seals",
+        "detail": "Insist on Silk Mark for genuine Tussar, Handloom Mark for pit-loom weaves, and Craftmark for authentic handmade tribal artifacts."
+    },
+    {
+        "title": "Direct Artisan Cooperative Sourcing",
+        "detail": "Buy directly from artisan clusters (e.g. Jitwarpur village or Nathnagar weavers) to ensure full value reaches the creator."
+    },
+    {
+        "title": "Respect Handcrafted Time & Natural Dyes",
+        "detail": "Authentic Madhubani paintings on silk take 15 to 45 days of meticulous line drawing using organic pigments."
+    }
+]
+
+def get_all_souvenirs():
+    """Return all cataloged GI and heritage artisan souvenirs."""
+    return GI_SOUVENIRS_DB
+
+def get_souvenir_by_slug(slug):
+    """Retrieve souvenir by slug or ID."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for item in GI_SOUVENIRS_DB:
+        if item["slug"] == s or item["id"] == s:
+            return item
+    return None
+
+def get_souvenirs_by_district(district):
+    """Filter souvenirs by manufacturing district."""
+    if not district or district.lower() == 'all':
+        return GI_SOUVENIRS_DB
+    d_clean = district.lower().strip()
+    return [s for s in GI_SOUVENIRS_DB if d_clean in s["district"].lower()]
+
+def get_souvenirs_by_category(cat):
+    """Filter souvenirs by craft category."""
+    if not cat or cat.lower() == 'all':
+        return GI_SOUVENIRS_DB
+    c_clean = cat.lower().strip()
+    return [s for s in GI_SOUVENIRS_DB if c_clean in s["craft_category"].lower()]
+
+def get_fair_trade_shopping_guidelines():
+    """Return fair-trade ethical buying principles."""
+    return FAIR_TRADE_GUIDELINES
