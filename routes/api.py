@@ -716,3 +716,60 @@ def api_get_species_list():
         'status': 'success',
         'species': get_endangered_species_list()
     })
+
+@api_bp.route('/volunteer/programs', methods=['GET'])
+def api_get_volunteer_programs():
+    """JSON API returning active rural immersion and volunteer opportunities."""
+    from models.volunteer import get_all_programs, get_programs_by_district
+    district = request.args.get('district')
+    programs = get_programs_by_district(district) if district else get_all_programs()
+    return jsonify({
+        'status': 'success',
+        'count': len(programs),
+        'programs': programs
+    })
+
+
+@api_bp.route('/volunteer/programs/<slug>', methods=['GET'])
+def api_get_volunteer_program_detail(slug):
+    """JSON API returning details, skills needed, and impact goals for an immersion program."""
+    from models.volunteer import get_program_by_slug
+    prog = get_program_by_slug(slug)
+    if not prog:
+        return jsonify({'status': 'not_found', 'message': f'Program not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'program': prog
+    })
+
+
+@api_bp.route('/volunteer/apply', methods=['POST'])
+def api_apply_volunteer_program():
+    """JSON API to submit a volunteer registration application."""
+    from models.volunteer import validate_volunteer_application, calculate_skill_match_score
+    data = request.get_json(silent=True) or request.form
+    name = (data.get('name') or '').strip()
+    email = (data.get('email') or '').strip()
+    phone = (data.get('phone') or '').strip()
+    prog_slug = (data.get('program_slug') or '').strip()
+    motivation = (data.get('motivation') or '').strip()
+    skills_raw = data.get('skills', [])
+    if isinstance(skills_raw, str):
+        skills = [s.strip() for s in skills_raw.split(',') if s.strip()]
+    else:
+        skills = skills_raw
+
+    is_valid, msg = validate_volunteer_application(name, email, phone, prog_slug, motivation, skills)
+    if not is_valid:
+        return jsonify({'status': 'error', 'message': msg}), 400
+
+    match_score = calculate_skill_match_score(skills, prog_slug)
+    app_id = f'HY-VOL-{abs(hash(email + prog_slug)) % 100000:05d}'
+
+    return jsonify({
+        'status': 'success',
+        'message': f'Thank you {name}! Your immersion application has been received.',
+        'application_id': app_id,
+        'skill_match_score_pct': match_score,
+        'program_slug': prog_slug
+    })
