@@ -73,3 +73,33 @@ class TestBudgetPlannerModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestDistrictCostIndex(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_district_cost_factors(self):
+        """Verify district price multipliers."""
+        from models.budget_planner import get_district_cost_index, get_district_adjusted_budget
+        index = get_district_cost_index()
+        self.assertIn('patna', index)
+        self.assertIn('madhubani', index)
+
+        patna_cost = get_district_adjusted_budget(1000, 'patna')
+        self.assertGreater(patna_cost, 1000)
+
+        madhubani_cost = get_district_adjusted_budget(1000, 'madhubani')
+        self.assertLess(madhubani_cost, 1000)
+
+    def test_cost_index_api(self):
+        """Test /api/v1/budget/district-cost-index endpoint."""
+        res = self.client.get('/api/v1/budget/district-cost-index')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 4)
