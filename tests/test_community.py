@@ -21,5 +21,16 @@ class CommunityTestCase(unittest.TestCase):
         response = self.client.get('/my-submissions')
         self.assertEqual(response.status_code, 302)
 
+def test_submission_status_meta(self):
+        """Verify status meta returns correct labels and editability."""
+        from models.places import get_submission_status_meta
+        pending = get_submission_status_meta('pending')
+        self.assertEqual(pending['label'], 'Under Review')
+        self.assertTrue(pending['can_edit'])
+
+        approved = get_submission_status_meta('approved')
+        self.assertEqual(approved['label'], 'Published')
+        self.assertFalse(approved['can_edit'])
+
 if __name__ == '__main__':
     unittest.main()
