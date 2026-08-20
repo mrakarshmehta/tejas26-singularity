@@ -813,3 +813,20 @@
 [data-theme="light"] .leaflet-popup-tip {
   background: #FFFFFF !important;
 }
+
+/* Ultra-small viewport popup responsiveness */
+@media (max-width: 360px) {
+  .leaflet-popup-content {
+    max-width: 240px !important;
+    padding: 10px !important;
+  }
+  .sn-popup-actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .sn-popup-btn {
+    width: 100% !important;
+    font-size: 0.76rem !important;
+    padding: 6px 10px !important;
+  }
+}
