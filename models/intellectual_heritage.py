@@ -135,3 +135,34 @@ def get_university_by_slug(slug):
         if u["slug"] == s or u["id"] == s:
             return u
     return None
+
+CLASSICAL_TREATISES_DB = [
+    {
+        "title": "Aryabhatiya",
+        "author": "Aryabhata",
+        "composed_year": "c. 499 CE",
+        "language": "Classical Sanskrit (Sutra Metre)",
+        "chapters": ["Gitikapada (Astronomical constants)", "Ganitapada (Mathematics & Geometry)", "Kalakriyapada (Time reckoning)", "Golapada (Sphere & Celestial motion)"],
+        "modern_significance": "Pioneered place-value zero notation, square/cube roots, and planetary orbital periods."
+    },
+    {
+        "title": "Arthashastra",
+        "author": "Chanakya (Kautilya)",
+        "composed_year": "c. 300 BCE",
+        "language": "Classical Sanskrit Prose & Shloka",
+        "chapters": ["Vinayadhikarika (Discipline & Training)", "Adhyakshaprachara (Duties of Ministers)", "Dharmasthiya (Civil Law)", "Kantakashodhana (Criminal Law & Defense)"],
+        "modern_significance": "World's foundational treatise on intelligence gathering, economic governance, and realistic international balance of power."
+    },
+    {
+        "title": "Purusha Pariksha (The Test of a Man)",
+        "author": "Mahakavi Vidyapati",
+        "composed_year": "c. 1410 CE",
+        "language": "Sanskrit & Classical Maithili",
+        "chapters": ["Stories on Valour", "Stories on Wit & Intellect", "Stories on Charity & Compassion", "Stories on Truthfulness"],
+        "modern_significance": "A masterpiece of ethical storytelling where character is evaluated across moral trials rather than birth or wealth."
+    }
+]
+
+def get_all_treatises():
+    """Return catalog of classical scientific and philosophical treatises."""
+    return CLASSICAL_TREATISES_DB
