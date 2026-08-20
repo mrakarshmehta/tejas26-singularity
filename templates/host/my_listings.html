@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}My Listings — {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.ml-container { max-width: 920px; margin: 0 auto; padding: var(--space-xl) var(--space-lg); }
+.ml-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-xl); flex-wrap: wrap; gap: var(--space-md); }
+.ml-header h1 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: var(--space-sm); }
+.ml-new-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: linear-gradient(135deg, var(--primary), var(--accent-amber)); color: #fff; border-radius: var(--radius-lg); font-family: var(--font-heading); font-weight: 700; font-size: 0.9rem; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
+.ml-new-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,122,24,0.3); }
+
+/* Filter Tabs */
+.ml-filters { display: flex; gap: var(--space-xs); margin-bottom: var(--space-xl); overflow-x: auto; padding-bottom: 4px; }
+.ml-filter { padding: 8px 16px; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 600; text-decoration: none; border: 1px solid var(--border-color); color: var(--text-muted); white-space: nowrap; transition: all 0.2s; }
+.ml-filter:hover { border-color: var(--primary); color: var(--primary); }
+.ml-filter.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* Listing Cards */
+.ml-grid { display: grid; gap: var(--space-lg); }
+.ml-card { display: grid; grid-template-columns: 180px 1fr; gap: var(--space-lg); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.2s; }
+.ml-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+@media (max-width: 600px) { .ml-card { grid-template-columns: 1fr; } }
+
+.ml-card-img { width: 100%; height: 160px; object-fit: cover; background: var(--bg-elevated); }
+.ml-card-body { padding: var(--space-md) var(--space-md) var(--space-md) 0; display: flex; flex-direction: column; }
+@media (max-width: 600px) { .ml-card-body { padding: var(--space-md); } }
+
+.ml-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-sm); margin-bottom: var(--space-sm); }
+.ml-card-title { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text-primary); text-decoration: none; }
+.ml-card-title:hover { color: var(--primary); }
+
+/* Status badges */
+.ml-status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+.ml-status-draft { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.ml-status-submitted { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.ml-status-under_review { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.ml-status-published { background: rgba(16,185,129,0.15); color: #10b981; }
+.ml-status-rejected { background: rgba(239,68,68,0.15); color: #ef4444; }
+.ml-status-suspended { background: rgba(239,68,68,0.15); color: #ef4444; }
+.ml-status-archived { background: rgba(107,114,128,0.15); color: #6b7280; }
+
+.ml-type-badge { display: inline-block; padding: 3px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.ml-type-free { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.ml-type-paid { background: rgba(255,122,24,0.12); color: var(--primary); }
+
+.ml-card-meta { display: flex; gap: var(--space-md); font-size: 0.82rem; color: var(--text-muted); margin-bottom: var(--space-sm); flex-wrap: wrap; }
+.ml-card-meta span { display: flex; align-items: center; gap: 4px; }
+.ml-card-actions { display: flex; gap: var(--space-xs); margin-top: auto; flex-wrap: wrap; }
+.ml-action { padding: 6px 14px; border-radius: var(--radius-md); font-size: 0.78rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); }
+.ml-action:hover { border-color: var(--primary); color: var(--primary); }
+.ml-action-submit { border-color: #10b981; color: #10b981; }
+.ml-action-submit:hover { background: #10b981; color: #fff; }
+
+/* Empty */
+.ml-empty { text-align: center; padding: var(--space-3xl); }
+.ml-empty .icon { font-size: 3rem; margin-bottom: var(--space-md); }
+.ml-empty p { color: var(--text-muted); margin-bottom: var(--space-lg); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ml-container">
+  <div class="ml-header">
+    <h1>🏠 My Listings</h1>
+    <a href="{{ url_for('host.listing_new') }}" class="ml-new-btn">➕ Create New Listing</a>
+  </div>
+
+  {# Filter Tabs #}
+  <div class="ml-filters">
+    <a href="{{ url_for('host.my_listings') }}" class="ml-filter {% if not current_filter %}active{% endif %}">All ({{ listings|length if not current_filter else '—' }})</a>
+    <a href="{{ url_for('host.my_listings', status='draft') }}" class="ml-filter {% if current_filter == 'draft' %}active{% endif %}">📝 Drafts</a>
+    <a href="{{ url_for('host.my_listings', status='submitted') }}" class="ml-filter {% if current_filter == 'submitted' %}active{% endif %}">📋 Pending Review</a>
+    <a href="{{ url_for('host.my_listings', status='published') }}" class="ml-filter {% if current_filter == 'published' %}active{% endif %}">✅ Published</a>
+    <a href="{{ url_for('host.my_listings', status='rejected') }}" class="ml-filter {% if current_filter == 'rejected' %}active{% endif %}">❌ Rejected</a>
+    <a href="{{ url_for('host.my_listings', status='archived') }}" class="ml-filter {% if current_filter == 'archived' %}active{% endif %}">📦 Archived</a>
+  </div>
+
+  {# Listings Grid #}
+  {% if listings %}
+  <div class="ml-grid">
+    {% for l in listings %}
+    <div class="ml-card">
+      {% if l.cover_image %}
+      <img src="{{ url_for('static', filename='uploads/hosts/listings/' + l.cover_image) }}" alt="{{ l.title }}" class="ml-card-img">
+      {% else %}
+      <div class="ml-card-img" style="display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--text-muted);">📷</div>
+      {% endif %}
+      <div class="ml-card-body">
+        <div class="ml-card-top">
+          <div>
+            <span class="ml-type-badge {% if l.listing_type == 'free_stay' %}ml-type-free{% else %}ml-type-paid{% endif %}">
+              {% if l.listing_type == 'free_stay' %}🤝 Free Stay{% else %}🏠 Paid{% endif %}
+            </span>
+            <a href="{{ url_for('host.listing_edit', listing_id=l.id) if l.status in ('draft','rejected') else '#' }}" class="ml-card-title" style="display:block;margin-top:4px;">{{ l.title }}</a>
+          </div>
+          <span class="ml-status ml-status-{{ l.status }}">
+            {% if l.status == 'draft' %}📝 Draft{% elif l.status == 'submitted' %}⏳ Pending Review{% elif l.status == 'under_review' %}🔍 Under Review{% elif l.status == 'published' %}✅ Published{% elif l.status == 'rejected' %}❌ Rejected{% elif l.status == 'suspended' %}🚫 Suspended{% elif l.status == 'archived' %}📦 Archived{% endif %}
+          </span>
+        </div>
+
+        <div class="ml-card-meta">
+          {% if l.district_name %}<span>📍 {{ l.district_name }}</span>{% endif %}
+          {% if l.listing_type == 'paid_homestay' %}<span>💰 ₹{{ l.price_per_night|int }}/night</span>{% else %}<span>🤝 Free</span>{% endif %}
+          <span>👥 {{ l.max_guests }} guests</span>
+          <span>📷 {{ l.photo_count }} photos</span>
+          <span>👁️ {{ l.view_count }} views</span>
+        </div>
+
+        <div class="ml-card-actions">
+          {% if l.status in ('draft', 'rejected') %}
+          <a href="{{ url_for('host.listing_edit', listing_id=l.id) }}" class="ml-action">✏️ Edit</a>
+          <form method="POST" action="{{ url_for('host.listing_submit', listing_id=l.id) }}" style="display:inline;" onsubmit="return confirm('Submit for admin review?')">
+            {{ csrf_input() }}
+            <button type="submit" class="ml-action ml-action-submit">📋 Submit</button>
+          </form>
+          {% endif %}
+          {% if l.status == 'archived' %}
+          <form method="POST" action="{{ url_for('host.listing_reactivate', listing_id=l.id) }}" style="display:inline;">
+            {{ csrf_input() }}
+            <button type="submit" class="ml-action">🔄 Reactivate</button>
+          </form>
+          {% endif %}
+          {% if l.status not in ('archived',) %}
+          <form method="POST" action="{{ url_for('host.listing_archive', listing_id=l.id) }}" style="display:inline;" onsubmit="return confirm('Archive this listing?')">
+            {{ csrf_input() }}
+            <button type="submit" class="ml-action">📦 Archive</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="ml-empty">
+    <div class="icon">🏠</div>
+    <h2>No listings yet</h2>
+    <p>Create your first listing and start hosting travellers!</p>
+    <a href="{{ url_for('host.listing_new') }}" class="ml-new-btn">➕ Create Your First Listing</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

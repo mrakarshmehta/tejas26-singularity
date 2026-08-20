@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+{% block title %}Guest Stay Requests — Host Portal | {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.host-req-container {
+  max-width: 1080px;
+  margin: var(--space-2xl) auto;
+  padding: 0 var(--space-lg);
+}
+.host-req-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.host-req-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+/* Tabs */
+.host-req-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: var(--space-xl);
+  overflow-x: auto;
+}
+.host-req-tab {
+  padding: 10px 18px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.host-req-tab:hover { color: var(--primary); }
+.host-req-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+.tab-badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+}
+
+/* Request Cards */
+.req-item-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-xl);
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .req-item-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+.guest-info-row {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+.guest-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent-amber));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.req-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-md);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  font-size: 0.88rem;
+}
+.req-meta-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+.req-meta-val { font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+
+.guest-msg-box {
+  border-left: 3px solid var(--accent-amber);
+  background: rgba(245,158,11,0.06);
+  padding: 8px 12px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: 0.88rem;
+  margin-bottom: var(--space-md);
+}
+
+/* Modals */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+  max-width: 480px;
+  width: 90%;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="host-req-container">
+  <div class="host-req-header">
+    <div>
+      <h1 class="host-req-title">Guest Stay Requests 🏠</h1>
+      <p style="color:var(--text-muted);">Manage requests from travellers wanting to stay at your properties.</p>
+    </div>
+    <div style="display:flex;gap:var(--space-sm);">
+      <a href="{{ url_for('host.dashboard') }}" class="btn btn-outline">
+        ← Host Dashboard
+      </a>
+      <a href="{{ url_for('host.listing_create') }}" class="btn btn-primary">
+        + New Listing
+      </a>
+    </div>
+  </div>
+
+  <!-- Status Tabs -->
+  <div class="host-req-tabs">
+    <a href="{{ url_for('host.host_requests', tab='pending') }}"
+       class="host-req-tab {% if active_tab == 'pending' %}active{% endif %}">
+      Pending Requests
+      {% if counts.get('pending', 0) > 0 %}
+      <span class="tab-badge">{{ counts.get('pending') }}</span>
+      {% endif %}
+    </a>
+    <a href="{{ url_for('host.host_requests', tab='accepted') }}"
+       class="host-req-tab {% if active_tab == 'accepted' %}active{% endif %}">
+      Accepted Stays
+      {% if counts.get('accepted', 0) > 0 %}
+      <span class="tab-badge" style="background:#10b981;">{{ counts.get('accepted') }}</span>
+      {% endif %}
+    </a>
+    <a href="{{ url_for('host.host_requests', tab='rejected') }}"
+       class="host-req-tab {% if active_tab == 'rejected' %}active{% endif %}">
+      Declined
+    </a>
+    <a href="{{ url_for('host.host_requests', tab='cancelled') }}"
+       class="host-req-tab {% if active_tab == 'cancelled' %}active{% endif %}">
+      Cancelled
+    </a>
+  </div>
+
+  {% if requests and requests|length > 0 %}
+    <div class="req-list">
+      {% for req in requests %}
+      <div class="req-item-card">
+        <div>
+          <div class="guest-info-row">
+            <div class="guest-avatar">
+              {{ req.traveller_avatar or '👤' }}
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-heading);font-size:1.15rem;font-weight:700;">
+                {{ req.traveller_display_name or req.traveller_full_name or 'Traveller' }}
+              </h3>
+              <span style="font-size:0.82rem;color:var(--text-muted);">
+                Requested for <strong><a href="{{ url_for('stays.stay_detail_slug', slug=req.listing_slug) }}" style="color:inherit;text-decoration:underline;">{{ req.listing_title }}</a></strong>
+              </span>
+            </div>
+          </div>
+
+          <div class="req-meta-grid">
+            <div>
+              <div class="req-meta-label">Dates</div>
+              <div class="req-meta-val">{{ req.check_in_date }} → {{ req.check_out_date }}</div>
+            </div>
+            <div>
+              <div class="req-meta-label">Duration</div>
+              <div class="req-meta-val">{{ req.nights }} night(s)</div>
+            </div>
+            <div>
+              <div class="req-meta-label">Guests</div>
+              <div class="req-meta-val">{{ req.num_guests }} guest(s)</div>
+            </div>
+            <div>
+              <div class="req-meta-label">Type & Payout</div>
+              <div class="req-meta-val">
+                {% if req.listing_type == 'free_stay' %}
+                  <span style="color:#10b981;">🤝 Free Stay</span>
+                {% else %}
+                  <span style="color:var(--primary);">₹{{ req.total_price|int }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          {% if req.message %}
+          <div class="guest-msg-box">
+            <strong>Guest Note:</strong> "{{ req.message }}"
+          </div>
+          {% endif %}
+
+          {% if req.status == 'accepted' or req.status == 'confirmed' %}
+          <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-lg);padding:10px 14px;font-size:0.88rem;">
+            <strong style="color:#10b981;">📞 Guest Direct Contact:</strong>
+            <span style="margin-left:8px;">{{ req.traveller_phone or 'Phone via support' }}</span> · <span>{{ req.traveller_email }}</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);min-width:160px;">
+          {% if req.status == 'pending' %}
+            <button type="button" class="btn btn-primary" style="background:#10b981;border-color:#10b981;"
+                    onclick="openAcceptModal({{ req.id }}, '{{ req.traveller_display_name or req.traveller_full_name }}')">
+              ✅ Accept Request
+            </button>
+            <button type="button" class="btn btn-outline" style="color:#ef4444;border-color:rgba(239,68,68,0.4);"
+                    onclick="openRejectModal({{ req.id }}, '{{ req.traveller_display_name or req.traveller_full_name }}')">
+              ❌ Decline
+            </button>
+          {% elif req.status == 'accepted' or req.status == 'confirmed' %}
+            <button type="button" class="btn btn-outline btn-sm" style="color:#ef4444;border-color:rgba(239,68,68,0.4);"
+                    onclick="openHostCancelModal({{ req.id }}, '{{ req.traveller_display_name or req.traveller_full_name }}')">
+              Cancel Reservation
+            </button>
+          {% else %}
+            <span style="font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;text-align:center;">
+              {{ req.status }}
+            </span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div style="display:flex;justify-content:center;gap:var(--space-xs);margin-top:var(--space-xl);">
+      {% for p in range(1, total_pages + 1) %}
+      <a href="{{ url_for('host.host_requests', tab=active_tab, page=p) }}"
+         class="btn btn-sm {% if p == page %}btn-primary{% else %}btn-outline{% endif %}">
+        {{ p }}
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  {% else %}
+    <div style="text-align:center;padding:var(--space-3xl) var(--space-lg);background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-2xl);">
+      <span style="font-size:3rem;display:block;margin-bottom:var(--space-md);">📭</span>
+      <h2 style="font-family:var(--font-heading);font-size:1.4rem;margin-bottom:var(--space-xs);">No {{ active_tab }} requests</h2>
+      <p style="color:var(--text-muted);max-width:400px;margin:0 auto var(--space-xl);">
+        When travellers request a stay at your listings, they will appear here for your review and approval.
+      </p>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Accept Modal -->
+<div class="modal-overlay" id="accept-modal">
+  <div class="modal-card">
+    <h3 style="font-family:var(--font-heading);font-size:1.2rem;margin-bottom:var(--space-xs);">Accept Stay Request</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:var(--space-md);" id="accept-modal-desc"></p>
+
+    <form method="POST" id="accept-form">
+      {{ csrf_input() }}
+      <div style="margin-bottom:var(--space-lg);">
+        <label style="font-size:0.8rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">Welcome Note & Arrival Directions (Optional)</label>
+        <textarea name="host_message" class="form-input" rows="3" placeholder="Add directions, check-in instructions, or a warm welcome message..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:var(--space-md);justify-content:flex-end;">
+        <button type="button" class="btn btn-outline" onclick="closeModal('accept-modal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="background:#10b981;border-color:#10b981;">Confirm & Accept</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal-overlay" id="reject-modal">
+  <div class="modal-card">
+    <h3 style="font-family:var(--font-heading);font-size:1.2rem;margin-bottom:var(--space-xs);">Decline Stay Request</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:var(--space-md);" id="reject-modal-desc"></p>
+
+    <form method="POST" id="reject-form">
+      {{ csrf_input() }}
+      <div style="margin-bottom:var(--space-lg);">
+        <label style="font-size:0.8rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">Reason for Declining (Optional)</label>
+        <textarea name="rejection_reason" class="form-input" rows="3" placeholder="Unavailable on these dates, undergoing maintenance, etc..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:var(--space-md);justify-content:flex-end;">
+        <button type="button" class="btn btn-outline" onclick="closeModal('reject-modal')">Back</button>
+        <button type="submit" class="btn btn-primary" style="background:#ef4444;border-color:#ef4444;">Decline Request</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Host Cancel Modal -->
+<div class="modal-overlay" id="host-cancel-modal">
+  <div class="modal-card">
+    <h3 style="font-family:var(--font-heading);font-size:1.2rem;margin-bottom:var(--space-xs);">Cancel Accepted Reservation</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:var(--space-md);" id="host-cancel-modal-desc"></p>
+
+    <form method="POST" id="host-cancel-form">
+      {{ csrf_input() }}
+      <div style="margin-bottom:var(--space-lg);">
+        <label style="font-size:0.8rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">Cancellation Reason *</label>
+        <textarea name="cancellation_reason" class="form-input" rows="3" required placeholder="Reason for cancellation (sent to guest)..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:var(--space-md);justify-content:flex-end;">
+        <button type="button" class="btn btn-outline" onclick="closeModal('host-cancel-modal')">Keep Reservation</button>
+        <button type="submit" class="btn btn-primary" style="background:#ef4444;border-color:#ef4444;">Confirm Cancellation</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openAcceptModal(reqId, guestName) {
+  const form = document.getElementById('accept-form');
+  form.action = '/host/requests/' + reqId + '/accept';
+  document.getElementById('accept-modal-desc').textContent = 'Confirm stay acceptance for ' + guestName + '. The dates will be blocked in your calendar.';
+  document.getElementById('accept-modal').classList.add('open');
+}
+function openRejectModal(reqId, guestName) {
+  const form = document.getElementById('reject-form');
+  form.action = '/host/requests/' + reqId + '/reject';
+  document.getElementById('reject-modal-desc').textContent = 'Decline stay request from ' + guestName + '.';
+  document.getElementById('reject-modal').classList.add('open');
+}
+function openHostCancelModal(reqId, guestName) {
+  const form = document.getElementById('host-cancel-form');
+  form.action = '/host/requests/' + reqId + '/cancel';
+  document.getElementById('host-cancel-modal-desc').textContent = 'Cancel confirmed reservation for ' + guestName + '. The calendar dates will be freed.';
+  document.getElementById('host-cancel-modal').classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+</script>
+{% endblock %}

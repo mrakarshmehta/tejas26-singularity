@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}Edit Host Profile — {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-edit-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+.profile-edit-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+.profile-edit-header h1 {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.profile-edit-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.profile-edit-back:hover { border-color: var(--primary); color: var(--primary); }
+
+/* Reuse form styles from become_host */
+.pe-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+.pe-section h2 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--primary);
+  display: flex; align-items: center; gap: var(--space-sm);
+}
+.pe-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+@media (max-width: 600px) { .pe-row { grid-template-columns: 1fr; } }
+.pe-group { margin-bottom: var(--space-md); }
+.pe-group label {
+  display: block; font-weight: 600; font-size: 0.85rem;
+  color: var(--text-primary); margin-bottom: var(--space-xs);
+}
+.pe-group input, .pe-group select, .pe-group textarea {
+  width: 100%; padding: 10px 14px;
+  border: 1px solid var(--border-color); border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: 0.9rem;
+  background: var(--bg-main); color: var(--text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pe-group input:focus, .pe-group select:focus, .pe-group textarea:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255,122,24,0.15);
+}
+.pe-group textarea { resize: vertical; min-height: 100px; }
+.pe-group .help { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+.pe-photo-preview {
+  display: flex; align-items: center; gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.pe-photo-preview img {
+  width: 80px; height: 80px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--primary);
+}
+
+.pe-save-btn {
+  display: block; width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-amber));
+  color: #fff; border: none; border-radius: var(--radius-lg);
+  font-family: var(--font-heading); font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+}
+.pe-save-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,122,24,0.3); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-edit-container">
+  <div class="profile-edit-header">
+    <a href="{{ url_for('host.dashboard') }}" class="profile-edit-back">← Dashboard</a>
+    <h1>Edit Host Profile</h1>
+  </div>
+
+  <form method="POST" action="{{ url_for('host.profile_update') }}" enctype="multipart/form-data">
+    {{ csrf_input() }}
+
+    {# Photo #}
+    <div class="pe-section">
+      <h2>📷 Profile Photo</h2>
+      <div class="pe-photo-preview">
+        {% if host.profile_photo %}
+        <img src="{{ url_for('static', filename='uploads/hosts/profiles/' + host.profile_photo) }}" alt="Profile">
+        <span style="font-size:0.85rem;color:var(--text-muted);">Current photo</span>
+        {% else %}
+        <div style="width:80px;height:80px;border-radius:50%;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:2rem;">{{ host.avatar_emoji or '🏠' }}</div>
+        <span style="font-size:0.85rem;color:var(--text-muted);">No photo uploaded</span>
+        {% endif %}
+      </div>
+      <div class="pe-group">
+        <label>Upload New Photo</label>
+        <input type="file" name="profile_photo" accept="image/*">
+      </div>
+    </div>
+
+    {# Bio & Languages #}
+    <div class="pe-section">
+      <h2>👤 About You</h2>
+      <div class="pe-group">
+        <label>Bio</label>
+        <textarea name="bio" maxlength="2000">{{ host.bio }}</textarea>
+      </div>
+      <div class="pe-group">
+        <label>Languages Spoken</label>
+        <input type="text" name="languages" value="{{ host.languages }}">
+      </div>
+    </div>
+
+    {# Location #}
+    <div class="pe-section">
+      <h2>📍 Location</h2>
+      <div class="pe-group">
+        <label>Address</label>
+        <textarea name="address_line" rows="2">{{ host.address_line }}</textarea>
+        <p class="help">Only your district is shown publicly.</p>
+      </div>
+      <div class="pe-row">
+        <div class="pe-group">
+          <label>District</label>
+          <select name="district_id">
+            <option value="">Select District</option>
+            {% for d in districts %}
+            <option value="{{ d.id }}" {% if host.district_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="pe-group">
+          <label>PIN Code</label>
+          <input type="text" name="pin_code" value="{{ host.pin_code }}" pattern="[0-9]{6}" maxlength="6">
+        </div>
+      </div>
+    </div>
+
+    {# Emergency Contact #}
+    <div class="pe-section">
+      <h2>🆘 Emergency Contact</h2>
+      <div class="pe-row">
+        <div class="pe-group">
+          <label>Contact Name</label>
+          <input type="text" name="emergency_name" value="{{ host.emergency_name }}">
+        </div>
+        <div class="pe-group">
+          <label>Contact Phone</label>
+          <input type="tel" name="emergency_phone" value="{{ host.emergency_phone }}">
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="pe-save-btn">💾 Save Changes</button>
+  </form>
+</div>
+{% endblock %}

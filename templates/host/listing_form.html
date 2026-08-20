@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit Listing' if is_edit else 'Create New Listing' }} — {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.lf-container { max-width: 780px; margin: 0 auto; padding: var(--space-xl) var(--space-lg); }
+.lf-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-2xl); }
+.lf-header h1 { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; }
+.lf-back { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 600; color: var(--text-muted); text-decoration: none; }
+.lf-back:hover { border-color: var(--primary); color: var(--primary); }
+
+/* Type Selector */
+.lf-type-selector { display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+.lf-type-option { flex: 1; padding: var(--space-lg); border: 2px solid var(--border-color); border-radius: var(--radius-lg); text-align: center; cursor: pointer; transition: all 0.2s; }
+.lf-type-option:hover { border-color: var(--primary); }
+.lf-type-option.active { border-color: var(--primary); background: rgba(255,122,24,0.06); }
+.lf-type-option .icon { font-size: 2rem; margin-bottom: var(--space-xs); }
+.lf-type-option h3 { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.lf-type-option p { font-size: 0.78rem; color: var(--text-muted); }
+.lf-type-radio { display: none; }
+
+/* Section */
+.lf-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg); }
+.lf-section h2 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-lg); padding-bottom: var(--space-sm); border-bottom: 2px solid var(--primary); display: flex; align-items: center; gap: var(--space-sm); }
+.lf-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md); }
+.lf-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md); }
+@media (max-width: 600px) { .lf-row, .lf-row-3 { grid-template-columns: 1fr; } }
+.lf-group { margin-bottom: var(--space-md); }
+.lf-group label { display: block; font-weight: 600; font-size: 0.85rem; color: var(--text-primary); margin-bottom: var(--space-xs); }
+.lf-group .req { color: var(--accent-rose); }
+.lf-group input, .lf-group select, .lf-group textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.9rem; background: var(--bg-main); color: var(--text-primary); transition: border-color 0.2s, box-shadow 0.2s; }
+.lf-group input:focus, .lf-group select:focus, .lf-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,122,24,0.15); }
+.lf-group textarea { resize: vertical; min-height: 100px; }
+.lf-group .help { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+/* Free Stay Badge */
+.free-badge { display: inline-block; padding: 4px 12px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 0.75rem; font-weight: 700; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Price section toggle */
+.price-section { transition: opacity 0.3s, max-height 0.3s; }
+.price-section.hidden { opacity: 0.3; max-height: 0; overflow: hidden; pointer-events: none; margin: 0; padding: 0; }
+
+/* Amenities Grid */
+.amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-sm); }
+.amenity-check { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+.amenity-check:hover { border-color: var(--primary); background: rgba(255,122,24,0.03); }
+.amenity-check input:checked + .amenity-label { color: var(--primary); font-weight: 600; }
+.amenity-check input { accent-color: var(--primary); }
+
+/* Photo Upload */
+.photo-upload-zone { border: 2px dashed var(--border-color); border-radius: var(--radius-lg); padding: var(--space-xl); text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: var(--space-md); }
+.photo-upload-zone:hover { border-color: var(--primary); background: rgba(255,122,24,0.03); }
+.photo-upload-zone.dragover { border-color: var(--primary); background: rgba(255,122,24,0.08); }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--space-sm); }
+.photo-thumb { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 4/3; }
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.photo-thumb .photo-delete { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; background: rgba(0,0,0,0.7); color: #fff; border: none; border-radius: 50%; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+.photo-thumb .cover-badge { position: absolute; bottom: 4px; left: 4px; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: var(--radius-sm); font-size: 0.65rem; font-weight: 700; }
+
+/* Submit */
+.lf-actions { display: flex; gap: var(--space-md); margin-top: var(--space-lg); }
+.lf-btn { flex: 1; padding: 14px; border: none; border-radius: var(--radius-lg); font-family: var(--font-heading); font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.lf-btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent-amber)); color: #fff; }
+.lf-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,122,24,0.3); }
+.lf-btn-secondary { background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border-color); }
+.lf-btn-submit { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.lf-btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="lf-container">
+  <div class="lf-header">
+    <a href="{{ url_for('host.my_listings') }}" class="lf-back">← My Listings</a>
+    <h1>{{ '✏️ Edit Listing' if is_edit else '➕ Create New Listing' }}</h1>
+  </div>
+
+  {% if is_edit and listing and listing.status == 'rejected' and listing.rejection_reason %}
+  <div style="padding:var(--space-md) var(--space-lg);background:linear-gradient(135deg,#fee2e2,#fecaca);border:1px solid #ef4444;border-radius:var(--radius-lg);margin-bottom:var(--space-xl);color:#991b1b;">
+    <strong>❌ Admin Feedback:</strong> {{ listing.rejection_reason }}
+  </div>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('host.listing_update', listing_id=listing.id) if is_edit else url_for('host.listing_create') }}" id="listing-form">
+    {{ csrf_input() }}
+
+    {# ── Stay Type Selector ── #}
+    <div class="lf-type-selector" id="type-selector">
+      <label class="lf-type-option {% if not listing or listing.listing_type == 'paid_homestay' %}active{% endif %}" data-type="paid_homestay">
+        <input type="radio" name="listing_type" value="paid_homestay" class="lf-type-radio"
+               {% if not listing or listing.listing_type == 'paid_homestay' %}checked{% endif %}>
+        <div class="icon">🏠</div>
+        <h3>Paid Homestay</h3>
+        <p>Charge a nightly rate for your space</p>
+      </label>
+      <label class="lf-type-option {% if listing and listing.listing_type == 'free_stay' %}active{% endif %}" data-type="free_stay">
+        <input type="radio" name="listing_type" value="free_stay" class="lf-type-radio"
+               {% if listing and listing.listing_type == 'free_stay' %}checked{% endif %}>
+        <div class="icon">🤝</div>
+        <h3>Free Local Stay</h3>
+        <p>Offer free accommodation to travellers</p>
+        <span class="free-badge">₹0 Free</span>
+      </label>
+    </div>
+
+    {# ── Basic Info ── #}
+    <div class="lf-section">
+      <h2>📝 Basic Information</h2>
+      <div class="lf-group">
+        <label>Listing Title <span class="req">*</span></label>
+        <input type="text" name="title" value="{{ listing.title if listing else '' }}" placeholder="e.g. Cozy Homestay near Giddheswar Temple" required minlength="5" maxlength="200">
+      </div>
+      <div class="lf-group">
+        <label>Description <span class="req">*</span></label>
+        <textarea name="description" placeholder="Describe your space, the neighbourhood, what makes it special..." required minlength="20" maxlength="5000" rows="5">{{ listing.description if listing else '' }}</textarea>
+      </div>
+      <div class="lf-row">
+        <div class="lf-group">
+          <label>Property Type</label>
+          <select name="property_type">
+            {% set pt = listing.property_type if listing else 'room' %}
+            <option value="room" {% if pt == 'room' %}selected{% endif %}>Private Room</option>
+            <option value="entire_home" {% if pt == 'entire_home' %}selected{% endif %}>Entire Home</option>
+            <option value="shared_room" {% if pt == 'shared_room' %}selected{% endif %}>Shared Room</option>
+            <option value="hut" {% if pt == 'hut' %}selected{% endif %}>Traditional Hut</option>
+            <option value="tent" {% if pt == 'tent' %}selected{% endif %}>Tent / Camp</option>
+            <option value="farmhouse" {% if pt == 'farmhouse' %}selected{% endif %}>Farmhouse</option>
+          </select>
+        </div>
+        <div class="lf-group">
+          <label>Cancellation Policy</label>
+          <select name="cancellation_policy">
+            {% set cp = listing.cancellation_policy if listing else 'flexible' %}
+            <option value="flexible" {% if cp == 'flexible' %}selected{% endif %}>Flexible (free cancellation)</option>
+            <option value="moderate" {% if cp == 'moderate' %}selected{% endif %}>Moderate (48hr notice)</option>
+            <option value="strict" {% if cp == 'strict' %}selected{% endif %}>Strict (no refund)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    {# ── Pricing (hidden for free stays) ── #}
+    <div class="lf-section price-section" id="price-section">
+      <h2>💰 Pricing</h2>
+      <div class="lf-row">
+        <div class="lf-group">
+          <label>Price Per Night (₹) <span class="req">*</span></label>
+          <input type="number" name="price_per_night" min="0" step="50" value="{{ listing.price_per_night|int if listing else 500 }}" id="price-input">
+          <p class="help">Set ₹0 for free stays</p>
+        </div>
+      </div>
+    </div>
+
+    {# ── Capacity & Rooms ── #}
+    <div class="lf-section">
+      <h2>🛏️ Capacity & Rooms</h2>
+      <div class="lf-row-3">
+        <div class="lf-group">
+          <label>Max Guests <span class="req">*</span></label>
+          <input type="number" name="max_guests" min="1" max="20" value="{{ listing.max_guests if listing else 2 }}">
+        </div>
+        <div class="lf-group">
+          <label>Rooms</label>
+          <input type="number" name="num_rooms" min="1" max="10" value="{{ listing.num_rooms if listing else 1 }}">
+        </div>
+        <div class="lf-group">
+          <label>Beds</label>
+          <input type="number" name="num_beds" min="1" max="20" value="{{ listing.num_beds if listing else 1 }}">
+        </div>
+      </div>
+      <div class="lf-row-3">
+        <div class="lf-group">
+          <label>Bathrooms</label>
+          <input type="number" name="num_bathrooms" min="0" max="10" value="{{ listing.num_bathrooms if listing else 1 }}">
+        </div>
+        <div class="lf-group">
+          <label>Min Stay (nights)</label>
+          <input type="number" name="min_stay_nights" min="1" max="30" value="{{ listing.min_stay_nights if listing else 1 }}">
+        </div>
+        <div class="lf-group">
+          <label>Max Stay (nights)</label>
+          <input type="number" name="max_stay_nights" min="0" max="365" value="{{ listing.max_stay_nights if listing else 0 }}">
+          <p class="help">0 = no limit</p>
+        </div>
+      </div>
+    </div>
+
+    {# ── Location ── #}
+    <div class="lf-section">
+      <h2>📍 Location</h2>
+      <div class="lf-group">
+        <label>District <span class="req">*</span></label>
+        <select name="district_id" required>
+          <option value="">Select District</option>
+          {% for d in districts %}
+          <option value="{{ d.id }}" {% if listing and listing.district_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="lf-group">
+        <label>Address / Location Description</label>
+        <textarea name="address_text" rows="2" placeholder="Village, landmark, nearby temple/attraction...">{{ listing.address_text if listing else '' }}</textarea>
+        <p class="help">Publicly visible. Use landmarks, not exact street address.</p>
+      </div>
+      <div class="lf-group">
+        <label>Full Address (Private)</label>
+        <input type="text" name="address_full" value="{{ listing.address_full if listing else '' }}" placeholder="Full address for confirmed guests only">
+        <p class="help">Only shared with confirmed guests. Never shown publicly.</p>
+      </div>
+    </div>
+
+    {# ── Check-in / Check-out ── #}
+    <div class="lf-section">
+      <h2>🕐 Check-in & Check-out</h2>
+      <div class="lf-row">
+        <div class="lf-group">
+          <label>Check-in Time</label>
+          <input type="time" name="check_in_time" value="{{ listing.check_in_time if listing else '14:00' }}">
+        </div>
+        <div class="lf-group">
+          <label>Check-out Time</label>
+          <input type="time" name="check_out_time" value="{{ listing.check_out_time if listing else '11:00' }}">
+        </div>
+      </div>
+    </div>
+
+    {# ── Amenities ── #}
+    <div class="lf-section">
+      <h2>✨ Amenities</h2>
+      <div class="amenities-grid">
+        {% for a in amenity_options %}
+        <label class="amenity-check">
+          <input type="checkbox" name="amenities" value="{{ a.key }}"
+                 {% if amenities_selected is defined and a.key in amenities_selected %}checked{% endif %}>
+          <span class="amenity-label">{{ a.icon }} {{ a.label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# ── House Rules ── #}
+    <div class="lf-section">
+      <h2>📋 House Rules</h2>
+      <div class="lf-group">
+        <textarea name="house_rules" rows="4" placeholder="No smoking, quiet hours after 10pm, shoes off at door...">{{ listing.house_rules if listing else '' }}</textarea>
+      </div>
+    </div>
+
+    {# ── Photos (edit mode only) ── #}
+    {% if is_edit %}
+    <div class="lf-section">
+      <h2>📷 Photos ({{ photos|length if photos else 0 }}/10)</h2>
+      <div class="photo-upload-zone" id="photo-drop-zone" onclick="document.getElementById('photo-input').click()">
+        <div style="font-size:2rem;">📸</div>
+        <p>Click or drag photos here</p>
+        <p style="font-size:0.75rem;color:var(--text-muted);">JPG, PNG, WebP · Max 5MB each · Up to 10 photos</p>
+      </div>
+      <input type="file" id="photo-input" multiple accept="image/*" style="display:none;">
+      <div class="photo-grid" id="photo-grid">
+        {% if photos %}
+        {% for p in photos %}
+        <div class="photo-thumb" data-photo-id="{{ p.id }}">
+          <img src="{{ url_for('static', filename='uploads/hosts/listings/' + p.filename) }}" alt="">
+          {% if listing.cover_image == p.filename %}
+          <span class="cover-badge">Cover</span>
+          {% endif %}
+          <button type="button" class="photo-delete" onclick="deletePhoto({{ listing.id }}, {{ p.id }}, this)">✕</button>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {# ── Actions ── #}
+    <div class="lf-actions">
+      <button type="submit" class="lf-btn lf-btn-primary">
+        💾 {{ 'Save Changes' if is_edit else 'Create Draft' }}
+      </button>
+      {% if is_edit and listing.status in ('draft', 'rejected') %}
+      <button type="button" class="lf-btn lf-btn-submit" onclick="submitForReview()">
+        📋 Submit for Review
+      </button>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<script>
+// Type selector toggle
+document.querySelectorAll('.lf-type-option').forEach(opt => {
+  opt.addEventListener('click', function() {
+    document.querySelectorAll('.lf-type-option').forEach(o => o.classList.remove('active'));
+    this.classList.add('active');
+    this.querySelector('input').checked = true;
+    const type = this.dataset.type;
+    const priceSection = document.getElementById('price-section');
+    if (type === 'free_stay') {
+      priceSection.classList.add('hidden');
+      document.getElementById('price-input').value = '0';
+    } else {
+      priceSection.classList.remove('hidden');
+    }
+  });
+});
+
+// Init: hide price section if free_stay
+if (document.querySelector('input[name="listing_type"]:checked')?.value === 'free_stay') {
+  document.getElementById('price-section').classList.add('hidden');
+}
+
+{% if is_edit %}
+// Photo upload
+const photoInput = document.getElementById('photo-input');
+const dropZone = document.getElementById('photo-drop-zone');
+const photoGrid = document.getElementById('photo-grid');
+const csrfToken = document.querySelector('[name="_csrf_token"]')?.value || '';
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  uploadFiles(e.dataTransfer.files);
+});
+photoInput.addEventListener('change', () => uploadFiles(photoInput.files));
+
+function uploadFiles(files) {
+  const fd = new FormData();
+  fd.append('_csrf_token', csrfToken);
+  for (let f of files) fd.append('photos', f);
+  fetch('{{ url_for("host.listing_photo_upload", listing_id=listing.id) }}', {
+    method: 'POST', body: fd,
+    headers: { 'X-CSRF-Token': csrfToken }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.uploaded) {
+      data.uploaded.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'photo-thumb';
+        div.dataset.photoId = p.id;
+        div.innerHTML = `<img src="${p.url}" alt=""><button type="button" class="photo-delete" onclick="deletePhoto({{ listing.id }}, ${p.id}, this)">✕</button>`;
+        photoGrid.appendChild(div);
+      });
+    }
+  });
+}
+
+function deletePhoto(listingId, photoId, btn) {
+  if (!confirm('Delete this photo?')) return;
+  fetch(`/host/listing/${listingId}/photos/${photoId}/delete`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) btn.closest('.photo-thumb').remove();
+  });
+}
+{% endif %}
+
+function submitForReview() {
+  if (confirm('Submit this listing for admin review? You won\'t be able to edit until it\'s reviewed.')) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ url_for("host.listing_submit", listing_id=listing.id) if is_edit and listing else "#" }}';
+    const csrf = document.createElement('input');
+    csrf.type = 'hidden'; csrf.name = '_csrf_token'; csrf.value = csrfToken;
+    form.appendChild(csrf);
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
+</script>
+{% endblock %}
