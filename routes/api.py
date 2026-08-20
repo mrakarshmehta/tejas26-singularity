@@ -919,3 +919,15 @@ def api_get_packing_advice():
         'district': district,
         'advice': advice
     })
+
+@api_bp.route('/weather/phenomena', methods=['GET'])
+def api_get_seasonal_phenomena():
+    """JSON API returning fog visibility indices, waterfall surges, and seasonal photography ratings."""
+    from models.weather import get_all_seasonal_phenomena, get_phenomena_by_month
+    month = request.args.get('month')
+    phenomena = get_phenomena_by_month(month) if month else get_all_seasonal_phenomena()
+    return jsonify({
+        'status': 'success',
+        'count': len(phenomena),
+        'phenomena': phenomena
+    })
