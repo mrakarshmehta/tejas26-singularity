@@ -387,3 +387,34 @@ def transport_guide():
         transit_routes=routes,
         rate_cards=rate_cards
     )
+
+@main_bp.route('/virtual-tours')
+def virtual_tours():
+    """Browse 360-degree virtual photo spheres and aerial viewpoints of Bihar heritage."""
+    from models.panoramas import get_all_panoramas, get_panoramas_by_district, get_panoramas_by_category
+    district = request.args.get('district')
+    category = request.args.get('category')
+
+    if district:
+        panos = get_panoramas_by_district(district)
+    elif category:
+        panos = get_panoramas_by_category(category)
+    else:
+        panos = get_all_panoramas()
+
+    return render_template(
+        'panoramas.html',
+        panoramas=panos,
+        selected_district=district or 'all',
+        selected_category=category or 'all'
+    )
+
+
+@main_bp.route('/virtual-tour/<slug>')
+def virtual_tour_viewer(slug):
+    """Interactive 360-degree panorama viewer with coordinate hotspots and audio ties."""
+    from models.panoramas import get_panorama_by_slug
+    pano = get_panorama_by_slug(slug)
+    if not pano:
+        abort(404)
+    return render_template('panorama_viewer.html', panorama=pano)
