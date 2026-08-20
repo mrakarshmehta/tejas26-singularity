@@ -1934,3 +1934,40 @@ body.is-offline::before {
   transform: translateY(-3px);
   box-shadow: 0 10px 20px -5px rgba(6, 78, 59, 0.15);
 }
+/* ==========================================================================
+   Milestone v2.7.0 Component Styles: Subsystems 1 to 9
+   ========================================================================== */
+
+.archaeology-card, .weather-widget-card, .arts-showcase-card,
+.guide-profile-badge, .trek-elevation-badge, .souvenir-price-badge,
+.scholar-treatise-card, .budget-calc-slider, .quiz-score-ribbon {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+}
+
+.archaeology-card:hover, .arts-showcase-card:hover, .scholar-treatise-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.12);
+}
+
+.gi-seal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(194, 65, 12, 0.12);
+    color: #c2410c;
+    border: 1px solid rgba(194, 65, 12, 0.25);
+}
+
+.guide-verified-badge {
+    background: rgba(22, 163, 74, 0.12);
+    color: #16a34a;
+    border: 1px solid rgba(22, 163, 74, 0.25);
+    border-radius: 9999px;
+    padding: 0.2rem 0.55rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
