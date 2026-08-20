@@ -61,3 +61,92 @@ HERITAGE_QUIZ_DB = [
         "explanation": "Bidesiya addresses the emotional pathos and social realities of rural migration from Bihar to industrial cities."
     }
 ]
+
+BADGE_TIERS_DB = [
+    {"min_percent": 90, "badge": "🏛️ Grand Magadha Mahapandit (Master Explorer)", "color": "#7c2d12"},
+    {"min_percent": 75, "badge": "📜 Nalanda Scholar (Heritage Expert)", "color": "#4338ca"},
+    {"min_percent": 50, "badge": "🧭 Bihar Yatra Explorer (Curious Traveler)", "color": "#0284c7"},
+    {"min_percent": 0, "badge": "🌱 Heritage Novice (Beginning the Journey)", "color": "#16a34a"}
+]
+
+def get_all_quiz_questions(category=None):
+    """Return quiz questions, optionally filtered by category (without exposing correct index for clients)."""
+    if not category or category.lower() == 'all':
+        questions = HERITAGE_QUIZ_DB
+    else:
+        c_clean = category.lower().strip()
+        questions = [q for q in HERITAGE_QUIZ_DB if q["category"].lower() == c_clean]
+
+    # Return client-safe list without answer keys for secure rendering
+    client_safe = []
+    for q in questions:
+        client_safe.append({
+            "id": q["id"],
+            "category": q["category"],
+            "difficulty": q["difficulty"],
+            "question": q["question"],
+            "options": q["options"]
+        })
+    return client_safe
+
+def get_quiz_categories():
+    """Return all unique quiz categories."""
+    return sorted(list(set(q["category"] for q in HERITAGE_QUIZ_DB)))
+
+def evaluate_quiz_submission(answers_dict):
+    """Evaluate submitted answers dictionary { 'q-id': selected_index } and award digital badge."""
+    if not answers_dict or not isinstance(answers_dict, dict):
+        return {
+            "score": 0,
+            "total": len(HERITAGE_QUIZ_DB),
+            "percentage": 0,
+            "badge": BADGE_TIERS_DB[-1]["badge"],
+            "results": []
+        }
+
+    correct_count = 0
+    detailed_results = []
+
+    for q in HERITAGE_QUIZ_DB:
+        q_id = q["id"]
+        user_choice = answers_dict.get(q_id)
+        is_correct = False
+
+        if user_choice is not None:
+            try:
+                choice_idx = int(user_choice)
+                if choice_idx == q["correct_index"]:
+                    is_correct = True
+                    correct_count += 1
+            except (ValueError, TypeError):
+                pass
+
+        detailed_results.append({
+            "id": q_id,
+            "question": q["question"],
+            "user_choice": int(user_choice) if user_choice is not None and str(user_choice).isdigit() else None,
+            "correct_index": q["correct_index"],
+            "is_correct": is_correct,
+            "correct_answer": q["options"][q["correct_index"]],
+            "explanation": q["explanation"]
+        })
+
+    total = len(HERITAGE_QUIZ_DB)
+    percentage = round((correct_count / total) * 100, 1) if total > 0 else 0
+
+    awarded_badge = BADGE_TIERS_DB[-1]["badge"]
+    badge_color = BADGE_TIERS_DB[-1]["color"]
+    for b in BADGE_TIERS_DB:
+        if percentage >= b["min_percent"]:
+            awarded_badge = b["badge"]
+            badge_color = b["color"]
+            break
+
+    return {
+        "score": correct_count,
+        "total": total,
+        "percentage": percentage,
+        "badge": awarded_badge,
+        "badge_color": badge_color,
+        "results": detailed_results
+    }
