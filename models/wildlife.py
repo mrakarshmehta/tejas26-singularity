@@ -192,3 +192,59 @@ WILDLIFE_SANCTUARIES_DB = [
         "nearest_hub": "Rajgir (3 km) / Patna Airport (100 km)"
     }
 ]
+
+SAFARI_GUIDELINES = [
+    {
+        "topic": "Entry Permits & Advance Booking",
+        "guideline": "For Valmiki Tiger Reserve and Rajgir Nature Safari, obtain online entry permits or arrive at forest entry gates before 8:00 AM for morning safari slots."
+    },
+    {
+        "topic": "Dress Code & Wildlife Respect",
+        "guideline": "Wear neutral earthy colors (khaki, olive green, brown). Maintain absolute silence; do not play loud music or use camera flashlights."
+    },
+    {
+        "topic": "River & Boating Safety",
+        "guideline": "During boat safaris in Vikramshila Dolphin Sanctuary or Kanwar Lake, ensure certified life jackets are fastened at all times and avoid using plastic bags."
+    },
+    {
+        "topic": "Plastic-Free Zero Trace Zone",
+        "guideline": "All sanctuaries are strict zero-plastic zones. Any littering attracts immediate forest department penalties."
+    }
+]
+
+def get_all_sanctuaries():
+    """Return all cataloged wildlife sanctuaries and nature reserves."""
+    return WILDLIFE_SANCTUARIES_DB
+
+def get_sanctuary_by_slug(slug):
+    """Find sanctuary by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for w in WILDLIFE_SANCTUARIES_DB:
+        if w["slug"] == s or w["id"] == s:
+            return w
+    return None
+
+def get_sanctuaries_by_district(district):
+    """Filter sanctuaries by district."""
+    if not district or district.lower() == 'all':
+        return WILDLIFE_SANCTUARIES_DB
+    d_clean = district.lower().strip()
+    return [w for w in WILDLIFE_SANCTUARIES_DB if d_clean in w["district"].lower()]
+
+def get_ramsar_wetlands():
+    """Return only Ramsar designated wetland sites."""
+    return [w for w in WILDLIFE_SANCTUARIES_DB if w.get("ramsar_site")]
+
+def get_safari_guidelines():
+    """Return wildlife safari and forest guidelines."""
+    return SAFARI_GUIDELINES
+
+def get_endangered_species_list():
+    """Extract distinct list of key endangered species across all reserves."""
+    species = set()
+    for w in WILDLIFE_SANCTUARIES_DB:
+        for f in w.get("key_fauna", []):
+            species.add(f)
+    return sorted(list(species))
