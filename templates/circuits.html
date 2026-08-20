@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Thematic Circuits & Heritage Trails — HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="circuits-page" style="max-width:1200px;margin:40px auto;padding:0 20px;">
+  
+  <div class="circuits-header" style="text-align:center;margin-bottom:40px;">
+    <div style="font-size:2.5rem;margin-bottom:8px;">🗺️</div>
+    <h1 style="font-size:2.2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">Curated Thematic Circuits</h1>
+    <p style="color:var(--text-muted);font-size:1.1rem;max-width:700px;margin:0 auto 24px;">
+      Explore Bihar through curated multi-day routes connecting ancient Buddhist monasteries, serene Jain pilgrimage sites, verdant wildlife reserves, and historic freedom trails.
+    </p>
+
+    <!-- Theme Filter Pills -->
+    <div class="theme-pills" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+      <a href="/circuits" class="pill {% if active_theme == 'all' %}active{% endif %}" style="padding:8px 18px;border-radius:20px;text-decoration:none;font-size:0.9rem;border:1px solid rgba(255,255,255,0.15);background:{% if active_theme == 'all' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">All Trails</a>
+      <a href="/circuits?theme=spiritual" class="pill {% if active_theme == 'spiritual' %}active{% endif %}" style="padding:8px 18px;border-radius:20px;text-decoration:none;font-size:0.9rem;border:1px solid rgba(255,255,255,0.15);background:{% if active_theme == 'spiritual' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">☸️ Spiritual & Faith</a>
+      <a href="/circuits?theme=nature" class="pill {% if active_theme == 'nature' %}active{% endif %}" style="padding:8px 18px;border-radius:20px;text-decoration:none;font-size:0.9rem;border:1px solid rgba(255,255,255,0.15);background:{% if active_theme == 'nature' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">🌿 Eco & Wildlife</a>
+      <a href="/circuits?theme=history" class="pill {% if active_theme == 'history' %}active{% endif %}" style="padding:8px 18px;border-radius:20px;text-decoration:none;font-size:0.9rem;border:1px solid rgba(255,255,255,0.15);background:{% if active_theme == 'history' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">🏛️ History & Heritage</a>
+    </div>
+  </div>
+
+  <!-- Circuits Grid -->
+  <div class="circuits-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));gap:24px;">
+    {% for c in circuits %}
+    <div class="circuit-card" style="background:var(--bg-card, #1e293b);border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;transition:transform 0.2s, box-shadow 0.2s;display:flex;flex-direction:column;">
+      <div style="padding:24px;flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:1.8rem;">{{ c.icon }}</span>
+          <span style="font-size:0.75rem;padding:4px 10px;border-radius:12px;background:rgba(255,255,255,0.08);color:var(--text-muted);font-weight:600;">{{ c.duration_days }} Days • {{ c.total_distance_km }} km</span>
+        </div>
+        <h2 style="font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:8px;">{{ c.title }}</h2>
+        <p style="color:var(--accent-orange, #ff7a18);font-size:0.85rem;font-weight:600;margin-bottom:12px;">{{ c.tagline }}</p>
+        <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.5;margin-bottom:18px;">{{ c.description }}</p>
+        
+        <!-- Stops count & highlights -->
+        <div style="background:rgba(0,0,0,0.2);padding:12px 14px;border-radius:10px;margin-bottom:18px;">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;font-weight:700;">Key Trail Stops:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            {% for s in c.stops %}
+            <span style="font-size:0.8rem;background:rgba(255,255,255,0.08);padding:3px 8px;border-radius:6px;color:#cbd5e1;">📍 {{ s.place_name }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px 24px;background:rgba(0,0,0,0.15);border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.82rem;color:var(--text-muted);">🗓️ {{ c.best_season }}</span>
+        <a href="/circuit/{{ c.slug }}" class="btn btn-sm btn-primary" style="padding:8px 16px;border-radius:8px;font-size:0.85rem;font-weight:600;text-decoration:none;background:var(--accent-orange, #ff7a18);color:#fff;">View Trail Route →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
