@@ -1,0 +1,122 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Bihar Heritage Trivia Quiz Challenge - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="quiz-page-container" style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #4c1d95 0%, #31104b 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #7c3aed;">
+        <span style="display: inline-block; background: rgba(167, 139, 250, 0.2); color: #ddd6fe; border: 1px solid rgba(167, 139, 250, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🏆 Cultural Trivia & Digital Badge Quest
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Heritage Trivia Challenge</h1>
+        <p style="color: #ede9fe; font-size: 1.05rem; margin: 0;">
+            Test your knowledge on ancient Indian astronomy, Mauryan monoliths, Mithila folk art, and UNESCO world heritage. Score 90%+ to earn the coveted <strong>Grand Magadha Mahapandit</strong> badge!
+        </p>
+    </div>
+
+    <!-- Category Filters -->
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <a href="/quiz" style="padding: 0.4rem 0.9rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; text-decoration: none; background: {% if selected_category == 'all' %}#7c3aed{% else %}var(--bg-subtle, #f1f5f9){% endif %}; color: {% if selected_category == 'all' %}#ffffff{% else %}var(--text-primary, #334155){% endif %};">
+            All Categories
+        </a>
+        {% for cat in categories %}
+        <a href="/quiz?category={{ cat }}" style="padding: 0.4rem 0.9rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; text-decoration: none; text-transform: capitalize; background: {% if selected_category == cat %}#7c3aed{% else %}var(--bg-subtle, #f1f5f9){% endif %}; color: {% if selected_category == cat %}#ffffff{% else %}var(--text-primary, #334155){% endif %};">
+            {{ cat }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Quiz Form -->
+    <form id="heritage-quiz-form" onsubmit="submitQuiz(event)">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+            {% for q in questions %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.75rem; font-weight: 700; background: rgba(124, 58, 237, 0.1); color: #7c3aed; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: capitalize;">
+                        {{ q.category }} • {{ q.difficulty }}
+                    </span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted, #64748b); font-weight: 600;">Question {{ loop.index }} of {{ questions | length }}</span>
+                </div>
+
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary, #0f172a); margin: 0 0 1rem 0; line-height: 1.4;">
+                    {{ q.question }}
+                </h3>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    {% for opt in q.options %}
+                    <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.9rem; background: var(--bg-subtle, #f8fafc); border-radius: 8px; cursor: pointer; border: 1px solid var(--border-color, #e2e8f0); font-size: 0.9rem; transition: background 0.2s;">
+                        <input type="radio" name="{{ q.id }}" value="{{ loop.index0 }}" required style="accent-color: #7c3aed;">
+                        <span>{{ opt }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 1rem; background: #7c3aed; color: #ffffff; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);">
+            Submit Answers & Reveal Badge
+        </button>
+    </form>
+
+    <!-- Quiz Result Modal/Container -->
+    <div id="quiz-result-box" style="display: none; margin-top: 2.5rem; background: var(--card-bg, #ffffff); border: 2px solid #7c3aed; border-radius: 16px; padding: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🏅</div>
+            <h2 id="res-badge" style="font-size: 1.6rem; font-weight: 800; margin: 0 0 0.5rem 0; color: #7c3aed;"></h2>
+            <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary, #0f172a);">
+                Score: <span id="res-score"></span> / <span id="res-total"></span> (<span id="res-percent"></span>%)
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+            📖 Question Explanations & Historical Lore
+        </h3>
+        <div id="explanations-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+    </div>
+</div>
+
+<script>
+function submitQuiz(e) {
+    e.preventDefault();
+    var form = document.getElementById('heritage-quiz-form');
+    var formData = new FormData(form);
+    var answers = {};
+    formData.forEach(function(val, key) {
+        answers[key] = parseInt(val);
+    });
+
+    fetch('/api/v1/quiz/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers: answers })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            var ev = data.evaluation;
+            document.getElementById('res-badge').textContent = ev.badge;
+            document.getElementById('res-score').textContent = ev.score;
+            document.getElementById('res-total').textContent = ev.total;
+            document.getElementById('res-percent').textContent = ev.percentage;
+
+            var listHtml = '';
+            ev.results.forEach(function(r) {
+                var color = r.is_correct ? '#16a34a' : '#dc2626';
+                var icon = r.is_correct ? '✅ Correct' : '❌ Incorrect';
+                listHtml += '<div style="padding: 1rem; background: var(--bg-subtle, #f8fafc); border-radius: 8px; border-left: 4px solid ' + color + ';">';
+                listHtml += '<div style="font-size: 0.8rem; font-weight: 700; color: ' + color + '; margin-bottom: 0.25rem;">' + icon + '</div>';
+                listHtml += '<div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem;">' + r.question + '</div>';
+                listHtml += '<div style="font-size: 0.85rem; color: var(--text-muted, #475569); line-height: 1.4;"><strong>Correct:</strong> ' + r.correct_answer + '<br><em>' + r.explanation + '</em></div>';
+                listHtml += '</div>';
+            });
+            document.getElementById('explanations-list').innerHTML = listHtml;
+            document.getElementById('quiz-result-box').style.display = 'block';
+            document.getElementById('quiz-result-box').scrollIntoView({ behavior: 'smooth' });
+        }
+    })
+    .catch(function(err) { console.error('Quiz evaluation error:', err); });
+}
+</script>
+{% endblock %}
