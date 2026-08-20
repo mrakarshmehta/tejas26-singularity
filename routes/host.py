@@ -340,6 +340,11 @@ def _save_listing_image(file_obj, listing_id):
     if not check_file_size(file_obj, max_mb=5):
         return None
 
+    from utils.image import compress_image_to_webp
+    fname = compress_image_to_webp(file_obj, LISTING_UPLOAD_FOLDER, prefix=f"listing_{listing_id}", max_width=1400, quality=82)
+    if fname:
+        return fname
+
     ext = file_obj.filename.rsplit('.', 1)[-1].lower()
     filename = f"listing_{listing_id}_{uuid.uuid4().hex[:10]}.{ext}"
     filepath = os.path.join(LISTING_UPLOAD_FOLDER, filename)
