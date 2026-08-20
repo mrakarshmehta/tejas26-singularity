@@ -1333,3 +1333,14 @@ def api_get_budget_currencies():
         'status': 'success',
         'currencies': currencies
     })
+
+@api_bp.route('/budget/district-cost-index', methods=['GET'])
+def api_get_district_cost_index():
+    """JSON API returning relative cost factors and tourism expense index by district."""
+    from models.budget_planner import get_district_cost_index
+    index = get_district_cost_index()
+    return jsonify({
+        'status': 'success',
+        'count': len(index),
+        'cost_index': index
+    })
