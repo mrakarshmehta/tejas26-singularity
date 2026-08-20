@@ -1269,3 +1269,14 @@ def api_get_ancient_universities():
         'count': len(universities),
         'universities': universities
     })
+
+@api_bp.route('/scholars/treatises', methods=['GET'])
+def api_get_classical_treatises():
+    """JSON API returning classical scientific, philosophical, and statecraft treatises."""
+    from models.intellectual_heritage import get_all_treatises
+    treatises = get_all_treatises()
+    return jsonify({
+        'status': 'success',
+        'count': len(treatises),
+        'treatises': treatises
+    })
