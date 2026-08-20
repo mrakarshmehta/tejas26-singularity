@@ -1355,3 +1355,26 @@ def api_get_tipping_guidelines():
         'count': len(guidelines),
         'guidelines': guidelines
     })
+
+@api_bp.route('/quiz/questions', methods=['GET'])
+def api_get_quiz_questions():
+    """JSON API returning client-safe heritage trivia questions and multiple-choice options."""
+    from models.quiz import get_all_quiz_questions
+    category = request.args.get('category')
+    questions = get_all_quiz_questions(category)
+    return jsonify({
+        'status': 'success',
+        'count': len(questions),
+        'questions': questions
+    })
+
+
+@api_bp.route('/quiz/categories', methods=['GET'])
+def api_get_quiz_categories():
+    """JSON API returning all available trivia categories (history, archaeology, culture, etc.)."""
+    from models.quiz import get_quiz_categories
+    categories = get_quiz_categories()
+    return jsonify({
+        'status': 'success',
+        'categories': categories
+    })
