@@ -251,6 +251,15 @@
 {% endblock %}
 
 {% block content %}
+
+      <!-- Amenity & Budget Quick Filter Bar -->
+      <div class="stay-amenity-filters" style="display:flex;flex-wrap:wrap;gap:8px;margin:15px 0;">
+        <label class="filter-chip"><input type="checkbox" name="amenity" value="wifi" style="display:none;"> 📶 WiFi</label>
+        <label class="filter-chip"><input type="checkbox" name="amenity" value="meals" style="display:none;"> 🍲 Home Cooked Food</label>
+        <label class="filter-chip"><input type="checkbox" name="amenity" value="parking" style="display:none;"> 🚗 Free Parking</label>
+        <label class="filter-chip"><input type="checkbox" name="amenity" value="ac" style="display:none;"> ❄️ Air Conditioning</label>
+      </div>
+
 <!-- ═══ HERO ═══ -->
 <section class="stays-hero">
   <div class="stays-hero-inner">
