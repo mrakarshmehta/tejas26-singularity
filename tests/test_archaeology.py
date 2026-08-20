@@ -83,3 +83,40 @@ class TestArchaeologyModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestNumismaticsModelAndAPI(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_all_coin_hoards(self):
+        """Verify presence of signature coin hoards."""
+        from models.archaeology import get_all_numismatic_hoards, get_coin_hoard_by_slug
+        hoards = get_all_numismatic_hoards()
+        self.assertGreaterEqual(len(hoards), 3)
+        slugs = [h['slug'] for h in hoards]
+        self.assertIn('pataliputra-silver-punch-marked-hoard', slugs)
+        self.assertIn('kumhrar-gupta-gold-dinar-hoard', slugs)
+
+        gupta = get_coin_hoard_by_slug('kumhrar-gupta-gold-dinar-hoard')
+        self.assertIsNotNone(gupta)
+        self.assertEqual(gupta['metal'], 'Gold (High Purity)')
+
+    def test_coin_api_endpoints(self):
+        """Test /api/v1/archaeology/coins API endpoints."""
+        res = self.client.get('/api/v1/archaeology/coins')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreater(data['count'], 0)
+
+        # Single coin hoard detail
+        res_detail = self.client.get('/api/v1/archaeology/coins/pataliputra-silver-punch-marked-hoard')
+        self.assertEqual(res_detail.status_code, 200)
+        detail = res_detail.get_json()
+        self.assertEqual(detail['status'], 'success')
+        self.assertEqual(detail['hoard']['metal'], 'Silver (90% Purity)')
