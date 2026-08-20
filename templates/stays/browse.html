@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+{% block title %}Local Stays & Homestays in Bihar — {{ app_name }}{% endblock %}
+{% block meta_desc %}Browse authentic local homestays and free local stays in Bihar. Stay with verified local hosts and experience real hospitality.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Stays Hero ── */
+.stays-hero {
+  background: linear-gradient(135deg, rgba(255,122,24,0.08), rgba(245,158,11,0.04));
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+}
+.stays-hero-inner { max-width: 800px; margin: 0 auto; }
+.stays-hero h1 {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+.stays-hero p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-bottom: var(--space-xl);
+}
+
+/* ── Filter Bar ── */
+.stays-filter-container {
+  max-width: 1200px;
+  margin: -30px auto 0;
+  padding: 0 var(--space-lg);
+  position: relative;
+  z-index: 10;
+}
+.stays-filter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.stays-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  align-items: end;
+}
+.stays-filter-group { display: flex; flex-direction: column; gap: 4px; }
+.stays-filter-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stays-filter-input, .stays-filter-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+.stays-filter-input:focus, .stays-filter-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.stays-filter-btn {
+  padding: 11px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-amber));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 42px;
+}
+.stays-filter-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(255,122,24,0.3); }
+
+/* Quick Type Pills */
+.stays-type-pills {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+.type-pill {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.type-pill:hover { border-color: var(--primary); color: var(--primary); }
+.type-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* ── Content Layout ── */
+.stays-content {
+  max-width: 1200px;
+  margin: var(--space-2xl) auto;
+  padding: 0 var(--space-lg);
+}
+.stays-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.stays-results-count {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ── Grid & Cards ── */
+.stays-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-xl);
+}
+.stay-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  text-decoration: none;
+  color: inherit;
+}
+.stay-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  border-color: var(--primary);
+}
+.stay-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+.stay-card-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.stay-card:hover .stay-card-img { transform: scale(1.04); }
+.stay-card-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; color: var(--text-muted);
+}
+.stay-badge-type {
+  position: absolute; top: 12px; left: 12px;
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.badge-free { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.badge-paid { background: rgba(0,0,0,0.75); color: #fff; backdrop-filter: blur(4px); }
+
+.stay-badge-verified {
+  position: absolute; top: 12px; right: 12px;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font-size: 0.72rem; font-weight: 700;
+  background: #10b981; color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.stay-card-body {
+  padding: var(--space-lg);
+  display: flex; flex-direction: column; flex-grow: 1;
+}
+.stay-card-location {
+  font-size: 0.82rem; font-weight: 600; color: var(--primary);
+  margin-bottom: 4px; display: flex; align-items: center; gap: 4px;
+}
+.stay-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--text-primary); margin-bottom: var(--space-xs);
+  line-height: 1.35;
+}
+.stay-card-desc {
+  font-size: 0.85rem; color: var(--text-muted);
+  line-height: 1.5; margin-bottom: var(--space-md);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.stay-card-footer {
+  margin-top: auto;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.stay-card-price { display: flex; flex-direction: column; }
+.stay-card-price-val {
+  font-family: var(--font-heading);
+  font-size: 1.25rem; font-weight: 800;
+  color: var(--text-primary);
+}
+.stay-card-price-label { font-size: 0.75rem; color: var(--text-muted); }
+.stay-card-free-label {
+  font-family: var(--font-heading);
+  font-size: 1.15rem; font-weight: 800;
+  color: #10b981;
+}
+.stay-card-btn {
+  padding: 8px 16px; border-radius: var(--radius-md);
+  background: var(--bg-elevated); border: 1px solid var(--border-color);
+  font-size: 0.82rem; font-weight: 700; color: var(--text-primary);
+  transition: all 0.15s;
+}
+.stay-card:hover .stay-card-btn {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+
+/* Empty State */
+.stays-empty {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+  background: var(--bg-card);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-xl);
+}
+.stays-empty-icon { font-size: 3.5rem; margin-bottom: var(--space-md); }
+.stays-empty h3 { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+.stays-empty p { color: var(--text-muted); max-width: 450px; margin: 0 auto var(--space-lg); }
+
+/* Pagination */
+.stays-pagination { display: flex; justify-content: center; gap: 6px; margin-top: var(--space-2xl); }
+.page-link {
+  padding: 8px 14px; border-radius: var(--radius-md);
+  border: 1px solid var(--border-color); background: var(--bg-card);
+  color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;
+}
+.page-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ═══ HERO ═══ -->
+<section class="stays-hero">
+  <div class="stays-hero-inner">
+    <h1>🏠 Local Stays & Homestays in Bihar</h1>
+    <p>Stay with local families, experience authentic village culture, or book comfortable homestays across Bihar.</p>
+  </div>
+</section>
+
+<!-- ═══ FILTER BAR ═══ -->
+<div class="stays-filter-container">
+  <div class="stays-filter-card">
+    <form action="{{ url_for('stays.browse_stays') }}" method="GET">
+      <div class="stays-filter-grid">
+        <div class="stays-filter-group">
+          <label for="q">Search</label>
+          <input type="text" name="q" id="q" placeholder="City, title, keyword..." class="stays-filter-input" value="{{ filters.query or '' }}">
+        </div>
+
+        <div class="stays-filter-group">
+          <label for="district_id">District</label>
+          <select name="district_id" id="district_id" class="stays-filter-select">
+            <option value="">All Bihar Districts</option>
+            {% for d in districts %}
+            <option value="{{ d.id }}" {% if filters.district_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="stays-filter-group">
+          <label for="type">Stay Type</label>
+          <select name="type" id="type" class="stays-filter-select">
+            <option value="">All Stays</option>
+            <option value="paid_homestay" {% if filters.listing_type == 'paid_homestay' %}selected{% endif %}>Paid Homestay 🏠</option>
+            <option value="free_stay" {% if filters.listing_type == 'free_stay' %}selected{% endif %}>Free Local Stay 🤝</option>
+          </select>
+        </div>
+
+        <div class="stays-filter-group">
+          <label for="guests">Guests</label>
+          <select name="guests" id="guests" class="stays-filter-select">
+            <option value="">Any Capacity</option>
+            <option value="1" {% if filters.min_guests == 1 %}selected{% endif %}>1+ Guest</option>
+            <option value="2" {% if filters.min_guests == 2 %}selected{% endif %}>2+ Guests</option>
+            <option value="4" {% if filters.min_guests == 4 %}selected{% endif %}>4+ Guests</option>
+            <option value="6" {% if filters.min_guests == 6 %}selected{% endif %}>6+ Guests</option>
+          </select>
+        </div>
+
+        <div class="stays-filter-group">
+          <label for="sort">Sort By</label>
+          <select name="sort" id="sort" class="stays-filter-select">
+            <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest First</option>
+            <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="rating" {% if filters.sort == 'rating' %}selected{% endif %}>Highest Rated</option>
+          </select>
+        </div>
+
+        <div class="stays-filter-group">
+          <button type="submit" class="stays-filter-btn">🔍 Filter Stays</button>
+        </div>
+      </div>
+
+      <div class="stays-type-pills">
+        <a href="{{ url_for('stays.browse_stays') }}" class="type-pill {% if not filters.listing_type and not filters.verified_only %}active{% endif %}">All Stays</a>
+        <a href="{{ url_for('stays.browse_stays', type='paid_homestay') }}" class="type-pill {% if filters.listing_type == 'paid_homestay' %}active{% endif %}">🏠 Paid Homestays</a>
+        <a href="{{ url_for('stays.browse_stays', type='free_stay') }}" class="type-pill {% if filters.listing_type == 'free_stay' %}active{% endif %}">🤝 Free Local Stays</a>
+        <a href="{{ url_for('stays.browse_stays', verified='1') }}" class="type-pill {% if filters.verified_only %}active{% endif %}">✅ Verified Hosts Only</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="stays-content">
+  <div class="stays-results-header">
+    <div class="stays-results-count">
+      Showing {{ listings|length }} of {{ total }} available stays
+    </div>
+    <div>
+      <a href="{{ url_for('host.become_host') }}" style="color:var(--primary);font-weight:700;text-decoration:none;font-size:0.9rem;">
+        ➕ Want to host travellers? Join as Host →
+      </a>
+    </div>
+  </div>
+
+  {% if listings %}
+  <div class="stays-grid">
+    {% for l in listings %}
+    <a href="{{ url_for('stays.stay_detail_slug', slug=l.slug) }}" class="stay-card">
+      <div class="stay-card-image-wrapper">
+        {% if l.cover_image %}
+        <img src="{{ url_for('static', filename='uploads/hosts/listings/' + l.cover_image) }}" alt="{{ l.title }}" class="stay-card-img" loading="lazy">
+        {% else %}
+        <div class="stay-card-placeholder">🏡</div>
+        {% endif %}
+
+        {% if l.listing_type == 'free_stay' %}
+        <span class="stay-badge-type badge-free">🤝 Free Stay</span>
+        {% else %}
+        <span class="stay-badge-type badge-paid">🏠 Homestay</span>
+        {% endif %}
+
+        {% if l.is_verified_badge %}
+        <span class="stay-badge-verified">✅ Verified Host</span>
+        {% endif %}
+      </div>
+
+      <div class="stay-card-body">
+        <div class="stay-card-location">
+          📍 {{ l.district_name or 'Bihar' }} · 👥 Up to {{ l.max_guests }} guests
+        </div>
+        <h3 class="stay-card-title">{{ l.title }}</h3>
+        <p class="stay-card-desc">{{ l.description }}</p>
+
+        <div class="stay-card-footer">
+          {% if l.listing_type == 'free_stay' %}
+          <div class="stay-card-price">
+            <span class="stay-card-free-label">Free Stay (₹0)</span>
+            <span class="stay-card-price-label">Hosted by {{ l.host_name }}</span>
+          </div>
+          {% else %}
+          <div class="stay-card-price">
+            <span class="stay-card-price-val">₹{{ l.price_per_night|int }}</span>
+            <span class="stay-card-price-label">per night</span>
+          </div>
+          {% endif %}
+          <span class="stay-card-btn">View Stay →</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if total_pages > 1 %}
+  <div class="stays-pagination">
+    {% for p in range(1, total_pages + 1) %}
+    <a href="{{ url_for('stays.browse_stays', page=p, **request.args) }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="stays-empty">
+    <div class="stays-empty-icon">🏠</div>
+    <h3>No stays found matching your filter</h3>
+    <p>Try clearing filters or selecting a different district to explore local stays across Bihar.</p>
+    <a href="{{ url_for('stays.browse_stays') }}" class="stays-filter-btn" style="display:inline-block;text-decoration:none;line-height:42px;padding:0 24px;">Clear All Filters</a>
+  </div>
+  {% endif %}
+</main>
+{% endblock %}

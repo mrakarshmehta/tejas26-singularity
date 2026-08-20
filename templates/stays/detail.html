@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.title }} — {{ listing.district_name or 'Bihar' }} Homestay | {{ app_name }}{% endblock %}
+{% block meta_desc %}{{ listing.description|truncate_words(25) }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Stay Detail Container ── */
+.sd-container { max-width: 1140px; margin: var(--space-xl) auto; padding: 0 var(--space-lg); }
+
+/* Header & Badges */
+.sd-header { margin-bottom: var(--space-lg); }
+.sd-badges { display: flex; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-xs); flex-wrap: wrap; }
+.sd-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+.sd-badge-free { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.sd-badge-paid { background: rgba(255,122,24,0.15); color: var(--primary); }
+.sd-badge-verified { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+
+.sd-title { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--text-primary); margin-bottom: var(--space-xs); line-height: 1.25; }
+.sd-location { font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+
+/* ── Gallery ── */
+.sd-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-sm); margin-bottom: var(--space-2xl); border-radius: var(--radius-xl); overflow: hidden; height: 420px; }
+@media (max-width: 768px) { .sd-gallery { grid-template-columns: 1fr; height: 260px; } }
+
+.sd-gallery-main { width: 100%; height: 100%; object-fit: cover; background: var(--bg-elevated); cursor: pointer; }
+.sd-gallery-sub { display: grid; grid-template-rows: 1fr 1fr; gap: var(--space-sm); height: 100%; }
+.sd-gallery-sub img { width: 100%; height: 100%; object-fit: cover; background: var(--bg-elevated); cursor: pointer; }
+
+/* ── Main Layout: Content + Booking Box ── */
+.sd-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--space-2xl); align-items: start; }
+@media (max-width: 900px) { .sd-layout { grid-template-columns: 1fr; } }
+
+/* Highlights Grid */
+.sd-highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--space-md); padding: var(--space-lg); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-xl); margin-bottom: var(--space-2xl); }
+.sd-highlight-item { text-align: center; }
+.sd-highlight-icon { font-size: 1.6rem; margin-bottom: 2px; }
+.sd-highlight-val { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+.sd-highlight-lbl { font-size: 0.75rem; color: var(--text-muted); }
+
+/* Host Card */
+.sd-host-card { display: flex; gap: var(--space-lg); padding: var(--space-lg); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-xl); margin-bottom: var(--space-2xl); align-items: center; }
+.sd-host-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); flex-shrink: 0; }
+.sd-host-avatar-placeholder { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent-amber)); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; flex-shrink: 0; }
+.sd-host-info h4 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.sd-host-bio { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 6px; }
+.sd-host-meta { font-size: 0.78rem; color: var(--text-muted); display: flex; gap: var(--space-md); flex-wrap: wrap; }
+
+/* Section Titles */
+.sd-section-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-md); padding-bottom: 6px; border-bottom: 2px solid var(--border-color); }
+
+/* Description */
+.sd-desc { font-size: 0.95rem; line-height: 1.7; color: var(--text-primary); margin-bottom: var(--space-2xl); white-space: pre-line; }
+
+/* Amenities Grid */
+.sd-amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-2xl); }
+.sd-amenity-item { display: flex; align-items: center; gap: var(--space-sm); padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); font-size: 0.9rem; font-weight: 600; }
+.sd-amenity-icon { font-size: 1.2rem; }
+
+/* Rules & Times */
+.sd-rules-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: var(--space-lg); margin-bottom: var(--space-2xl); }
+.sd-rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md); }
+.sd-rule-item label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+.sd-rule-item div { font-weight: 700; font-size: 1rem; color: var(--text-primary); margin-top: 2px; }
+
+/* ── Sticky Booking / Request Box ── */
+.sd-booking-card { position: sticky; top: 90px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-2xl); padding: var(--space-xl); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.sd-booking-price-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-lg); padding-bottom: var(--space-md); border-bottom: 1px solid var(--border-color); }
+.sd-booking-price { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--text-primary); }
+.sd-booking-price span { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+.sd-booking-free { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #10b981; }
+
+.sd-booking-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.sd-form-group { display: flex; flex-direction: column; gap: 4px; }
+.sd-form-group label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+.sd-form-input { width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; }
+
+.sd-btn-request {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-amber));
+  color: #fff; border: none; border-radius: var(--radius-lg);
+  font-family: var(--font-heading); font-weight: 800; font-size: 1.05rem;
+  cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none;
+}
+.sd-btn-request:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,122,24,0.35); }
+.sd-btn-free-request {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+}
+.sd-btn-free-request:hover { box-shadow: 0 6px 20px rgba(16,185,129,0.45); }
+
+.sd-guarantee { text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: var(--space-sm); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sd-container">
+  <!-- ═══ HEADER ═══ -->
+  <div class="sd-header">
+    <div class="sd-badges">
+      {% if listing.listing_type == 'free_stay' %}
+      <span class="sd-badge sd-badge-free">🤝 Free Local Stay</span>
+      {% else %}
+      <span class="sd-badge sd-badge-paid">🏠 Paid Homestay</span>
+      {% endif %}
+
+      {% if listing.is_verified_badge %}
+      <span class="sd-badge sd-badge-verified">✅ HiddenYatra Verified Host</span>
+      {% endif %}
+    </div>
+
+    <h1 class="sd-title">{{ listing.title }}</h1>
+
+    <div class="sd-location">
+      📍 {{ listing.address_text or listing.district_name or 'Bihar' }}
+      {% if listing.district_name %} · {{ listing.district_name }} District{% endif %}
+      · 👁️ {{ listing.view_count or 0 }} views
+    </div>
+  </div>
+
+  <!-- ═══ PHOTO GALLERY ═══ -->
+  <div class="sd-gallery">
+    {% if listing.cover_image %}
+    <img src="{{ url_for('static', filename='uploads/hosts/listings/' + listing.cover_image) }}" alt="{{ listing.title }}" class="sd-gallery-main">
+    {% else %}
+    <div class="sd-gallery-main" style="display:flex;align-items:center;justify-content:center;font-size:4rem;color:var(--text-muted);">🏡</div>
+    {% endif %}
+
+    <div class="sd-gallery-sub">
+      {% if photos and photos|length > 0 %}
+      <img src="{{ url_for('static', filename='uploads/hosts/listings/' + photos[0].filename) }}" alt="Photo 1">
+      {% if photos|length > 1 %}
+      <img src="{{ url_for('static', filename='uploads/hosts/listings/' + photos[1].filename) }}" alt="Photo 2">
+      {% else %}
+      <div style="background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--text-muted);">📷</div>
+      {% endif %}
+      {% else %}
+      <div style="background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--text-muted);">📷</div>
+      <div style="background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--text-muted);">📷</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ═══ MAIN LAYOUT ═══ -->
+  <div class="sd-layout">
+    <div class="sd-main-info">
+
+      <!-- Highlights Card -->
+      <div class="sd-highlights">
+        <div class="sd-highlight-item">
+          <div class="sd-highlight-icon">👥</div>
+          <div class="sd-highlight-val">{{ listing.max_guests }} Guests</div>
+          <div class="sd-highlight-lbl">Max Capacity</div>
+        </div>
+        <div class="sd-highlight-item">
+          <div class="sd-highlight-icon">🚪</div>
+          <div class="sd-highlight-val">{{ listing.num_rooms }} Bedroom</div>
+          <div class="sd-highlight-lbl">Private Space</div>
+        </div>
+        <div class="sd-highlight-item">
+          <div class="sd-highlight-icon">🛏️</div>
+          <div class="sd-highlight-val">{{ listing.num_beds }} Beds</div>
+          <div class="sd-highlight-lbl">Comfort Beds</div>
+        </div>
+        <div class="sd-highlight-item">
+          <div class="sd-highlight-icon">🚿</div>
+          <div class="sd-highlight-val">{{ listing.num_bathrooms }} Bath</div>
+          <div class="sd-highlight-lbl">Bathrooms</div>
+        </div>
+      </div>
+
+      <!-- Host Banner -->
+      <div class="sd-host-card">
+        {% if listing.host_photo %}
+        <img src="{{ url_for('static', filename='uploads/hosts/profiles/' + listing.host_photo) }}" alt="{{ listing.host_name }}" class="sd-host-avatar">
+        {% else %}
+        <div class="sd-host-avatar-placeholder">🏠</div>
+        {% endif %}
+        <div class="sd-host-info">
+          <h4>Hosted by {{ listing.host_name or listing.host_username or 'Local Host' }}</h4>
+          {% if listing.host_bio %}
+          <p class="sd-host-bio">{{ listing.host_bio }}</p>
+          {% endif %}
+          <div class="sd-host-meta">
+            {% if listing.host_languages %}<span>🗣️ Speaks: {{ listing.host_languages }}</span>{% endif %}
+            {% if listing.is_verified_badge %}<span style="color:#10b981;font-weight:700;">✅ HiddenYatra Verified</span>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <h3 class="sd-section-title">About this Stay</h3>
+      <div class="sd-desc">{{ listing.description }}</div>
+
+      <!-- Amenities -->
+      {% if amenities %}
+      <h3 class="sd-section-title">Amenities Included</h3>
+      <div class="sd-amenities-grid">
+        {% for a in amenities %}
+        <div class="sd-amenity-item">
+          <span class="sd-amenity-icon">{{ a.icon or '✨' }}</span>
+          <span>{{ a.label or a.code }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- House Rules & Policy -->
+      <h3 class="sd-section-title">Stay Policies & Rules</h3>
+      <div class="sd-rules-box">
+        <div class="sd-rules-grid">
+          <div class="sd-rule-item">
+            <label>Check-in Time</label>
+            <div>{{ listing.check_in_time or '14:00' }}</div>
+          </div>
+          <div class="sd-rule-item">
+            <label>Check-out Time</label>
+            <div>{{ listing.check_out_time or '11:00' }}</div>
+          </div>
+          <div class="sd-rule-item">
+            <label>Cancellation Policy</label>
+            <div style="text-transform:capitalize;">{{ listing.cancellation_policy or 'Flexible' }}</div>
+          </div>
+          <div class="sd-rule-item">
+            <label>Stay Limits</label>
+            <div>
+              {% if listing.min_stay_nights %}Min {{ listing.min_stay_nights }} night(s){% else %}No min{% endif %}
+              {% if listing.max_stay_nights and listing.max_stay_nights > 0 %} · Max {{ listing.max_stay_nights }} night(s){% endif %}
+            </div>
+          </div>
+        </div>
+
+        {% if listing.house_rules %}
+        <div style="margin-top:var(--space-md);padding-top:var(--space-md);border-top:1px dashed var(--border-color);">
+          <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">House Rules from Host</label>
+          <p style="margin-top:4px;font-size:0.9rem;white-space:pre-line;">{{ listing.house_rules }}</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- ═══ BOOKING / REQUEST SIDEBAR ═══ -->
+    <div class="sd-booking-card">
+      <div class="sd-booking-price-header">
+        {% if listing.listing_type == 'free_stay' %}
+        <div class="sd-booking-free">Free Local Stay</div>
+        <span style="font-size:0.85rem;color:#10b981;font-weight:700;">₹0 / night</span>
+        {% else %}
+        <div class="sd-booking-price">₹{{ listing.price_per_night|int }} <span>/ night</span></div>
+        {% endif %}
+      </div>
+
+      <form action="{{ url_for('stays.submit_stay_request', slug=listing.slug) }}" method="POST" class="sd-booking-form" id="sd-booking-form">
+        {{ csrf_input() }}
+
+        <div class="sd-form-group">
+          <label for="checkin">Check-in Date *</label>
+          <input type="date" id="checkin" name="check_in_date" class="sd-form-input" required>
+        </div>
+
+        <div class="sd-form-group">
+          <label for="checkout">Check-out Date *</label>
+          <input type="date" id="checkout" name="check_out_date" class="sd-form-input" required>
+        </div>
+
+        <div class="sd-form-group">
+          <label for="num_guests">Number of Guests</label>
+          <select id="num_guests" name="num_guests" class="sd-form-input">
+            {% for g in range(1, (listing.max_guests or 2) + 1) %}
+            <option value="{{ g }}">{{ g }} {% if g == 1 %}guest{% else %}guests{% endif %}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="sd-form-group">
+          <label for="message">Note for Host (Optional)</label>
+          <textarea id="message" name="message" class="sd-form-input" rows="2" placeholder="Tell the host about your trip purpose, arrival time, or special requirements..."></textarea>
+        </div>
+
+        <!-- Live Price / Nights Breakdown Box -->
+        <div id="sd-price-calc" style="background:var(--bg-elevated);border-radius:var(--radius-lg);padding:12px;display:none;font-size:0.88rem;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span id="sd-calc-label">₹{{ listing.price_per_night|int }} × <span id="sd-calc-nights">1</span> night(s)</span>
+            <span id="sd-calc-subtotal" style="font-weight:700;">₹0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;border-top:1px dashed var(--border-color);padding-top:6px;font-weight:800;font-size:0.95rem;">
+            <span>Total</span>
+            <span id="sd-calc-total" style="color:var(--primary);">₹0</span>
+          </div>
+        </div>
+
+        {% if session.get('user_id') %}
+          {% if listing.listing_type == 'free_stay' %}
+          <button type="submit" class="sd-btn-request sd-btn-free-request" id="btn-request-stay">
+            🤝 Request Free Local Stay
+          </button>
+          {% else %}
+          <button type="submit" class="sd-btn-request" id="btn-request-stay">
+            📩 Request to Book
+          </button>
+          {% endif %}
+        {% else %}
+          <a href="{{ url_for('auth.login', next=request.path) }}" class="sd-btn-request" style="text-align:center;">
+            🔐 Login to Request Stay
+          </a>
+        {% endif %}
+
+        <p class="sd-guarantee">
+          🔒 Requests are subject to host approval. No upfront payment required.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+  const form = document.getElementById('sd-booking-form');
+  if (!form) return;
+
+  const inInput = document.getElementById('checkin');
+  const outInput = document.getElementById('checkout');
+  const priceCalc = document.getElementById('sd-price-calc');
+  const calcNights = document.getElementById('sd-calc-nights');
+  const calcSubtotal = document.getElementById('sd-calc-subtotal');
+  const calcTotal = document.getElementById('sd-calc-total');
+
+  const pricePerNight = {{ listing.price_per_night or 0 }};
+  const isFreeStay = {{ 'true' if listing.listing_type == 'free_stay' else 'false' }};
+
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0];
+  inInput.min = today;
+  outInput.min = today;
+
+  function updateCalculation() {
+    if (!inInput.value || !outInput.value) {
+      priceCalc.style.display = 'none';
+      return;
+    }
+
+    const dIn = new Date(inInput.value);
+    const dOut = new Date(outInput.value);
+    const diffTime = dOut - dIn;
+    const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (nights > 0) {
+      calcNights.textContent = nights;
+      if (isFreeStay) {
+        calcSubtotal.textContent = '₹0 (Free)';
+        calcTotal.textContent = '₹0 Free';
+      } else {
+        const total = Math.round(pricePerNight * nights);
+        calcSubtotal.textContent = '₹' + total;
+        calcTotal.textContent = '₹' + total;
+      }
+      priceCalc.style.display = 'block';
+    } else {
+      priceCalc.style.display = 'none';
+    }
+  }
+
+  inInput.addEventListener('change', function() {
+    if (inInput.value) {
+      const nextDay = new Date(inInput.value);
+      nextDay.setDate(nextDay.getDate() + 1);
+      outInput.min = nextDay.toISOString().split('T')[0];
+      if (outInput.value && outInput.value <= inInput.value) {
+        outInput.value = nextDay.toISOString().split('T')[0];
+      }
+    }
+    updateCalculation();
+  });
+
+  outInput.addEventListener('change', updateCalculation);
+})();
+</script>
+{% endblock %}
