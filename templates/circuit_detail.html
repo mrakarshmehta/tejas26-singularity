@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ circuit.title }} — Trail Route — HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="circuit-detail-container" style="max-width:1100px;margin:40px auto;padding:0 20px;">
+  
+  <!-- Breadcrumb & Top Bar -->
+  <div style="margin-bottom:20px;display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text-muted);">
+    <a href="/circuits" style="color:var(--accent-orange, #ff7a18);text-decoration:none;">← All Thematic Circuits</a>
+    <span>/</span>
+    <span>{{ circuit.theme }}</span>
+  </div>
+
+  <!-- Header Banner -->
+  <div class="circuit-hero-card" style="background:var(--bg-card, #1e293b);border-radius:20px;border:1px solid rgba(255,255,255,0.1);padding:36px;margin-bottom:32px;position:relative;overflow:hidden;">
+    <div style="position:relative;z-index:2;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <span style="font-size:2.2rem;">{{ circuit.icon }}</span>
+        <span style="background:rgba(255,122,24,0.15);color:var(--accent-orange, #ff7a18);padding:4px 12px;border-radius:14px;font-size:0.8rem;font-weight:700;">{{ circuit.theme }}</span>
+      </div>
+      <h1 style="font-size:2.2rem;font-weight:800;color:#fff;margin-bottom:8px;">{{ circuit.title }}</h1>
+      <p style="font-size:1.1rem;color:var(--accent-orange, #ff7a18);margin-bottom:16px;font-weight:600;">{{ circuit.tagline }}</p>
+      <p style="color:var(--text-muted);line-height:1.6;max-width:850px;margin-bottom:24px;font-size:0.95rem;">{{ circuit.description }}</p>
+
+      <!-- Key Metrics Row -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:16px;">
+        <div style="background:rgba(0,0,0,0.3);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;">Duration</div>
+          <div style="font-size:1.2rem;font-weight:700;color:#fff;">{{ circuit.duration_days }} Days</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;">Total Route</div>
+          <div style="font-size:1.2rem;font-weight:700;color:#fff;">{{ circuit.total_distance_km }} km</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;">Best Season</div>
+          <div style="font-size:1.2rem;font-weight:700;color:#fff;">{{ circuit.best_season }}</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;">Stops Included</div>
+          <div style="font-size:1.2rem;font-weight:700;color:#fff;">{{ circuit.stops|length }} Locations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Stepper -->
+  <h2 style="font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:20px;">📍 Route Stops & Itinerary Timeline</h2>
+  
+  <div class="circuit-timeline" style="position:relative;padding-left:30px;border-left:3px dashed rgba(255,122,24,0.4);margin-bottom:40px;">
+    {% for stop in circuit.stops %}
+    <div class="timeline-stop" style="position:relative;margin-bottom:30px;">
+      <!-- Stop Circle -->
+      <div style="position:absolute;left:-44px;top:0;width:26px;height:26px;border-radius:50%;background:var(--accent-orange, #ff7a18);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;border:3px solid var(--bg-dark, #0f172a);">
+        {{ stop.order }}
+      </div>
+
+      <div style="background:var(--bg-card, #1e293b);padding:20px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <h3 style="font-size:1.2rem;font-weight:700;color:#fff;margin:0;">{{ stop.place_name }}</h3>
+          <span style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.08);color:var(--text-muted);">Day {{ stop.days }}</span>
+        </div>
+        <div style="font-size:0.85rem;color:var(--accent-orange, #ff7a18);margin-bottom:8px;">🏛️ District: {{ stop.district }}</div>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:12px;">🌟 <strong>Highlight:</strong> {{ stop.highlight }}</p>
+        <div style="display:flex;gap:10px;">
+          <a href="/explore-map?lat={{ stop.lat }}&lng={{ stop.lng }}" class="btn btn-sm btn-secondary" style="font-size:0.8rem;padding:5px 12px;border-radius:6px;text-decoration:none;background:rgba(255,255,255,0.08);color:#fff;">🗺️ View on Map</a>
+          <a href="/search?q={{ stop.place_name }}" class="btn btn-sm btn-secondary" style="font-size:0.8rem;padding:5px 12px;border-radius:6px;text-decoration:none;background:rgba(255,255,255,0.08);color:#fff;">🔍 Read Guide</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Action CTA -->
+  <div style="background:linear-gradient(135deg, rgba(255,122,24,0.15), rgba(99,102,241,0.15));border-radius:16px;padding:28px;text-align:center;border:1px solid rgba(255,255,255,0.1);">
+    <h3 style="font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:8px;">Ready to explore the {{ circuit.title }}?</h3>
+    <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:18px;">Customize this circuit into your personal day-by-day smart itinerary with budget calculation and homestays.</p>
+    <a href="/itinerary?circuit={{ circuit.slug }}&days={{ circuit.duration_days }}" class="btn btn-primary" style="padding:10px 24px;border-radius:8px;font-weight:700;text-decoration:none;background:var(--accent-orange, #ff7a18);color:#fff;">✨ Build Custom Itinerary →</a>
+  </div>
+
+</div>
+{% endblock %}
