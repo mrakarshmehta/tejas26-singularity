@@ -185,3 +185,27 @@ def get_submission_status_info(submission_id):
     status = request.args.get('status', 'pending')
     meta = get_submission_status_meta(status)
     return jsonify({'status': 'success', 'submission_id': submission_id, 'meta': meta})
+
+
+@community_bp.route('/review/<int:review_id>/helpful', methods=['POST'])
+def toggle_review_helpful(review_id):
+    """Toggle helpfulness vote on a place review."""
+    voted_reviews = session.get('voted_reviews', [])
+    has_voted = review_id in voted_reviews
+
+    if has_voted:
+        voted_reviews.remove(review_id)
+        delta = -1
+        action = 'removed'
+    else:
+        voted_reviews.append(review_id)
+        delta = 1
+        action = 'added'
+
+    session['voted_reviews'] = voted_reviews
+    return jsonify({
+        'status': 'success',
+        'review_id': review_id,
+        'action': action,
+        'delta': delta
+    })
