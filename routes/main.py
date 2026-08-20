@@ -320,3 +320,11 @@ def craft_detail(slug):
         abort(404)
     centers = get_artisan_centers_for_craft(slug)
     return render_template('craft_detail.html', craft=craft, artisan_centers=centers)
+
+
+@main_bp.route('/eco-pledge')
+def eco_pledge():
+    """Showcase Bihar responsible tourism guidelines and green traveler pledge."""
+    from models.eco import get_responsible_travel_code
+    pillars = get_responsible_travel_code()
+    return render_template('eco_pledge.html', pillars=pillars)
