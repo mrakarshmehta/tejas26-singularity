@@ -147,3 +147,26 @@ def validate_guide_inquiry(traveler_name, email, phone, guide_slug, travel_date,
         return False, "Invalid group size specified."
 
     return True, "Booking inquiry successfully validated."
+
+GUIDE_ETHICS_STANDARDS = [
+    {
+        "standard_title": "ASI & Ministry Licensing Compliance",
+        "description": "All listed guides hold active photographic identity licenses issued by the Archaeological Survey of India (ASI) or Bihar Tourism."
+    },
+    {
+        "standard_title": "Transparent Tariffs & Zero Shopping Commission Steering",
+        "description": "Guides are strictly bound to daily fixed fees with a pledge against steering tourists into inflated commission-based souvenir shops."
+    },
+    {
+        "standard_title": "First-Aid & Emergency CPR Certification",
+        "description": "Trained in wilderness first-aid, heat exhaustion protocols, and direct integration with Bihar 112 emergency trauma services."
+    },
+    {
+        "standard_title": "Safe & Respectful Solo / Women Traveler Protocols",
+        "description": "Adheres to international solo traveler dignity guidelines, respectful cultural photography etiquette, and local community customs."
+    }
+]
+
+def get_guide_ethics_standards():
+    """Return verified guide code of ethics and traveler safety standards."""
+    return GUIDE_ETHICS_STANDARDS
