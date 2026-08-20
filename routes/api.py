@@ -394,3 +394,24 @@ def api_get_place_audio_guide(slug):
         'track': selected_track,
         'supported_languages': list(guide['languages'].keys())
     })
+
+
+@api_bp.route('/festivals', methods=['GET'])
+def api_get_festivals():
+    """JSON API endpoint returning Bihar cultural festivals filtered by month or district."""
+    from models.festivals import get_all_festivals, get_festivals_by_month, get_festivals_by_district
+    month = request.args.get('month')
+    district = request.args.get('district')
+
+    if month:
+        festivals = get_festivals_by_month(month)
+    elif district:
+        festivals = get_festivals_by_district(district)
+    else:
+        festivals = get_all_festivals()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(festivals),
+        'festivals': festivals
+    })
