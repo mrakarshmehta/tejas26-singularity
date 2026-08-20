@@ -265,3 +265,35 @@ def circuit_detail(slug):
         abort(404)
     metrics = calculate_circuit_metrics(slug)
     return render_template('circuit_detail.html', circuit=circuit, metrics=metrics)
+
+
+@main_bp.route('/festivals')
+def festivals_calendar():
+    """Display seasonal festivals and cultural celebrations across Bihar."""
+    from models.festivals import get_all_festivals, get_festivals_by_month, get_festivals_by_district
+    month_arg = request.args.get('month')
+    district_arg = request.args.get('district')
+
+    if month_arg:
+        festivals = get_festivals_by_month(month_arg)
+    elif district_arg:
+        festivals = get_festivals_by_district(district_arg)
+    else:
+        festivals = get_all_festivals()
+
+    return render_template(
+        'festivals.html',
+        festivals=festivals,
+        selected_month=month_arg,
+        selected_district=district_arg
+    )
+
+
+@main_bp.route('/festival/<slug>')
+def festival_detail(slug):
+    """View dedicated celebration details and visitor guide for a specific festival."""
+    from models.festivals import get_festival_by_slug
+    fest = get_festival_by_slug(slug)
+    if not fest:
+        abort(404)
+    return render_template('festival_detail.html', festival=fest)
