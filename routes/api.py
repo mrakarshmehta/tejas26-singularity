@@ -1393,3 +1393,19 @@ def api_evaluate_quiz():
         'status': 'success',
         'evaluation': result
     })
+
+@api_bp.route('/quiz/certificate', methods=['POST'])
+def api_generate_quiz_certificate():
+    """JSON API to issue a digital certificate for heritage quiz scores."""
+    from models.quiz import generate_quiz_certificate
+    data = request.get_json(silent=True) or request.form
+    name = (data.get('name') or 'Heritage Explorer').strip()
+    score = data.get('score', 0)
+    total = data.get('total', 6)
+    badge = data.get('badge', 'Heritage Explorer')
+
+    cert = generate_quiz_certificate(name, score, total, badge)
+    return jsonify({
+        'status': 'success',
+        'certificate': cert
+    })
