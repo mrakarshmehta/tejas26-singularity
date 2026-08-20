@@ -120,3 +120,70 @@ ARCHAEOLOGICAL_SITES_DB = [
         "visiting_hours": "Sunrise to Sunset"
     }
 ]
+
+EPIGRAPHY_CHRONOLOGY = [
+    {
+        "era": "Prehistoric & Neolithic",
+        "dates": "2500 BCE - 1000 BCE",
+        "key_sites": ["Chirand", "Chechar", "Taradih", "Senuwar"],
+        "primary_scripts": "Pictographic / Bone Engravings",
+        "overview": "Earliest riverine agricultural settlements and bone metallurgy across the Gangetic plains."
+    },
+    {
+        "era": "Mauryan & Sunga Imperial",
+        "dates": "4th Century BCE - 1st Century BCE",
+        "key_sites": ["Pataliputra Kumhrar", "Lauriya Nandangarh", "Rampurva", "Kolhua Vaishali", "Barabar Caves"],
+        "primary_scripts": "Ashokan Brahmi & Kharosthi",
+        "overview": "Monumental stone carving, lustrous polish, and royal edicts promoting Dhamma and civic welfare."
+    },
+    {
+        "era": "Gupta & Post-Gupta Golden Age",
+        "dates": "4th Century CE - 7th Century CE",
+        "key_sites": ["Nalanda Mahavihara", "Sultanganj", "Mundeshwari Temple", "Aphsad"],
+        "primary_scripts": "Late Brahmi / Gupta Brahmi / Sanskrit",
+        "overview": "Classical temple architecture, astronomical observatories, and colossal copper/stone sculptures."
+    },
+    {
+        "era": "Pala & Sena Renaissance",
+        "dates": "8th Century CE - 12th Century CE",
+        "key_sites": ["Kurkihar", "Vikramshila", "Telhara", "Odantapuri", "Antichak"],
+        "primary_scripts": "Gaudiya / Siddhamatrika / Proto-Maithili",
+        "overview": "Flourishing Mahayana-Vajrayana Buddhist art, bronze lost-wax casting, and palm-leaf manuscript illustration."
+    }
+]
+
+def get_all_archaeological_sites():
+    """Return all cataloged ancient excavation and epigraphical sites."""
+    return ARCHAEOLOGICAL_SITES_DB
+
+def get_site_by_slug(slug):
+    """Retrieve site details by slug or identifier."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for site in ARCHAEOLOGICAL_SITES_DB:
+        if site["slug"] == s or site["id"] == s:
+            return site
+    return None
+
+def get_sites_by_district(district):
+    """Filter archaeological sites by district."""
+    if not district or district.lower() == 'all':
+        return ARCHAEOLOGICAL_SITES_DB
+    d_clean = district.lower().strip()
+    return [site for site in ARCHAEOLOGICAL_SITES_DB if d_clean in site["district"].lower()]
+
+def get_sites_by_period(period):
+    """Filter sites by historical era (e.g. Mauryan, Pala, Neolithic)."""
+    if not period or period.lower() == 'all':
+        return ARCHAEOLOGICAL_SITES_DB
+    p_clean = period.lower().strip()
+    return [site for site in ARCHAEOLOGICAL_SITES_DB if p_clean in site["period"].lower()]
+
+def get_ashokan_edicts():
+    """Retrieve only Ashokan pillars and royal edict sites."""
+    return [site for site in ARCHAEOLOGICAL_SITES_DB if "ashoka" in site.get("ruler", "").lower() or "ashoka" in site.get("title", "").lower()]
+
+def get_epigraphy_chronology():
+    """Return epigraphical and archaeological era timeline."""
+    return EPIGRAPHY_CHRONOLOGY
