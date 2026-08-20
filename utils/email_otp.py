@@ -152,3 +152,28 @@ def send_otp_email(to_email, otp_code, purpose='verify'):
         if not IS_PRODUCTION:
             logger.info('OTP for %s: %s', to_email, otp_code)
         return False
+
+
+_OTP_ATTEMPTS = {}
+
+def check_otp_rate_limit(identifier, max_attempts=3, window_seconds=300):
+    """Sliding-window rate limiter for OTP generation and verification requests.
+
+    Returns:
+        tuple (allowed: bool, remaining_seconds: int)
+    """
+    import time
+    now = time.time()
+    history = _OTP_ATTEMPTS.get(identifier, [])
+    # Filter out entries older than window
+    history = [t for t in history if now - t < window_seconds]
+    _OTP_ATTEMPTS[identifier] = history
+
+    if len(history) >= max_attempts:
+        oldest = history[0]
+        retry_after = int(window_seconds - (now - oldest))
+        return False, max(1, retry_after)
+
+    history.append(now)
+    _OTP_ATTEMPTS[identifier] = history
+    return True, 0
