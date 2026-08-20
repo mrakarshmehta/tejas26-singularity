@@ -215,3 +215,8 @@
     font-size: 0.9rem;
   }
 }
+
+.radius-slider-track {
+  accent-color: #6366f1;
+  cursor: pointer;
+}

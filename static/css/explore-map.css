@@ -830,3 +830,27 @@
     padding: 6px 10px !important;
   }
 }
+
+/* Map Radius & Custom Markers */
+.map-radius-control {
+  position: absolute;
+  bottom: 24px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 10px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.map-marker-pin {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  transition: transform 0.15s ease-out;
+}
+.map-marker-pin:hover {
+  transform: scale(1.18);
+}
