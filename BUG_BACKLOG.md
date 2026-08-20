@@ -1,18 +1,17 @@
-﻿# HiddenYatra — Bug Backlog & Edge Case Tracker
+﻿# HiddenYatra — Bug Backlog & Milestone Tracker
 
-This document tracks edge case items, visual polish, and future sprint enhancements.
+This document tracks completed milestone capabilities and non-blocking backlog enhancements.
 
 ---
 
-## 1. Resolved Milestone Items
+## 1. Completed Milestone Releases
 
-| Item # | Target Component | Description | Status |
+| Milestone | Component | Key Features Delivered | Status |
 |---|---|---|---|
-| ML-01 | Heritage Circuits | Thematic circuit trails and distance calculations | RESOLVED |
-| ML-02 | Audio Guides | Multilingual place audio narrations & transcript reader | RESOLVED |
-| ML-03 | Festival Calendar | Bihar seasonal festival directory & monthly filter | RESOLVED |
-| ML-04 | GI Handicrafts | GI-tagged crafts catalog & verified artisan centers | RESOLVED |
-| ML-05 | Eco Tourism | Responsible traveler code & digital pledge | RESOLVED |
-| ML-06 | Traveler Safety | 24/7 SOS helpline directory & trauma hospitals | RESOLVED |
-| ML-07 | Transit Mobility | Inter-district transit matrix & commute fare estimator | RESOLVED |
-| ML-08 | PWA Offline | Offline cache for safety and mobility guides | RESOLVED |
+| M-01 | Regional Heritage | Thematic Circuits, Festivals Calendar, GI Crafts | COMPLETED |
+| M-02 | Safety & Transit | 24/7 SOS 112 Helplines, Trauma Hospitals, Fare Estimator | COMPLETED |
+| M-03 | Virtual Experience | 360° Photo Spheres, Coordinate Hotspots, Audio Narration | COMPLETED |
+| M-04 | Culinary Heritage | Traditional Cuisine, Dietary Filters, Gastronomy Trails | COMPLETED |
+| M-05 | Wildlife & Nature | Tiger Reserves, Dolphin Sanctuaries, Ramsar Wetlands | COMPLETED |
+| M-06 | Rural Immersion | Community Volunteerism, Artisan Residencies, Skill Match | COMPLETED |
+| M-07 | Universal Search | Cross-domain multi-entity instant discovery | COMPLETED |
