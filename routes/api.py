@@ -942,3 +942,40 @@ def api_get_weather_emergency_alerts():
         'count': len(alerts),
         'alerts': alerts
     })
+
+@api_bp.route('/performing-arts', methods=['GET'])
+def api_get_performing_arts():
+    """JSON API returning traditional folk dances, theater forms, and music genres."""
+    from models.performing_arts import get_all_performing_arts, get_arts_by_region
+    region = request.args.get('region')
+    arts = get_arts_by_region(region) if region else get_all_performing_arts()
+    return jsonify({
+        'status': 'success',
+        'count': len(arts),
+        'performing_arts': arts
+    })
+
+
+@api_bp.route('/performing-arts/<slug>', methods=['GET'])
+def api_get_performing_art_detail(slug):
+    """JSON API returning cultural backstory, instruments, and themes for an art form."""
+    from models.performing_arts import get_art_by_slug
+    art = get_art_by_slug(slug)
+    if not art:
+        return jsonify({'status': 'not_found', 'message': f'Art form not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'art': art
+    })
+
+
+@api_bp.route('/performing-arts/instruments', methods=['GET'])
+def api_get_folk_instruments():
+    """JSON API returning traditional musical instruments used in Bihar folk culture."""
+    from models.performing_arts import get_all_folk_instruments
+    instruments = get_all_folk_instruments()
+    return jsonify({
+        'status': 'success',
+        'count': len(instruments),
+        'instruments': instruments
+    })
