@@ -128,3 +128,50 @@ def get_arts_by_region(region):
 def get_all_folk_instruments():
     """Return catalog of traditional Bihar musical instruments."""
     return FOLK_INSTRUMENTS_DB
+
+FOLK_ARTIST_GUILDS_DB = [
+    {
+        "id": "guild-bhikhari-thakur-trust",
+        "name": "Bhikhari Thakur Folk Theater Repertory",
+        "genre": "Bidesiya & Launda Naach",
+        "base_location": "Kutubpur, Saran (Chhapra) & Patna",
+        "district": "Saran",
+        "lead_exponent": "Jainendra Dost & Senior Folk Artists",
+        "performance_season": "Year-round (Peak in Autumn & Winter)",
+        "contact_note": "Available for cultural festival performances and rural theater workshops."
+    },
+    {
+        "id": "guild-mithila-sohar-mandali",
+        "name": "Mithilanchal Maithili Sangeet Parishad",
+        "genre": "Sohar, Samdauni & Batgamani",
+        "base_location": "Darbhanga & Madhubani",
+        "district": "Madhubani",
+        "lead_exponent": "Smt. Sharda Sinha Legacy Guild Artists",
+        "performance_season": "Festival occasions (Kojagara, Chhath, Weddings)",
+        "contact_note": "Specializes in traditional acoustic Maithili choral harmonies."
+    },
+    {
+        "id": "guild-buxar-kajari-samiti",
+        "name": "Bhojpur Kajari & Biraha Gaayan Mandal",
+        "genre": "Kajari & Nirgun Spiritual Ballads",
+        "base_location": "Buxar & Ara",
+        "district": "Buxar",
+        "lead_exponent": "Master Kabir Panthi Folk Vocalists",
+        "performance_season": "Shravana Monsoon & Makar Sankranti",
+        "contact_note": "Performs traditional open-air jhula songs and Kabir nirgun verses."
+    }
+]
+
+def get_all_folk_guilds():
+    """Return verified folk performing artist troupes and cultural repertories."""
+    return FOLK_ARTIST_GUILDS_DB
+
+def get_guild_by_id(guild_id):
+    """Retrieve artist guild by ID."""
+    if not guild_id:
+        return None
+    g_clean = guild_id.lower().strip()
+    for g in FOLK_ARTIST_GUILDS_DB:
+        if g["id"] == g_clean or g_clean in g["name"].lower():
+            return g
+    return None
