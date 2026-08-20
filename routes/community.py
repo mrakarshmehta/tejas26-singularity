@@ -176,3 +176,12 @@ def upload_temp():
         return jsonify({'error': 'Failed to process image'}), 400
 
     return jsonify({'filename': fname, 'url': f'/static/uploads/submissions/{fname}'})
+
+
+@community_bp.route('/submissions/<int:submission_id>/status-info', methods=['GET'])
+def get_submission_status_info(submission_id):
+    """Return JSON status metadata and review notes for a place submission."""
+    from models.places import get_submission_status_meta
+    status = request.args.get('status', 'pending')
+    meta = get_submission_status_meta(status)
+    return jsonify({'status': 'success', 'submission_id': submission_id, 'meta': meta})
