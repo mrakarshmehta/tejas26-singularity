@@ -475,6 +475,13 @@
       btnEl.classList.toggle('saved');
       return;
     }
+
+    if (btnEl && btnEl.disabled) return;
+    if (btnEl) {
+      btnEl.disabled = true;
+      btnEl.classList.add('loading');
+    }
+
     fetch(`/wishlist/${rawId}/toggle`, {
       method: 'POST',
       headers: {
@@ -494,7 +501,7 @@
         btnEl.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
         btnEl.setAttribute('title', isSaved ? 'Remove from wishlist' : 'Save to wishlist');
         btnEl.setAttribute('aria-label', isSaved ? 'Remove from wishlist' : 'Save to wishlist');
-        
+
         // Dispatch global sync event for navbar/wishlist counter
         try {
           window.dispatchEvent(new CustomEvent('wishlist:updated', {
@@ -506,6 +513,12 @@
       })
       .catch((err) => {
         console.warn('Failed to toggle wishlist state for place:', rawId, err);
+      })
+      .finally(() => {
+        if (btnEl) {
+          btnEl.disabled = false;
+          btnEl.classList.remove('loading');
+        }
       });
   };
 
