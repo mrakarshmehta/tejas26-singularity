@@ -1860,3 +1860,12 @@ body.is-offline::before {
 #audio-play-btn:hover {
   transform: scale(1.04);
 }
+
+/* Crafts & GI Badges */
+.craft-card {
+  transition: transform 0.2s ease, border-color 0.2s;
+}
+.craft-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 122, 24, 0.35);
+}
