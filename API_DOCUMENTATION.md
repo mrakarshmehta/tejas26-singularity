@@ -92,3 +92,22 @@ HiddenYatra exposes RESTful JSON endpoints for location discovery, thematic heri
 
 ### 8.1 Universal Discovery
 * GET /api/v1/universal-search?q=<query>&limit=12 — Cross-domain search instantly matching across places, circuits, festivals, crafts, dishes, wildlife, and 360 photo spheres.
+### Multi-Currency Trip Budget Planner API
+
+#### 1. Calculate Trip Budget
+GET /api/v1/budget/calculate or POST /api/v1/budget/calculate
+
+Query / Payload Parameters:
+- tier (string, optional): backpacker, heritage (default), luxury
+- days (int, optional): 1 to 30 (default: 3)
+- travelers (int, optional): 1 to 20 (default: 2)
+- currency (string, optional): INR (default), USD, EUR, GBP, JPY, AUD, SGD
+
+#### 2. Get Travel Tiers
+GET /api/v1/budget/tiers
+
+#### 3. Get Currencies
+GET /api/v1/budget/currencies
+
+#### 4. Get District Cost Index
+GET /api/v1/budget/district-cost-index
