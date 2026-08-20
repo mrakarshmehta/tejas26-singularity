@@ -235,3 +235,9 @@ def food_culture():
                            bihar=bihar,
                            foods=foods,
                            districts=districts)
+
+
+@main_bp.route('/offline')
+def offline_fallback():
+    """Render the offline PWA fallback page."""
+    return render_template('offline.html'), 200
