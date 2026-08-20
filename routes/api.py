@@ -1211,3 +1211,14 @@ def api_get_souvenirs_guidelines():
         'count': len(guidelines),
         'guidelines': guidelines
     })
+
+@api_bp.route('/souvenirs/workshops', methods=['GET'])
+def api_get_artisan_workshops():
+    """JSON API returning artisan village clusters, visiting hours, and hands-on workshop activities."""
+    from models.souvenirs import get_all_artisan_workshops
+    workshops = get_all_artisan_workshops()
+    return jsonify({
+        'status': 'success',
+        'count': len(workshops),
+        'workshops': workshops
+    })
