@@ -1166,3 +1166,48 @@ def api_get_trek_fitness():
         'count': len(levels),
         'fitness_levels': levels
     })
+
+@api_bp.route('/souvenirs', methods=['GET'])
+def api_get_souvenirs():
+    """JSON API returning authentic GI certified souvenirs, price ranges, and artisan clusters."""
+    from models.souvenirs import get_all_souvenirs, get_souvenirs_by_district, get_souvenirs_by_category
+    district = request.args.get('district')
+    cat = request.args.get('category')
+
+    if district:
+        souvenirs = get_souvenirs_by_district(district)
+    elif cat:
+        souvenirs = get_souvenirs_by_category(cat)
+    else:
+        souvenirs = get_all_souvenirs()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(souvenirs),
+        'souvenirs': souvenirs
+    })
+
+
+@api_bp.route('/souvenirs/<slug>', methods=['GET'])
+def api_get_souvenir_detail(slug):
+    """JSON API returning GI status, materials, price range, and ethical impact for a souvenir."""
+    from models.souvenirs import get_souvenir_by_slug
+    item = get_souvenir_by_slug(slug)
+    if not item:
+        return jsonify({'status': 'not_found', 'message': f'Souvenir not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'souvenir': item
+    })
+
+
+@api_bp.route('/souvenirs/guidelines', methods=['GET'])
+def api_get_souvenirs_guidelines():
+    """JSON API returning fair-trade ethical buying and authenticity verification rules."""
+    from models.souvenirs import get_fair_trade_shopping_guidelines
+    guidelines = get_fair_trade_shopping_guidelines()
+    return jsonify({
+        'status': 'success',
+        'count': len(guidelines),
+        'guidelines': guidelines
+    })
