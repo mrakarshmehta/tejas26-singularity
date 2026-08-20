@@ -529,3 +529,10 @@ def archaeology_detail(slug):
     if not site:
         abort(404)
     return render_template('archaeology_detail.html', site=site)
+
+@main_bp.route('/numismatics')
+def numismatics_gallery():
+    """Explore ancient coinage of Bihar: Mauryan silver karshapanas, Gupta gold dinars, and Buxar seals."""
+    from models.archaeology import get_all_numismatic_hoards
+    hoards = get_all_numismatic_hoards()
+    return render_template('numismatics.html', hoards=hoards)
