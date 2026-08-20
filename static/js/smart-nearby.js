@@ -332,7 +332,7 @@
                 ${item.rating ? `<span class="sn-badge sn-badge-rating">⭐ ${item.rating}</span>` : ''}
               </div>
             </div>
-            <button class="sn-save-btn ${item.is_saved ? 'saved' : ''}" onclick="SNS.toggleSave('${item.raw_id || item.id}', '${item.item_type || 'service'}', this)" title="Save to wishlist">
+            <button class="sn-save-btn ${item.is_saved ? 'saved' : ''}" onclick="SNS.toggleSave('${item.raw_id || item.id}', '${item.item_type || 'service'}', this)" title="${item.is_saved ? 'Remove from wishlist' : 'Save to wishlist'}" aria-label="${item.is_saved ? 'Remove from wishlist' : 'Save to wishlist'}" aria-pressed="${item.is_saved ? 'true' : 'false'}">
               ❤️
             </button>
           </div>
@@ -489,7 +489,20 @@
         return r.json();
       })
       .then((data) => {
-        btnEl.classList.toggle('saved');
+        const isSaved = (data && typeof data.wishlisted === 'boolean') ? data.wishlisted : !btnEl.classList.contains('saved');
+        btnEl.classList.toggle('saved', isSaved);
+        btnEl.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+        btnEl.setAttribute('title', isSaved ? 'Remove from wishlist' : 'Save to wishlist');
+        btnEl.setAttribute('aria-label', isSaved ? 'Remove from wishlist' : 'Save to wishlist');
+        
+        // Dispatch global sync event for navbar/wishlist counter
+        try {
+          window.dispatchEvent(new CustomEvent('wishlist:updated', {
+            detail: { placeId: rawId, wishlisted: isSaved, count: data && data.count }
+          }));
+        } catch (e) {
+          // Ignore event dispatch failure in non-browser environments
+        }
       })
       .catch((err) => {
         console.warn('Failed to toggle wishlist state for place:', rawId, err);
