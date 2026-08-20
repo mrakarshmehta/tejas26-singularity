@@ -443,3 +443,24 @@ def api_get_craft_detail(slug):
         'craft': craft,
         'artisan_centers': centers
     })
+
+
+@api_bp.route('/eco/pledge', methods=['POST'])
+def api_submit_eco_pledge():
+    """Sign the HiddenYatra Responsible Traveler Pledge."""
+    from models.eco import validate_pledge_submission
+    data = request.get_json(silent=True) or request.form
+    name = (data.get('name') or '').strip()
+    email = (data.get('email') or '').strip()
+    state_origin = (data.get('state_origin') or 'India').strip()
+
+    is_valid, msg = validate_pledge_submission(name, email, state_origin)
+    if not is_valid:
+        return jsonify({'status': 'error', 'message': msg}), 400
+
+    return jsonify({
+        'status': 'success',
+        'message': f'Thank you {name}! You are now a certified Responsible Traveler for Bihar.',
+        'badge': '🌿 Bihar Eco-Heritage Guardian',
+        'certificate_code': f'HY-ECO-{abs(hash(email)) % 100000:05d}'
+    })
