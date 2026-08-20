@@ -1,4 +1,4 @@
-"""
+﻿"""
 Comprehensive Contract & Routing Verification for the 35-Commit Milestone
 """
 import unittest
@@ -14,7 +14,7 @@ class TestDiscoveryContract(unittest.TestCase):
         self.assertGreaterEqual(len(circuits), 5)
         for c in circuits:
             self.assertIn('slug', c)
-            self.assertIn('name', c)
+            self.assertIn('title', c)
             self.assertIn('stops', c)
 
     def test_festivals_contract(self):

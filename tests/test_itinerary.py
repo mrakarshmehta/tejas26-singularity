@@ -1,4 +1,4 @@
-"""
+﻿"""
 Unit tests for AI Trip Planner scoring & spatial logic in routes/itinerary.py
 """
 import unittest
@@ -53,8 +53,7 @@ class TestItineraryScoring(unittest.TestCase):
         dist = haversine(25.5941, 85.1376, 25.5941, 85.1376)
         self.assertAlmostEqual(dist, 0, places=4)
 
-
-def test_pacing_config_presets(self):
+    def test_pacing_config_presets(self):
         """Verify pacing config returns valid parameters for all presets."""
         from models.itineraries import get_pacing_config, calculate_daily_slots
         relaxed = get_pacing_config('relaxed')
@@ -72,6 +71,7 @@ def test_pacing_config_presets(self):
         self.assertIn('breakdown', budget)
         self.assertGreater(budget['total_estimated_inr'], 0)
         self.assertEqual(budget['days'], 3)
+
 
 if __name__ == '__main__':
     unittest.main()
