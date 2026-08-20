@@ -65,3 +65,29 @@ class TestIntellectualHeritageModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestClassicalTreatises(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_treatises_database(self):
+        """Verify presence of signature treatises."""
+        from models.intellectual_heritage import get_all_treatises
+        treatises = get_all_treatises()
+        self.assertGreaterEqual(len(treatises), 3)
+        titles = [t['title'] for t in treatises]
+        self.assertIn('Aryabhatiya', titles)
+        self.assertIn('Arthashastra', titles)
+
+    def test_treatises_api(self):
+        """Test /api/v1/scholars/treatises endpoint."""
+        res = self.client.get('/api/v1/scholars/treatises')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 3)
