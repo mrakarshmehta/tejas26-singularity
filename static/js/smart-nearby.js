@@ -486,8 +486,8 @@
       .then(() => {
         btnEl.classList.toggle('saved');
       })
-      .catch(() => {
-        btnEl.classList.toggle('saved');
+      .catch((err) => {
+        console.warn('Failed to toggle wishlist state for place:', rawId, err);
       });
   };
 
