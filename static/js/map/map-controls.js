@@ -668,3 +668,17 @@ if (typeof window !== 'undefined' && 'ontouchstart' in window) {
   root.HYMapControls = MapControls;
 
 })(window);
+
+// Category SVG Marker Definitions
+window.HY_CATEGORY_MARKERS = {
+  heritage: { color: '#e11d48', icon: '🏛️' },
+  nature: { color: '#059669', icon: '🌿' },
+  spiritual: { color: '#d97706', icon: '🕉️' },
+  food: { color: '#ea580c', icon: '🍲' },
+  default: { color: '#6366f1', icon: '📍' }
+};
+
+window.HY_GET_MARKER_STYLE = function(category) {
+  const cat = (category || '').toLowerCase();
+  return window.HY_CATEGORY_MARKERS[cat] || window.HY_CATEGORY_MARKERS.default;
+};
