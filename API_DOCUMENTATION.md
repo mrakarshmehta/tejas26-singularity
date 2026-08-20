@@ -109,3 +109,18 @@ HiddenYatra exposes RESTful JSON endpoints for location discovery, AI trip plann
   "timestamp": "2026-08-05T18:45:00Z"
 }
 ```
+
+## New v2.4 Endpoints
+
+### 1. Itinerary Budget & Export
+* `GET /itinerary/api/budget-estimate?days=3&companion=solo&tier=moderate` — Calculate structured trip budget.
+* `GET /itinerary/<id>/export/json` — Export itinerary details in JSON format.
+
+### 2. Proximity & Radius Discovery
+* `GET /api/places/nearby-radius?lat=25.59&lng=85.13&radius=25` — Return places within radial distance.
+
+### 3. Stay Price Breakdown
+* `POST /host/stays/api/calculate-price` — Calculate base fare, fees, and taxes for homestay booking.
+
+### 4. Admin Telemetry
+* `GET /admin/api/system-telemetry` — Live system health and platform status.
