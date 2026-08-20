@@ -210,3 +210,31 @@ def get_phenomena_by_month(month_name):
         return SEASONAL_PHENOMENA_DB
     m_clean = month_name.capitalize().strip()
     return [p for p in SEASONAL_PHENOMENA_DB if m_clean in p.get("active_months", [])]
+
+WEATHER_EMERGENCY_ALERTS_DB = [
+    {
+        "hazard_type": "Lightning & Severe Convective Storms (Vajrapat)",
+        "high_risk_months": ["April", "May", "June", "July"],
+        "safety_protocol": "If caught in open fields, avoid standing under isolated tall trees or near wire fences. Take shelter inside brick structures or vehicles.",
+        "alert_app_reference": "IndraVajra App (Disaster Management Department, Govt of Bihar)",
+        "emergency_helpline": "1070 (State Emergency Operations Centre) / 112"
+    },
+    {
+        "hazard_type": "Riverine Flood & High Current Surge",
+        "high_risk_months": ["July", "August", "September"],
+        "safety_protocol": "Check district river discharge levels before embarking on country boat rides on Ganga, Gandak, or Kosi rivers. Ensure certified life-jackets are worn.",
+        "alert_app_reference": "Central Water Commission (CWC) Flood Portal",
+        "emergency_helpline": "1077 (District Control Room) / SDRF River Rescue"
+    },
+    {
+        "hazard_type": "Dense Winter Radiation Fog",
+        "high_risk_months": ["December", "January"],
+        "safety_protocol": "Use low-beam fog lights and hazard flashers on Purvanchal & GT Road expressways. Maintain 50m following distance.",
+        "alert_app_reference": "IMD Mausam & Highway Traffic Control",
+        "emergency_helpline": "1033 (National Highway Emergency Helpline) / 112"
+    }
+]
+
+def get_all_weather_emergency_alerts():
+    """Return weather safety protocols and emergency disaster response guidelines."""
+    return WEATHER_EMERGENCY_ALERTS_DB
