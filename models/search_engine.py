@@ -1074,6 +1074,9 @@ class SearchIndex:
             results.sort(key=lambda r: r.get('distance_km', 99999))
 
         self._set_cached(cache_key, results)
+        if seq_id is not None:
+            for r in results:
+                r['seq_id'] = seq_id
         return results[:limit]
 
     def _passes_filters(self, entry, filters, user_lat=None, user_lng=None):
