@@ -565,3 +565,17 @@ def get_sitemap_districts():
             "WHERE d.is_visible = 1"
         )
         return cur.fetchall()
+
+
+def format_audit_log_entry(admin_id, action_type, target_type, target_id, details=None, ip_address=None):
+    """Format structured audit log event dict."""
+    from datetime import datetime
+    return {
+        'admin_id': admin_id,
+        'action': action_type,
+        'target_type': target_type,
+        'target_id': target_id,
+        'details': details or {},
+        'ip_address': ip_address or '127.0.0.1',
+        'timestamp': datetime.utcnow().isoformat()
+    }
