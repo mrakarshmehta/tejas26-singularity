@@ -495,3 +495,37 @@ def volunteer_programs():
         programs=programs,
         selected_district=district or 'all'
     )
+
+@main_bp.route('/archaeology')
+def archaeology_directory():
+    """Explore ancient excavation sites, Ashokan edicts, Brahmi inscriptions, and bronze hoards."""
+    from models.archaeology import get_all_archaeological_sites, get_sites_by_district, get_sites_by_period, get_epigraphy_chronology
+    district = request.args.get('district')
+    period = request.args.get('period')
+
+    if district:
+        sites = get_sites_by_district(district)
+    elif period:
+        sites = get_sites_by_period(period)
+    else:
+        sites = get_all_archaeological_sites()
+
+    chronology = get_epigraphy_chronology()
+
+    return render_template(
+        'archaeology.html',
+        sites=sites,
+        chronology=chronology,
+        selected_district=district or 'all',
+        selected_period=period or 'all'
+    )
+
+
+@main_bp.route('/archaeology/<slug>')
+def archaeology_detail(slug):
+    """View excavation history, script, coordinates, and museum preservation details."""
+    from models.archaeology import get_site_by_slug
+    site = get_site_by_slug(slug)
+    if not site:
+        abort(404)
+    return render_template('archaeology_detail.html', site=site)
