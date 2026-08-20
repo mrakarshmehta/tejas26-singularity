@@ -1485,4 +1485,32 @@ def search_cross_domain_heritage(query, limit=12):
     except Exception:
         pass
 
+    # 12. Ancient Scholars & Universities
+    try:
+        from models.intellectual_heritage import get_all_scholars, get_all_ancient_universities
+        for sch in get_all_scholars():
+            if q in sch.get('name', '').lower() or q in sch.get('primary_treatise', '').lower() or q in sch.get('field', '').lower():
+                matches.append({
+                    'type': 'scholar',
+                    'category_label': 'Ancient Scholar & Polymath',
+                    'title': sch['name'],
+                    'slug': sch['slug'],
+                    'url': f"/intellectual-heritage/{sch['slug']}",
+                    'description': sch.get('field', '') + ' • ' + sch.get('primary_treatise', ''),
+                    'icon': '💡'
+                })
+        for u in get_all_ancient_universities():
+            if q in u.get('name', '').lower() or q in u.get('curriculum', '').lower():
+                matches.append({
+                    'type': 'ancient_university',
+                    'category_label': 'Ancient Monastic University',
+                    'title': u['name'],
+                    'slug': u['slug'],
+                    'url': f"/intellectual-heritage",
+                    'description': u.get('founded_era', '') + ' • ' + u.get('district', ''),
+                    'icon': '🏛️'
+                })
+    except Exception:
+        pass
+
     return matches[:limit]
