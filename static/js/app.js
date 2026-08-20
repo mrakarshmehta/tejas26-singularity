@@ -188,3 +188,15 @@ function scrollCarousel(id, direction) {
   const cardWidth = track.querySelector('.place-card')?.offsetWidth || 340;
   track.scrollBy({ left: direction * (cardWidth + 24), behavior: 'smooth' });
 }
+
+
+// Network Status Monitor
+window.addEventListener('online', function() {
+  console.log('[Network] Back online');
+  document.body.classList.remove('is-offline');
+});
+
+window.addEventListener('offline', function() {
+  console.log('[Network] Connection lost');
+  document.body.classList.add('is-offline');
+});
