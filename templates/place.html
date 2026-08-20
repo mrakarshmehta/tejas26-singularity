@@ -1268,3 +1268,42 @@ if (userUploadForm) {
 })();
 </script>
 {% endblock %}
+
+
+    <!-- Multilingual Audio Guide Player Partial -->
+    <div class="audio-guide-widget" id="place-audio-guide" style="background:var(--bg-card, #1e293b);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;margin:24px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.5rem;">🎧</span>
+          <div>
+            <h3 style="font-size:1.1rem;font-weight:700;color:#fff;margin:0;">Audio Story & Narration</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Listen to verified heritage history</span>
+          </div>
+        </div>
+        <div class="audio-lang-selector">
+          <select id="audio-lang-select" onchange="window.HY_switchAudioLang(this.value)" style="background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:4px 10px;font-size:0.8rem;">
+            <option value="en">English (EN)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="bho">भोजपुरी (Bhojpuri)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:12px;margin-bottom:10px;">
+        <p id="audio-transcript-text" style="font-size:0.88rem;color:var(--text-muted);line-height:1.5;margin:0;">
+          Click Play to listen to the verified story of this historic monument.
+        </p>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button type="button" id="audio-play-btn" onclick="window.HY_toggleAudioPlay()" class="btn btn-sm btn-primary" style="padding:6px 14px;border-radius:20px;font-size:0.85rem;background:var(--accent-orange, #ff7a18);color:#fff;border:none;cursor:pointer;">
+            ▶ Play Audio
+          </button>
+          <span id="audio-timer" style="font-size:0.8rem;color:var(--text-muted);">0:00 / 2:30</span>
+        </div>
+        <button type="button" onclick="window.HY_toggleAudioSpeed()" id="audio-speed-btn" style="background:rgba(255,255,255,0.08);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:0.75rem;cursor:pointer;">
+          1.0x
+        </button>
+      </div>
+    </div>
