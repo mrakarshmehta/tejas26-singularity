@@ -1,0 +1,175 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Rural Immersion & Cultural Volunteerism - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="volunteer-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #1e40af;">
+        <span style="display: inline-block; background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🤝 Community-Based Tourism & Cultural Exchange
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Rural Immersion & Volunteerism</h1>
+        <p style="color: #cbd5e1; font-size: 1.05rem; margin: 0; max-width: 700px;">
+            Travel deeper by giving back. Live alongside master Mithila painters, assist organic Makhana harvesting collectives, or teach heritage storytelling at ancient Nalanda ruins.
+        </p>
+    </div>
+
+    <!-- Programs Grid -->
+    <div style="margin-bottom: 3.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🌱</span> Active Immersion Opportunities ({{ programs | length }})
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.75rem;">
+            {% for prog in programs %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(2, 132, 199, 0.1); color: var(--primary, #0284c7); padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            {{ prog.category }}
+                        </span>
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #059669; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            ⏳ {{ prog.duration_weeks }} Weeks
+                        </span>
+                    </div>
+
+                    <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary, #0f172a); line-height: 1.3;">
+                        {{ prog.title }}
+                    </h3>
+                    <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0.75rem;">
+                        📍 {{ prog.village }} ({{ prog.district }}) • 🏡 {{ prog.stipend_or_board }}
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                        {{ prog.description }}
+                    </p>
+
+                    <div style="background: var(--bg-subtle, #f8fafc); padding: 0.75rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.85rem;">
+                        <strong style="color: var(--text-primary, #1e293b); display: block; margin-bottom: 0.25rem;">Skills Desired:</strong>
+                        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+                            {% for skill in prog.skills_needed %}
+                            <span style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                {{ skill }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="prefillApplyModal('{{ prog.slug }}', '{{ prog.title }}')" style="width: 100%; padding: 0.75rem; background: var(--primary, #0284c7); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;">
+                    Apply for this Immersion
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Application Form Section -->
+    <div id="apply-section" style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-top: 0; margin-bottom: 0.5rem; color: var(--text-primary, #0f172a);">
+            📝 Register as a Volunteer / Cultural Ambassador
+        </h2>
+        <p style="font-size: 0.9rem; color: var(--text-muted, #64748b); margin: 0 0 1.5rem 0;">
+            Submit your application to be matched with host farming collectives and artisan guilds in Bihar.
+        </p>
+
+        <form id="volunteer-form" onsubmit="submitVolunteerApp(event)">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary, #1e293b);">Full Name</label>
+                    <input type="text" id="vol-name" required placeholder="e.g. Ananya Sen" style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary, #1e293b);">Email Address</label>
+                    <input type="email" id="vol-email" required placeholder="ananya@example.com" style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary, #1e293b);">Phone Number</label>
+                    <input type="tel" id="vol-phone" required placeholder="+91 98765 43210" style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary, #1e293b);">Select Program</label>
+                <select id="vol-prog" required style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); background: var(--bg-surface, #ffffff); font-size: 0.9rem;">
+                    {% for p in programs %}
+                    <option value="{{ p.slug }}">{{ p.title }} ({{ p.district }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary, #1e293b);">Your Skills (Comma-separated)</label>
+                <input type="text" id="vol-skills" placeholder="e.g. Photography, English Fluency, Organic Farming, Storytelling" style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem;">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary, #1e293b);">Statement of Motivation (Why do you wish to join?)</label>
+                <textarea id="vol-motivation" rows="3" required placeholder="Describe your background, what skills you hope to share, and your passion for cultural conservation..." style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border-color, #cbd5e1); font-size: 0.9rem;"></textarea>
+            </div>
+
+            <button type="submit" id="vol-submit-btn" style="background: #16a34a; color: #ffffff; padding: 0.85rem 2rem; border-radius: 8px; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.2s;">
+                Submit Volunteer Application
+            </button>
+        </form>
+
+        <div id="vol-result" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(22, 163, 74, 0.1); border: 1px solid rgba(22, 163, 74, 0.3); border-radius: 10px; display: none;">
+            <h4 style="margin: 0 0 0.25rem 0; color: #15803d; font-size: 1.1rem; font-weight: 700;">✅ Application Successfully Submitted!</h4>
+            <p id="vol-res-msg" style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #166534;"></p>
+            <div style="font-size: 0.85rem; font-weight: 600; color: #15803d;">
+                Registration Code: <span id="vol-res-code" style="font-family: monospace; font-weight: 800;"></span> |
+                Skill Match: <span id="vol-res-match" style="font-weight: 800;"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function prefillApplyModal(slug, title) {
+    var sel = document.getElementById('vol-prog');
+    if (sel) sel.value = slug;
+    var formSection = document.getElementById('apply-section');
+    if (formSection) {
+        formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function submitVolunteerApp(e) {
+    e.preventDefault();
+    var name = document.getElementById('vol-name').value;
+    var email = document.getElementById('vol-email').value;
+    var phone = document.getElementById('vol-phone').value;
+    var prog = document.getElementById('vol-prog').value;
+    var skills = document.getElementById('vol-skills').value;
+    var motivation = document.getElementById('vol-motivation').value;
+
+    fetch('/api/v1/volunteer/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            program_slug: prog,
+            skills: skills,
+            motivation: motivation
+        })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.status === 'success') {
+            document.getElementById('vol-res-msg').textContent = data.message;
+            document.getElementById('vol-res-code').textContent = data.application_id;
+            document.getElementById('vol-res-match').textContent = data.skill_match_score_pct + '%';
+            document.getElementById('vol-result').style.display = 'block';
+            document.getElementById('volunteer-form').reset();
+        } else {
+            alert('Error: ' + (data.message || 'Could not submit application'));
+        }
+    })
+    .catch(function(err) {
+        console.error('Submission error:', err);
+    });
+}
+</script>
+{% endblock %}
