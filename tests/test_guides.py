@@ -96,3 +96,29 @@ class TestGuidesModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestGuideEthicsStandards(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_ethics_standards_data(self):
+        """Verify guide ethics standards list."""
+        from models.guides import get_guide_ethics_standards
+        standards = get_guide_ethics_standards()
+        self.assertGreaterEqual(len(standards), 3)
+        titles = [s['standard_title'] for s in standards]
+        self.assertTrue(any('Licensing' in t for t in titles))
+        self.assertTrue(any('First-Aid' in t for t in titles))
+
+    def test_ethics_api(self):
+        """Test /api/v1/guides/ethics API endpoint."""
+        res = self.client.get('/api/v1/guides/ethics')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 3)
