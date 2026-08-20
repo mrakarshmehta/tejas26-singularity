@@ -304,3 +304,38 @@ def api_nearby_services(place_id):
 
     return jsonify({'services': grouped})
 
+
+
+@api_bp.route('/places/nearby-radius', methods=['GET'])
+def api_places_nearby_radius():
+    """Discover places within a custom circular radius (km) with distance sorting."""
+    lat = request.args.get('lat', type=float)
+    lng = request.args.get('lng', type=float)
+    radius_km = request.args.get('radius', 25.0, type=float)
+    category = request.args.get('category')
+
+    if lat is None or lng is None:
+        return jsonify({'status': 'error', 'message': 'lat and lng parameters are required'}), 400
+
+    from models.places import calculate_haversine_distance, get_places_by_filter
+    places = get_places_by_filter(category=category, limit=50)
+
+    results = []
+    for p in places:
+        plat = p.get('latitude')
+        plng = p.get('longitude')
+        if plat and plng:
+            dist = calculate_haversine_distance(lat, lng, plat, plng)
+            if dist <= radius_km:
+                p_copy = dict(p)
+                p_copy['distance_km'] = dist
+                results.append(p_copy)
+
+    results.sort(key=lambda x: x['distance_km'])
+    return jsonify({
+        'status': 'success',
+        'center': {'lat': lat, 'lng': lng},
+        'radius_km': radius_km,
+        'count': len(results),
+        'places': results
+    })
