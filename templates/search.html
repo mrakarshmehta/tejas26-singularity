@@ -83,7 +83,7 @@
 <section class="search-hero">
   <h1>🔍 {% if query %}Results for "<span class="text-gradient-saffron">{{ query }}</span>"{% else %}Search <span class="text-gradient-saffron">HiddenYatra</span>{% endif %}</h1>
   <form action="{{ url_for('main.search') }}" method="GET" class="search-box">
-    <input type="text" name="q" value="{{ query }}" placeholder="Search places, districts, food..." autofocus>
+    <input type="text" name="q" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-haspopup="listbox" value="{{ query }}" placeholder="Search places, districts, food..." autofocus>
     <button type="submit">Search</button>
   </form>
 </section>
