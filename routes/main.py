@@ -418,3 +418,37 @@ def virtual_tour_viewer(slug):
     if not pano:
         abort(404)
     return render_template('panorama_viewer.html', panorama=pano)
+
+@main_bp.route('/gastronomy')
+def gastronomy_directory():
+    """Discover Bihar's traditional cuisine, GI-tagged sweets, and regional food trails."""
+    from models.gastronomy import get_all_dishes, get_dishes_by_district, get_dishes_by_dietary, get_culinary_trails
+    district = request.args.get('district')
+    dietary = request.args.get('dietary')
+
+    if district:
+        dishes = get_dishes_by_district(district)
+    elif dietary:
+        dishes = get_dishes_by_dietary(dietary)
+    else:
+        dishes = get_all_dishes()
+
+    trails = get_culinary_trails()
+
+    return render_template(
+        'gastronomy.html',
+        dishes=dishes,
+        trails=trails,
+        selected_district=district or 'all',
+        selected_dietary=dietary or 'all'
+    )
+
+
+@main_bp.route('/gastronomy/<slug>')
+def dish_detail(slug):
+    """View cultural backstory, ingredients, and verified eateries for a traditional delicacy."""
+    from models.gastronomy import get_dish_by_slug
+    dish = get_dish_by_slug(slug)
+    if not dish:
+        abort(404)
+    return render_template('dish_detail.html', dish=dish)
