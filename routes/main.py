@@ -482,3 +482,16 @@ def wildlife_detail(slug):
     if not sanctuary:
         abort(404)
     return render_template('wildlife_detail.html', sanctuary=sanctuary)
+
+@main_bp.route('/volunteer')
+def volunteer_programs():
+    """Browse rural community immersion initiatives, artisan residencies, and apply to volunteer."""
+    from models.volunteer import get_all_programs, get_programs_by_district
+    district = request.args.get('district')
+    programs = get_programs_by_district(district) if district else get_all_programs()
+
+    return render_template(
+        'volunteer.html',
+        programs=programs,
+        selected_district=district or 'all'
+    )
