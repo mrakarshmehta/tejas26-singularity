@@ -1086,3 +1086,16 @@ def api_get_guide_ethics():
         'count': len(standards),
         'standards': standards
     })
+
+@api_bp.route('/guides/verify-license', methods=['GET'])
+def api_verify_guide_license():
+    """JSON API to verify a guide's official ASI or state tourism license number."""
+    from models.guides import verify_guide_license
+    lic = request.args.get('license', '').strip()
+    is_valid, info = verify_guide_license(lic)
+    if not is_valid:
+        return jsonify({'status': 'invalid', 'message': info}), 404
+    return jsonify({
+        'status': 'verified',
+        'details': info
+    })
