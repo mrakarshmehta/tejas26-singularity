@@ -1845,3 +1845,18 @@ body.is-offline::before {
   padding: 6px;
   z-index: 99999;
 }
+
+/* Audio Guide Widget Styling */
+.audio-guide-widget {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s;
+}
+.audio-guide-widget:hover {
+  border-color: rgba(255, 122, 24, 0.3);
+}
+#audio-play-btn {
+  transition: transform 0.15s ease, background 0.2s;
+}
+#audio-play-btn:hover {
+  transform: scale(1.04);
+}
