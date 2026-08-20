@@ -362,3 +362,28 @@ def traveler_safety():
         medical_facilities=medical_list,
         guidelines=guidelines
     )
+
+@main_bp.route('/transport')
+def transport_guide():
+    """Statewide transit hubs, inter-district connectivity matrix, and fare estimator."""
+    from models.transport import (
+        get_airports,
+        get_railway_junctions,
+        get_bus_terminals,
+        get_interdistrict_routes,
+        get_vehicle_rate_cards
+    )
+    airports = get_airports()
+    railways = get_railway_junctions()
+    bus_depots = get_bus_terminals()
+    routes = get_interdistrict_routes()
+    rate_cards = get_vehicle_rate_cards()
+
+    return render_template(
+        'transport.html',
+        airports=airports,
+        railways=railways,
+        bus_depots=bus_depots,
+        transit_routes=routes,
+        rate_cards=rate_cards
+    )
