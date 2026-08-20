@@ -1,0 +1,65 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Authentic Bihar GI Souvenirs & Crafts - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="souvenirs-page-container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Hero Banner -->
+    <div style="background: linear-gradient(135deg, #7c2d12 0%, #431407 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #c2410c;">
+        <span style="display: inline-block; background: rgba(251, 146, 60, 0.2); color: #ffedd5; border: 1px solid rgba(251, 146, 60, 0.4); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">
+            🏺 Certified Geographical Indication (GI) Crafts
+        </span>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">Authentic Bihar Souvenirs</h1>
+        <p style="color: #fed7aa; font-size: 1.05rem; margin: 0; max-width: 750px;">
+            Support generational master artists with fair-trade certified handicrafts — from hand-painted Madhubani Tussar silk and Bhagalpur wild raw silk to golden Sikki grass and ancient Tikuli enamel platters.
+        </p>
+    </div>
+
+    <!-- Souvenirs Grid -->
+    <div style="margin-bottom: 3.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>✨</span> Master Artisan Heirlooms ({{ souvenirs | length }})
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.75rem;">
+            {% for s in souvenirs %}
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s ease;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2.2rem;">{{ s.icon }}</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; background: rgba(194, 65, 12, 0.1); color: #c2410c; padding: 0.2rem 0.6rem; border-radius: 6px;">
+                            {{ s.gi_tag_status }}
+                        </span>
+                    </div>
+
+                    <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 0.25rem 0; color: var(--text-primary, #0f172a); line-height: 1.3;">
+                        {{ s.name }}
+                    </h3>
+                    <div style="font-size: 0.8rem; color: var(--primary, #0284c7); font-weight: 600; margin-bottom: 0.75rem;">
+                        📍 {{ s.artisan_cluster }} ({{ s.district }})
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted, #475569); margin: 0 0 1rem 0; line-height: 1.5;">
+                        {{ s.description }}
+                    </p>
+
+                    <div style="background: var(--bg-subtle, #f8fafc); padding: 0.75rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.8rem;">
+                        <div style="margin-bottom: 0.25rem;"><strong>Materials:</strong> {{ s.materials }}</div>
+                        <div><strong>Guarantee:</strong> {{ s.authenticity_seal }}</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 1rem;">
+                    <div>
+                        <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary, #0f172a);">₹{{ s.price_range_inr.min }} - ₹{{ s.price_range_inr.max }}</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted, #64748b); display: block;">Fair-Trade Index</span>
+                    </div>
+                    <a href="/souvenirs/{{ s.slug }}" style="padding: 0.6rem 1.2rem; background: #c2410c; color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem;">
+                        View Artisan Story
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
