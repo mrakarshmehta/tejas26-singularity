@@ -1468,4 +1468,21 @@ def search_cross_domain_heritage(query, limit=12):
     except Exception:
         pass
 
+    # 11. Authentic GI Souvenirs & Crafts
+    try:
+        from models.souvenirs import get_all_souvenirs
+        for s in get_all_souvenirs():
+            if q in s.get('name', '').lower() or q in s.get('description', '').lower() or q in s.get('craft_category', '').lower():
+                matches.append({
+                    'type': 'souvenir',
+                    'category_label': 'GI Artisan Souvenir',
+                    'title': s['name'],
+                    'slug': s['slug'],
+                    'url': f"/souvenirs/{s['slug']}",
+                    'description': s.get('gi_tag_status', '') + ' • ' + s.get('district', ''),
+                    'icon': '🏺'
+                })
+    except Exception:
+        pass
+
     return matches[:limit]
