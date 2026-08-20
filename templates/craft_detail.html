@@ -1,0 +1,112 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ craft.name }} - GI Handicrafts of Bihar - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="craft-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/crafts" style="color: inherit; text-decoration: none;">Handicrafts & GI Directory</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ craft.name }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #451a03 0%, #78350f 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #92400e;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            {% if craft.gi_status %}
+            <span style="background: rgba(234, 179, 8, 0.2); color: #fef08a; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(234, 179, 8, 0.4);">
+                🏅 Certified GI (Geographical Indication) - {{ craft.gi_year or 'Certified' }}
+            </span>
+            {% endif %}
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                🎨 {{ craft.craft_type }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.3rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">
+            {{ craft.icon or '🧶' }} {{ craft.name }}
+        </h1>
+        <p style="font-size: 1.1rem; color: #fed7aa; margin: 0;">
+            Authentic Traditional Craft of {{ craft.origin_districts | join(', ') }}
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Overview, Technique & Materials -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    Craft Heritage & History
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin-bottom: 1.5rem;">
+                    {{ craft.description }}
+                </p>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary, #0f172a);">
+                    Artisan Technique & Process
+                </h3>
+                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted, #475569); margin: 0;">
+                    {{ craft.technique_summary }}
+                </p>
+            </div>
+
+            <!-- Verified Artisan Guilds & Centers -->
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    📍 Verified Artisan Centers & Guilds
+                </h2>
+                {% if artisan_centers %}
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for c in artisan_centers %}
+                    <div style="padding: 1rem; background: var(--bg-subtle, #f8fafc); border-radius: 8px; border-left: 3px solid #d97706;">
+                        <h4 style="margin: 0 0 0.25rem 0; font-size: 1.05rem; font-weight: 700;">{{ c.name }}</h4>
+                        <div style="font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0.25rem;">📍 {{ c.location }} ({{ c.district }})</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted, #475569);">👤 Contact: {{ c.lead_artisan or 'Guild Secretary' }} | 📞 {{ c.phone }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="font-size: 0.9rem; color: var(--text-muted, #64748b); margin: 0;">
+                    Artisan directory available through district cottage industries centers in {{ craft.origin_districts | join(', ') }}.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Materials, Villages & Buying Tips -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--primary, #0284c7);">
+                    🧵 Craft Specifications
+                </h3>
+                <div style="margin-bottom: 1rem;">
+                    <strong style="font-size: 0.85rem; color: var(--text-muted, #64748b); display: block;">Raw Materials:</strong>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary, #0f172a); margin-top: 0.25rem;">
+                        {{ craft.materials_used | join(', ') if craft.materials_used is iterable and craft.materials_used is not string else craft.materials_used }}
+                    </div>
+                </div>
+                <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-muted, #64748b); display: block;">Prominent Villages:</strong>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem;">
+                        {% for v in craft.prominent_villages %}
+                        <span style="background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #1e293b); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                            {{ v }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 0.75rem; color: #d97706;">
+                    🛍️ Authentic Purchase Tips
+                </h3>
+                <p style="font-size: 0.85rem; line-height: 1.6; color: var(--text-muted, #475569); margin: 0;">
+                    {{ craft.visiting_tips or 'Buy directly from certified weaver clusters or BSTDC Upendra Maharathi Sansthan counters to ensure fair artisan remuneration and authenticity.' }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

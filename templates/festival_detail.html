@@ -1,0 +1,102 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ festival.name }} - Bihar Cultural Festivals - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="festival-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/festivals" style="color: inherit; text-decoration: none;">Festivals Calendar</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ festival.name }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #431407;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            <span style="background: rgba(251, 146, 60, 0.2); color: #fdba74; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(251, 146, 60, 0.3);">
+                📅 {{ festival.month }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                ⏳ {{ festival.duration_days }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                🎭 {{ festival.theme }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.3rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">
+            {{ festival.icon or '🎉' }} {{ festival.name }}
+        </h1>
+        <p style="font-size: 1.15rem; color: #fed7aa; margin: 0; font-style: italic;">
+            "{{ festival.tagline }}"
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Overview, Significance & Rituals -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    Cultural Overview
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin-bottom: 1.5rem;">
+                    {{ festival.description }}
+                </p>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary, #0f172a);">
+                    Cultural & Historical Significance
+                </h3>
+                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted, #475569); margin: 0;">
+                    {{ festival.cultural_significance }}
+                </p>
+            </div>
+
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    ✨ Key Rituals & Highlights
+                </h2>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.95rem; line-height: 1.7; color: var(--text-muted, #334155);">
+                    {% for h in festival.rituals_highlights %}
+                    <li style="margin-bottom: 0.5rem;">{{ h }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Quick Facts & Visitor Advice -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--primary, #0284c7);">
+                    📍 Where to Experience
+                </h3>
+                <div style="margin-bottom: 1rem;">
+                    <strong style="font-size: 0.85rem; color: var(--text-muted, #64748b); display: block;">Primary Districts:</strong>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem;">
+                        {% for d in festival.primary_districts %}
+                        <span style="background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #1e293b); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">
+                            {{ d }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <strong style="font-size: 0.85rem; color: var(--text-muted, #64748b); display: block;">Recommended Season:</strong>
+                    <span style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary, #0f172a);">{{ festival.month }}</span>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-subtle, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 0.75rem; color: #d97706;">
+                    💡 Traveler Tips
+                </h3>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6; color: var(--text-muted, #475569);">
+                    {% for tip in festival.visitor_tips %}
+                    <li style="margin-bottom: 0.4rem;">{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
