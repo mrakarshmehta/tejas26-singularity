@@ -297,3 +297,26 @@ def festival_detail(slug):
     if not fest:
         abort(404)
     return render_template('festival_detail.html', festival=fest)
+
+
+@main_bp.route('/crafts')
+def crafts_directory():
+    """Browse Bihar's GI-tagged handicrafts and authentic artisan centers."""
+    from models.crafts import get_all_crafts, get_crafts_by_district
+    district_filter = request.args.get('district')
+    if district_filter:
+        crafts = get_crafts_by_district(district_filter)
+    else:
+        crafts = get_all_crafts()
+    return render_template('crafts.html', crafts=crafts, active_district=district_filter or 'all')
+
+
+@main_bp.route('/craft/<slug>')
+def craft_detail(slug):
+    """View craft history, GI certification, materials, and artisan centers."""
+    from models.crafts import get_craft_by_slug, get_artisan_centers_for_craft
+    craft = get_craft_by_slug(slug)
+    if not craft:
+        abort(404)
+    centers = get_artisan_centers_for_craft(slug)
+    return render_template('craft_detail.html', craft=craft, artisan_centers=centers)
