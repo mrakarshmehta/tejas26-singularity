@@ -819,3 +819,14 @@ def get_places_by_filter(district_id=None, category=None, sort_by='views', limit
         params.append(limit)
         cur.execute(query, tuple(params))
         return cur.fetchall()
+
+
+def get_submission_status_meta(status_code):
+    """Return badge color, display label, and actionable state for submission statuses."""
+    status_map = {
+        'pending': {'label': 'Under Review', 'color': '#f59e0b', 'can_edit': True},
+        'approved': {'label': 'Published', 'color': '#10b981', 'can_edit': False},
+        'rejected': {'label': 'Changes Needed', 'color': '#ef4444', 'can_edit': True},
+        'draft': {'label': 'Draft', 'color': '#6b7280', 'can_edit': True}
+    }
+    return status_map.get(str(status_code).lower(), status_map['pending'])
