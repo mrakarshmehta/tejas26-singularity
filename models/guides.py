@@ -170,3 +170,19 @@ GUIDE_ETHICS_STANDARDS = [
 def get_guide_ethics_standards():
     """Return verified guide code of ethics and traveler safety standards."""
     return GUIDE_ETHICS_STANDARDS
+
+def verify_guide_license(license_no):
+    """Verify validity and status of guide license number."""
+    if not license_no:
+        return False, "License number is required."
+    l_clean = license_no.strip().upper()
+    for g in VERIFIED_GUIDES_DB:
+        if g.get("license_number", "").upper() == l_clean:
+            return True, {
+                "valid": True,
+                "guide_name": g["name"],
+                "tier": g["license_tier"],
+                "district": g["district"],
+                "experience_years": g["experience_years"]
+            }
+    return False, "License number not found in verified official registry."
