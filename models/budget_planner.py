@@ -153,3 +153,30 @@ def get_district_adjusted_budget(base_daily_inr, district_slug):
     d_clean = district_slug.lower().strip()
     factor = DISTRICT_COST_INDEX_DB.get(d_clean, {}).get("factor", 1.0)
     return round(base_daily_inr * factor, 2)
+
+TIPPING_ETIQUETTE_DB = [
+    {
+        "service": "Heritage Tour Guides",
+        "standard_tip": "₹300 - ₹500 per day",
+        "etiquette_note": "Customary for licensed ASI guides providing exemplary historical storytelling."
+    },
+    {
+        "service": "Chauffeurs & Safari Drivers",
+        "standard_tip": "₹200 - ₹400 per day",
+        "etiquette_note": "Appreciated for careful highway driving, luggage assistance, and punctual transfers."
+    },
+    {
+        "service": "Restaurants & Heritage Dhabas",
+        "standard_tip": "5% - 10% of bill",
+        "etiquette_note": "Discretionary; check if service charge is already included on the final bill."
+    },
+    {
+        "service": "UPI & Cash Management",
+        "standard_tip": "Carry ₹1,000 - ₹2,000 in small cash notes (₹50, ₹100, ₹200)",
+        "etiquette_note": "UPI (Google Pay, PhonePe, Paytm) is accepted in 95% of urban shops and tea stalls across Bihar."
+    }
+]
+
+def get_tipping_and_cash_guidelines():
+    """Return tipping norms, cash management, and UPI digital payment advice."""
+    return TIPPING_ETIQUETTE_DB
