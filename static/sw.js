@@ -1,5 +1,5 @@
 ﻿// HiddenYatra Service Worker - Offline Caching for Regional Discovery & Traveler Safety
-const CACHE_NAME = 'hiddenyatra-v5';
+const CACHE_NAME = 'hiddenyatra-v6';
 const STATIC_ASSETS = [
   '/',
   '/offline',
@@ -8,6 +8,10 @@ const STATIC_ASSETS = [
   '/circuits',
   '/festivals',
   '/crafts',
+  '/gastronomy',
+  '/wildlife',
+  '/virtual-tours',
+  '/volunteer',
   '/static/css/main.min.css',
   '/static/css/components.min.css',
   '/static/css/animations.min.css',

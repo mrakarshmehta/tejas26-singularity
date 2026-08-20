@@ -3,22 +3,25 @@
 {% block title %}Offline Mode - HiddenYatra{% endblock %}
 
 {% block content %}
-<div class="offline-container" style="max-width: 680px; margin: 60px auto; text-align: center; padding: 30px; background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);">
+<div class="offline-container" style="max-width: 720px; margin: 60px auto; text-align: center; padding: 30px; background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);">
   <div style="font-size: 3.5rem; margin-bottom: 16px;">📡</div>
   <h1 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; color: var(--text-primary, #0f172a);">You are currently offline</h1>
   <p style="color: var(--text-muted, #64748b); line-height: 1.6; margin-bottom: 24px; font-size: 0.95rem;">
-    Your connection to the network was interrupted. Essential offline guides including emergency helplines, transport schedules, and saved places remain accessible.
+    Your connection was interrupted. Essential offline directories including emergency helplines, transit tables, heritage circuits, and gastronomy guides remain cached and accessible.
   </p>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; text-align: left;">
-    <a href="/safety" style="padding: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; text-decoration: none; color: #dc2626; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem;">
-      <span>🚨</span> Emergency Safety (112)
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 24px; text-align: left;">
+    <a href="/safety" style="padding: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; text-decoration: none; color: #dc2626; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85rem;">
+      <span>🚨</span> Safety (112)
     </a>
-    <a href="/transport" style="padding: 12px; background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(2, 132, 199, 0.2); border-radius: 8px; text-decoration: none; color: #0284c7; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem;">
-      <span>🚆</span> Transit & Fares Guide
+    <a href="/transport" style="padding: 10px; background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(2, 132, 199, 0.2); border-radius: 8px; text-decoration: none; color: #0284c7; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85rem;">
+      <span>🚆</span> Transit Fares
     </a>
-    <a href="/circuits" style="padding: 12px; background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.2); border-radius: 8px; text-decoration: none; color: #d97706; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem;">
-      <span>🧭</span> Heritage Circuits
+    <a href="/gastronomy" style="padding: 10px; background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.2); border-radius: 8px; text-decoration: none; color: #d97706; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85rem;">
+      <span>🍲</span> Food Heritage
+    </a>
+    <a href="/wildlife" style="padding: 10px; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.2); border-radius: 8px; text-decoration: none; color: #059669; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85rem;">
+      <span>🐅</span> Nature Parks
     </a>
   </div>
 
@@ -27,7 +30,7 @@
       🔄 Retry Connection
     </button>
     <a href="/wishlist" style="background: var(--bg-subtle, #f1f5f9); color: var(--text-primary, #334155); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">
-      ⭐ View Saved Places
+      ⭐ Saved Places
     </a>
   </div>
 </div>
