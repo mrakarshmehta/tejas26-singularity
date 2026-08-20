@@ -241,3 +241,27 @@ def food_culture():
 def offline_fallback():
     """Render the offline PWA fallback page."""
     return render_template('offline.html'), 200
+
+
+@main_bp.route('/circuits')
+def circuits_browse():
+    """Browse curated thematic heritage trails and pilgrimage circuits."""
+    from models.circuits import get_all_circuits
+    theme_filter = request.args.get('theme')
+    if theme_filter:
+        from models.circuits import filter_circuits_by_theme
+        circuits = filter_circuits_by_theme(theme_filter)
+    else:
+        circuits = get_all_circuits()
+    return render_template('circuits.html', circuits=circuits, active_theme=theme_filter or 'all')
+
+
+@main_bp.route('/circuit/<slug>')
+def circuit_detail(slug):
+    """View details, map stops, and day-by-day itinerary of a thematic circuit."""
+    from models.circuits import get_circuit_by_slug, calculate_circuit_metrics
+    circuit = get_circuit_by_slug(slug)
+    if not circuit:
+        abort(404)
+    metrics = calculate_circuit_metrics(slug)
+    return render_template('circuit_detail.html', circuit=circuit, metrics=metrics)
