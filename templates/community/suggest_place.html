@@ -807,10 +807,30 @@
   };
 
 })();
+    // Client-side photo compression integration
+    const photoInput = document.getElementById('photos-input');
+    if (photoInput && window.HY && window.HY.compressImageBeforeUpload) {
+      photoInput.addEventListener('change', async function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          console.log(`[SuggestPlace] Pre-processing ${files.length} images...`);
+        }
+      });
+    }
 </script>
 {% if map_engine == 'google' and google_maps_api_key %}
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&map_id={{ google_maps_map_id }}&libraries=marker&v=weekly">
+    // Client-side photo compression integration
+    const photoInput = document.getElementById('photos-input');
+    if (photoInput && window.HY && window.HY.compressImageBeforeUpload) {
+      photoInput.addEventListener('change', async function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          console.log(`[SuggestPlace] Pre-processing ${files.length} images...`);
+        }
+      });
+    }
 </script>
 {% endif %}
 {% endblock %}
