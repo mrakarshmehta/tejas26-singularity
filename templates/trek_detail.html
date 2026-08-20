@@ -1,0 +1,87 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}{{ trek.name }} - Bihar Eco-Trails - HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="trek-detail-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem 1rem;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted, #64748b);">
+        <a href="/" style="color: inherit; text-decoration: none;">Home</a> &gt;
+        <a href="/treks" style="color: inherit; text-decoration: none;">Eco-Trails & Treks</a> &gt;
+        <span style="color: var(--text-primary, #0f172a); font-weight: 600;">{{ trek.name }}</span>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <div style="background: linear-gradient(135deg, #022c22 0%, #064e3b 100%); border-radius: 16px; padding: 2.5rem 2rem; color: #ffffff; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); border: 1px solid #059669;">
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            <span style="background: rgba(16, 185, 129, 0.2); color: #a7f3d0; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3);">
+                ⛰️ {{ trek.difficulty }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                📍 {{ trek.district }}
+            </span>
+            <span style="background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                ⏱️ {{ trek.duration_hours }}
+            </span>
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2;">
+            {{ trek.name }}
+        </h1>
+        <p style="font-size: 1.05rem; color: #d1fae5; margin: 0;">
+            Distance: <strong>{{ trek.distance_km }} km</strong> • Elevation Gain: <strong>+{{ trek.elevation_gain_m }}m</strong> (Summit: {{ trek.summit_elevation_m }}m)
+        </p>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <!-- Left: Description & Trail Highlights -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-primary, #0f172a);">
+                    Trail Overview & Topography
+                </h2>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-muted, #334155); margin: 0 0 1.5rem 0;">
+                    {{ trek.description }}
+                </p>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary, #0f172a);">
+                    🚩 Waypoints & Geological Highlights
+                </h3>
+                <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.95rem; line-height: 1.7; color: var(--text-muted, #334155);">
+                    {% for item in trek.trail_highlights %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right: Gear Checklist & Quick Info -->
+        <div>
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: #059669;">
+                    🎒 Required Hiking Gear
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem;">
+                    {% for gear in trek.gear_required %}
+                    <div style="padding: 0.5rem 0.75rem; background: var(--bg-subtle, #f8fafc); border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary, #1e293b); border-left: 3px solid #059669;">
+                        {{ gear }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="border-top: 1px solid var(--border-color, #f1f5f9); padding-top: 1rem; font-size: 0.85rem;">
+                    <div style="margin-bottom: 0.4rem;">
+                        <strong>Terrain:</strong> {{ trek.trail_type }}
+                    </div>
+                    <div style="margin-bottom: 0.4rem;">
+                        <strong>Best Travel Season:</strong> {{ trek.best_season }}
+                    </div>
+                    <div>
+                        <strong>Coordinates:</strong> {{ trek.coordinates.lat }}, {{ trek.coordinates.lng }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
