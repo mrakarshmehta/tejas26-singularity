@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.min.css') }}?v=10">
+{% endblock %}
+
+{% block content %}
+<section class="hy-light-login-wrapper">
+  <!-- Light Warm Travel Backdrop -->
+  <div class="hy-light-backdrop" aria-hidden="true">
+    <!-- Soft Warm Ambient Gradients -->
+    <div class="hy-light-blob blob-warm-1"></div>
+    <div class="hy-light-blob blob-warm-2"></div>
+
+    <!-- Bihar Map Watermark Silhouette (5-10% Opacity) -->
+    <div class="hy-bihar-watermark">
+      <svg viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M120 180 Q 200 120, 320 150 T 520 100 T 700 160 Q 750 250, 680 340 T 480 420 T 250 380 Q 100 320, 120 180 Z" fill="#FF7A18" opacity="0.04"/>
+      </svg>
+    </div>
+
+    <!-- Dotted Travel Route Vector Lines -->
+    <svg class="hy-light-route-svg" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M-50 150 C 350 350, 650 80, 950 450 C 1250 850, 1500 250, 1600 550" stroke="#FF7A18" stroke-width="2" stroke-dasharray="8 8" opacity="0.12"/>
+      <path d="M-80 650 C 380 250, 780 750, 1180 150" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.10"/>
+    </svg>
+
+    <!-- Subtle Floating Travel Pins -->
+    <div class="hy-light-pin pin-l1">📍</div>
+    <div class="hy-light-pin pin-l2">🏛️</div>
+    <div class="hy-light-pin pin-l3">🌿</div>
+    <div class="hy-light-pin pin-l4">🗺️</div>
+  </div>
+
+  <!-- Login Card Container -->
+  <div class="hy-light-card-container">
+    <div class="hy-light-card">
+
+      <!-- Header & Brand Logo -->
+      <div class="hy-light-brand-header">
+        <div class="hy-light-logo-icon">
+          <img src="{{ url_for('static', filename='logo-icon.svg') }}" alt="HiddenYatra Logo" width="44" height="44">
+        </div>
+        <h1 class="hy-light-title">
+          Hidden<span class="text-saffron">Yatra</span>
+          <span class="hy-saffron-badge">ADMIN</span>
+        </h1>
+        <p class="hy-light-subtitle">Sign in to manage Bihar travel destinations and content</p>
+      </div>
+
+      <!-- Login Form -->
+      <form method="POST" class="hy-light-form">
+        {{ csrf_input() }}
+
+        <div class="hy-light-group">
+          <div class="hy-light-label-row">
+            <label for="password" class="hy-light-label">Admin Master Password</label>
+            <span class="hy-light-secure-tag">🔒 SSL Encrypted</span>
+          </div>
+
+          <div class="hy-light-input-relative">
+            <input type="password" name="password" id="password" placeholder="Enter admin password..." class="hy-light-input" required autofocus autocomplete="off" data-lpignore="true" data-1p-ignore="true">
+            <button type="button" class="hy-light-pwd-btn" id="toggle-pwd-btn" title="Toggle password visibility">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full hy-light-submit-btn">
+          <span>Login to Admin Dashboard</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="hy-light-footer">
+        <a href="{{ url_for('main.index') }}" class="hy-light-back-link">
+          ← Back to Exploring Bihar
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleBtn = document.getElementById('toggle-pwd-btn');
+  const pwdInput = document.getElementById('password');
+  if (toggleBtn && pwdInput) {
+    toggleBtn.addEventListener('click', function() {
+      const type = pwdInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdInput.setAttribute('type', type);
+      toggleBtn.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+  }
+});
+</script>
+{% endblock %}
+
