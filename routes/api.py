@@ -931,3 +931,14 @@ def api_get_seasonal_phenomena():
         'count': len(phenomena),
         'phenomena': phenomena
     })
+
+@api_bp.route('/weather/alerts', methods=['GET'])
+def api_get_weather_emergency_alerts():
+    """JSON API returning lightning, flood, and fog emergency protocols and disaster helplines."""
+    from models.weather import get_all_weather_emergency_alerts
+    alerts = get_all_weather_emergency_alerts()
+    return jsonify({
+        'status': 'success',
+        'count': len(alerts),
+        'alerts': alerts
+    })
