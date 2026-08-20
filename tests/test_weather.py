@@ -82,3 +82,31 @@ class TestWeatherModelAndAPI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestSeasonalPhenomenaAndVisibility(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_seasonal_phenomena_database(self):
+        """Verify presence of fog, waterfall surge, and summer heatwave profiles."""
+        from models.weather import get_all_seasonal_phenomena, get_phenomena_by_month
+        phenomena = get_all_seasonal_phenomena()
+        self.assertGreaterEqual(len(phenomena), 3)
+
+        dec_phenom = get_phenomena_by_month('December')
+        self.assertGreaterEqual(len(dec_phenom), 1)
+        self.assertTrue(any('Fog' in p['name'] for p in dec_phenom))
+
+    def test_phenomena_api_endpoints(self):
+        """Test /api/v1/weather/phenomena endpoint."""
+        res = self.client.get('/api/v1/weather/phenomena?month=August')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 1)
+        self.assertTrue(any('Waterfall' in p['name'] for p in data['phenomena']))
