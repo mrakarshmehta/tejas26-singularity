@@ -26,3 +26,16 @@ HiddenYatra is an immersive digital tourism platform and PWA dedicated to uncove
 - **Frontend**: Vanilla JavaScript (ES6+), Vanilla CSS3 Design System, Responsive Layouts
 - **PWA**: Service Worker v6 with offline asset caching and navigation fallback
 - **Testing**: Python unittest suite covering contract tests, unit tests, and full ecosystem integration
+## v2.7.0 Features & New Subsystems
+
+HiddenYatra v2.7.0 brings 9 major cultural subsystems and full universal search integration:
+1. **Archaeology & Epigraphy Museum** (/archaeology, /numismatics): Mauryan Ashokan Brahmi pillars, Gupta gold dinars, and excavation timelines.
+2. **Weather & Microclimate Advisory** (/weather): 38 district normals, seasonal packing checklists, AQI ratings, and fog advisories.
+3. **Folk Performing Arts & Music** (/performing-arts): Bidesiya theater, Chhau dance, Kajari/Sohar chants, and traditional instrument gallery.
+4. **Certified Local Tour Guides** (/guides): Licensed ASI guides, multilingual storytellers, and zero-commission booking inquiries.
+5. **Eco-Trails & Hill Treks** (/treks): Mandar Hill, Rohtasgarh Plateau canyon expeditions, elevation profiles, and Leave No Trace rules.
+6. **GI Souvenirs & Artisan Crafts** (/souvenirs): Mithila Tussar silk, Bhagalpur weaves, golden Sikki grass, and village studio visits.
+7. **Ancient Intellectual Heritage** (/intellectual-heritage): Aryabhata, Chanakya, Nalanda 9-story library towers (Dharmaganja).
+8. **Trip Budget Planner** (/budget-planner): Multi-currency (7 currencies) cost calculator, itemized expense breakdowns, and tipping etiquette.
+9. **Heritage Trivia Quiz** (/quiz): Gamified cultural quiz bank, digital achievement badges, and verifiable certificates.
+10. **Universal Cross-Domain Search**: Instant unified search across all 12 cultural dimensions of Bihar.
