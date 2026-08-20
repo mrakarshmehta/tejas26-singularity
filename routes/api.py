@@ -1003,3 +1003,14 @@ def api_get_folk_guild_detail(guild_id):
         'status': 'success',
         'guild': guild
     })
+
+@api_bp.route('/performing-arts/seasons', methods=['GET'])
+def api_get_performance_seasons():
+    """JSON API returning seasonal performance windows, festival contexts, and key genres."""
+    from models.performing_arts import get_performance_seasons
+    seasons = get_performance_seasons()
+    return jsonify({
+        'status': 'success',
+        'count': len(seasons),
+        'seasons': seasons
+    })
