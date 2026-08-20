@@ -101,3 +101,49 @@ def compress_image_to_webp(file_obj, dest_folder, prefix='img',
         return None
 
     return filename if os.path.exists(filepath) else None
+
+
+def validate_dimensions(file_obj, min_w=50, min_h=50, max_w=8000, max_h=8000):
+    """Validate that image dimensions fall within permissible bounds.
+
+    Returns:
+        tuple (is_valid: bool, width: int, height: int)
+    """
+    if not file_obj:
+        return False, 0, 0
+    try:
+        pos = file_obj.tell() if hasattr(file_obj, 'tell') else 0
+        stream = getattr(file_obj, 'stream', file_obj)
+        img = Image.open(stream)
+        w, h = img.size
+        if hasattr(file_obj, 'seek'):
+            file_obj.seek(pos)
+        is_valid = (min_w <= w <= max_w) and (min_h <= h <= max_h)
+        return is_valid, w, h
+    except Exception:
+        return False, 0, 0
+
+
+def get_image_metadata(file_obj):
+    """Extract format, size, and mode metadata from an image stream.
+
+    Returns:
+        dict with format, width, height, mode, or empty dict on error.
+    """
+    if not file_obj:
+        return {}
+    try:
+        pos = file_obj.tell() if hasattr(file_obj, 'tell') else 0
+        stream = getattr(file_obj, 'stream', file_obj)
+        img = Image.open(stream)
+        meta = {
+            'format': img.format,
+            'width': img.width,
+            'height': img.height,
+            'mode': img.mode
+        }
+        if hasattr(file_obj, 'seek'):
+            file_obj.seek(pos)
+        return meta
+    except Exception:
+        return {}
