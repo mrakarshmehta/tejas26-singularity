@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Cultural Festivals & Heritage Fairs of Bihar — HiddenYatra{% endblock %}
+
+{% block content %}
+<div class="festivals-container" style="max-width:1200px;margin:40px auto;padding:0 20px;">
+
+  <!-- Hero Header -->
+  <div style="text-align:center;margin-bottom:40px;">
+    <div style="font-size:2.5rem;margin-bottom:8px;">🪔</div>
+    <h1 style="font-size:2.2rem;font-weight:800;color:var(--text-primary);margin-bottom:12px;">Seasonal Festivals & Heritage Fairs</h1>
+    <p style="color:var(--text-muted);font-size:1.1rem;max-width:720px;margin:0 auto 24px;">
+      Discover centuries-old traditions, solar worship rituals at holy river ghats, folk performing arts, and Asia's grandest historic fairs.
+    </p>
+
+    <!-- Month Filter Bar -->
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+      <a href="/festivals" class="btn btn-sm" style="padding:6px 14px;border-radius:18px;text-decoration:none;font-size:0.85rem;border:1px solid rgba(255,255,255,0.15);background:{% if not selected_month %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">All Year</a>
+      <a href="/festivals?month=5" class="btn btn-sm" style="padding:6px 14px;border-radius:18px;text-decoration:none;font-size:0.85rem;border:1px solid rgba(255,255,255,0.15);background:{% if selected_month == '5' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">May (Vesak)</a>
+      <a href="/festivals?month=7" class="btn btn-sm" style="padding:6px 14px;border-radius:18px;text-decoration:none;font-size:0.85rem;border:1px solid rgba(255,255,255,0.15);background:{% if selected_month == '7' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">Jul/Aug (Shravani)</a>
+      <a href="/festivals?month=10" class="btn btn-sm" style="padding:6px 14px;border-radius:18px;text-decoration:none;font-size:0.85rem;border:1px solid rgba(255,255,255,0.15);background:{% if selected_month == '10' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">Oct/Nov (Chhath Puja)</a>
+      <a href="/festivals?month=11" class="btn btn-sm" style="padding:6px 14px;border-radius:18px;text-decoration:none;font-size:0.85rem;border:1px solid rgba(255,255,255,0.15);background:{% if selected_month == '11' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">Nov (Sonepur Fair)</a>
+      <a href="/festivals?month=12" class="btn btn-sm" style="padding:6px 14px;border-radius:18px;text-decoration:none;font-size:0.85rem;border:1px solid rgba(255,255,255,0.15);background:{% if selected_month == '12' %}var(--accent-orange, #ff7a18){% else %}rgba(255,255,255,0.05){% endif %};color:#fff;">Dec (Rajgir Mahotsav)</a>
+    </div>
+  </div>
+
+  <!-- Festivals Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(350px, 1fr));gap:24px;">
+    {% for f in festivals %}
+    <div class="festival-card" style="background:var(--bg-card, #1e293b);border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+      <div style="padding:24px;flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:2rem;">{{ f.icon }}</span>
+          <span style="font-size:0.75rem;padding:4px 10px;border-radius:12px;background:rgba(255,122,24,0.15);color:var(--accent-orange, #ff7a18);font-weight:700;">{{ f.category }}</span>
+        </div>
+
+        <h2 style="font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:8px;">{{ f.name }}</h2>
+        <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <span>🗓️ {{ f.month_name }}</span> • <span>⏱️ {{ f.duration_days }} Days</span>
+        </div>
+
+        <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.55;margin-bottom:16px;">{{ f.significance }}</p>
+
+        <div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:12px;margin-bottom:14px;">
+          <div style="font-size:0.75rem;color:var(--accent-orange, #ff7a18);font-weight:700;text-transform:uppercase;margin-bottom:4px;">💡 Visitor Insight</div>
+          <div style="font-size:0.85rem;color:#cbd5e1;line-height:1.4;">{{ f.visitor_tips }}</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 24px;background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.8rem;color:var(--text-muted);">📍 {{ f.region }}</span>
+        <a href="/explore-map?q={{ f.name }}" class="btn btn-sm btn-primary" style="font-size:0.82rem;padding:6px 14px;border-radius:8px;text-decoration:none;background:var(--accent-orange, #ff7a18);color:#fff;font-weight:600;">Explore Locations →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
