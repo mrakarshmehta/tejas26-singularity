@@ -61,3 +61,75 @@ TRAVEL_TIERS_DB = {
         "dining_type": "Fine Dining Bihari Royal Cuisine & Gourmet Experiences"
     }
 }
+
+def get_all_currencies():
+    """Return supported currencies and conversion rates."""
+    return CURRENCY_RATES_DB
+
+def get_all_travel_tiers():
+    """Return all budget tiers and itemized category breakdown templates."""
+    return TRAVEL_TIERS_DB
+
+def convert_currency(amount_inr, target_currency="INR"):
+    """Convert an amount in INR to target currency."""
+    curr = target_currency.upper().strip() if target_currency else "INR"
+    if curr not in CURRENCY_RATES_DB:
+        curr = "INR"
+
+    rate = CURRENCY_RATES_DB[curr]["rate_to_inr"]
+    converted_value = round(amount_inr / rate, 2)
+    return {
+        "currency": curr,
+        "symbol": CURRENCY_RATES_DB[curr]["symbol"],
+        "amount": converted_value,
+        "amount_inr": amount_inr
+    }
+
+def calculate_trip_budget(tier="heritage", days=3, travelers=2, currency="INR"):
+    """Calculate comprehensive itemized trip budget for given duration, travelers, and tier."""
+    t_key = tier.lower().strip() if tier else "heritage"
+    if t_key not in TRAVEL_TIERS_DB:
+        t_key = "heritage"
+
+    t_data = TRAVEL_TIERS_DB[t_key]
+    d_count = max(1, min(30, int(days) if str(days).isdigit() else 3))
+    tr_count = max(1, min(20, int(travelers) if str(travelers).isdigit() else 2))
+
+    daily_base_inr = t_data["daily_rate_inr"]
+    total_inr = daily_base_inr * d_count * tr_count
+
+    # Itemized total calculation
+    itemized_totals_inr = {}
+    for cat, daily_cat_cost in t_data["breakdown_inr"].items():
+        itemized_totals_inr[cat] = daily_cat_cost * d_count * tr_count
+
+    curr_key = currency.upper().strip() if currency else "INR"
+    if curr_key not in CURRENCY_RATES_DB:
+        curr_key = "INR"
+
+    rate = CURRENCY_RATES_DB[curr_key]["rate_to_inr"]
+    sym = CURRENCY_RATES_DB[curr_key]["symbol"]
+
+    itemized_converted = {}
+    for cat, amt_inr in itemized_totals_inr.items():
+        itemized_converted[cat] = {
+            "amount": round(amt_inr / rate, 2),
+            "amount_inr": amt_inr
+        }
+
+    return {
+        "tier": t_key,
+        "tier_name": t_data["tier_name"],
+        "days": d_count,
+        "travelers": tr_count,
+        "currency": curr_key,
+        "currency_symbol": sym,
+        "total_amount": round(total_inr / rate, 2),
+        "total_amount_inr": total_inr,
+        "daily_per_person": round(daily_base_inr / rate, 2),
+        "daily_per_person_inr": daily_base_inr,
+        "itemized_breakdown": itemized_converted,
+        "stay_type": t_data["stay_type"],
+        "transit_type": t_data["transit_type"],
+        "dining_type": t_data["dining_type"]
+    }
