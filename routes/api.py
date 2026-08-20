@@ -1075,3 +1075,14 @@ def api_inquire_guide():
         'inquiry_id': inquiry_id,
         'guide_slug': guide_slug
     })
+
+@api_bp.route('/guides/ethics', methods=['GET'])
+def api_get_guide_ethics():
+    """JSON API returning certified tour guide code of ethics and traveler safety standards."""
+    from models.guides import get_guide_ethics_standards
+    standards = get_guide_ethics_standards()
+    return jsonify({
+        'status': 'success',
+        'count': len(standards),
+        'standards': standards
+    })
