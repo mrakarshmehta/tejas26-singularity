@@ -123,3 +123,58 @@ GASTRONOMY_DISHES_DB = [
         ]
     }
 ]
+
+CULINARY_TRAILS = [
+    {
+        "id": "trail-magadha-sweets",
+        "title": "Grand Magadha Sweetmeat & Savory Trail",
+        "region": "Patna - Maner - Nalanda - Gaya",
+        "duration_days": 2,
+        "dishes_included": ["Litti Chokha", "Maner Ka Laddu", "Silao Khaja", "Gaya Tilkut"],
+        "highlights": "Explore 2,000-year-old culinary traditions from the banks of the Sone River to the holy lanes of Ramna."
+    },
+    {
+        "id": "trail-mithila-royal",
+        "title": "Mithilanchal Royal Flavors & Makhana Trail",
+        "region": "Darbhanga - Madhubani",
+        "duration_days": 2,
+        "dishes_included": ["Mithila Makhana Kheer", "Maachh Bhaat", "Tilkut", "Anarsa"],
+        "highlights": "Savor authentic lotus-seed puddings and sweet delicacies of the ancient Videha kingdom."
+    }
+]
+
+def get_all_dishes():
+    """Return all cataloged traditional Bihar dishes and delicacies."""
+    return GASTRONOMY_DISHES_DB
+
+def get_dish_by_slug(slug):
+    """Retrieve dish details by slug."""
+    if not slug:
+        return None
+    s = slug.lower().strip()
+    for d in GASTRONOMY_DISHES_DB:
+        if d["slug"] == s or d["id"] == s:
+            return d
+    return None
+
+def get_dishes_by_district(district):
+    """Filter dishes by origin district."""
+    if not district or district.lower() == 'all':
+        return GASTRONOMY_DISHES_DB
+    d_clean = district.lower().strip()
+    return [d for d in GASTRONOMY_DISHES_DB if d_clean in d["origin_district"].lower() or d["origin_district"] == "All Bihar"]
+
+def get_dishes_by_dietary(tag):
+    """Filter dishes by dietary preferences (e.g. Vegan, Gluten-Free)."""
+    if not tag or tag.lower() == 'all':
+        return GASTRONOMY_DISHES_DB
+    t_clean = tag.lower().strip()
+    return [d for d in GASTRONOMY_DISHES_DB if any(t_clean in dt.lower() for dt in d.get("dietary_tags", []))]
+
+def get_gi_tagged_dishes():
+    """Return only GI-certified food items."""
+    return [d for d in GASTRONOMY_DISHES_DB if d.get("gi_status")]
+
+def get_culinary_trails():
+    """Return curated regional gastronomy trail itineraries."""
+    return CULINARY_TRAILS
