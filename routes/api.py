@@ -787,3 +787,49 @@ def api_universal_search():
         'count': len(results),
         'results': results
     })
+
+@api_bp.route('/archaeology/sites', methods=['GET'])
+def api_get_archaeological_sites():
+    """JSON API returning ancient excavation sites, Ashokan pillars, and epigraphy."""
+    from models.archaeology import get_all_archaeological_sites, get_sites_by_district, get_sites_by_period, get_ashokan_edicts
+    district = request.args.get('district')
+    period = request.args.get('period')
+    ashokan_only = request.args.get('ashokan', '').lower() in ['1', 'true', 'yes']
+
+    if ashokan_only:
+        sites = get_ashokan_edicts()
+    elif district:
+        sites = get_sites_by_district(district)
+    elif period:
+        sites = get_sites_by_period(period)
+    else:
+        sites = get_all_archaeological_sites()
+
+    return jsonify({
+        'status': 'success',
+        'count': len(sites),
+        'sites': sites
+    })
+
+
+@api_bp.route('/archaeology/sites/<slug>', methods=['GET'])
+def api_get_archaeological_site_detail(slug):
+    """JSON API returning excavation highlights, script, and museum preservation for a site."""
+    from models.archaeology import get_site_by_slug
+    site = get_site_by_slug(slug)
+    if not site:
+        return jsonify({'status': 'not_found', 'message': f'Archaeological site not found: {slug}'}), 404
+    return jsonify({
+        'status': 'success',
+        'site': site
+    })
+
+
+@api_bp.route('/archaeology/chronology', methods=['GET'])
+def api_get_epigraphy_chronology():
+    """JSON API returning chronological historical eras and primary scripts."""
+    from models.archaeology import get_epigraphy_chronology
+    return jsonify({
+        'status': 'success',
+        'chronology': get_epigraphy_chronology()
+    })
