@@ -1903,3 +1903,34 @@ body.is-offline::before {
     border: 1px solid #000 !important;
   }
 }
+/* Virtual 360 Panoramas & Hotspot Styling */
+.pano-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+}
+.pano-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary, #0284c7);
+}
+.hs-pin:hover {
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 0 0 25px rgba(239, 68, 68, 1);
+}
+
+/* Gastronomy & Food Trails Styling */
+.gastronomy-dish-card {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.gastronomy-dish-card:hover {
+  transform: translateY(-3px);
+  border-color: #d97706;
+}
+
+/* Wildlife & Safari Badges */
+.wildlife-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.wildlife-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -5px rgba(6, 78, 59, 0.15);
+}
