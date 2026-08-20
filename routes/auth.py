@@ -407,3 +407,18 @@ def profile():
                            favorites=favorites,
                            visited=visited,
                            submissions=submissions)
+
+
+def validate_password_strength(password):
+    """Validate password meets minimum complexity requirements.
+
+    Returns:
+        tuple (is_valid: bool, reason: str or None)
+    """
+    if not password or len(password) < 8:
+        return False, "Password must be at least 8 characters long."
+    has_digit = any(c.isdigit() for c in password)
+    has_alpha = any(c.isalpha() for c in password)
+    if not (has_digit and has_alpha):
+        return False, "Password must contain both letters and numbers."
+    return True, None
