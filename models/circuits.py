@@ -122,3 +122,40 @@ def get_circuit_places(slug):
     if not circuit:
         return []
     return circuit.get('stops', [])
+
+
+def calculate_circuit_metrics(circuit_slug):
+    """Calculate aggregated metrics for a circuit including average travel per day and stops count."""
+    circuit = get_circuit_by_slug(circuit_slug)
+    if not circuit:
+        return None
+    
+    stops = circuit.get('stops', [])
+    num_stops = len(stops)
+    duration_days = max(1, circuit.get('duration_days', 1))
+    total_km = circuit.get('total_distance_km', 0)
+    
+    avg_km_per_day = round(total_km / duration_days, 1)
+    stops_per_day = round(num_stops / duration_days, 1)
+
+    return {
+        'slug': circuit['slug'],
+        'title': circuit['title'],
+        'total_stops': num_stops,
+        'duration_days': duration_days,
+        'total_distance_km': total_km,
+        'avg_km_per_day': avg_km_per_day,
+        'stops_per_day': stops_per_day,
+        'suggested_transport': 'Private Cab / State Tourist Bus' if total_km > 200 else 'Auto / Local Cab'
+    }
+
+
+def filter_circuits_by_theme(theme_query):
+    """Filter circuits by matching theme keywords (e.g. spiritual, nature, history)."""
+    if not theme_query:
+        return BIHAR_THEMATIC_CIRCUITS
+    query = theme_query.strip().lower()
+    return [
+        c for c in BIHAR_THEMATIC_CIRCUITS
+        if query in c['theme'].lower() or query in c['title'].lower() or query in c['description'].lower()
+    ]
