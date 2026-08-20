@@ -1,0 +1,166 @@
+/* ═══════════════════════════════════════════════════════════════════
+   HiddenYatra — Mode Dock (Map Style Selector)
+   Floating bottom dock for switching visual map modes.
+   Uses HiddenYatra's glassmorphism design language.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Dock Container ───────────────────────────────── */
+
+.hy-mode-dock {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  pointer-events: auto;
+}
+
+.hy-mode-dock-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(15, 15, 20, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+/* ── Mode Pill Buttons ────────────────────────────── */
+
+.hy-mode-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+  min-height: 36px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hy-mode-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.hy-mode-pill:focus-visible {
+  outline: 2px solid var(--primary, #ff7a18);
+  outline-offset: 2px;
+}
+
+/* ── Active State ─────────────────────────────────── */
+
+.hy-mode-pill.active {
+  background: rgba(255, 122, 24, 0.15);
+  color: #fff;
+  border-color: rgba(255, 122, 24, 0.6);
+  box-shadow: 0 0 12px rgba(255, 122, 24, 0.15);
+}
+
+.hy-mode-pill.active .hy-mode-pill-label {
+  color: #ff7a18;
+}
+
+/* ── Icon & Label ─────────────────────────────────── */
+
+.hy-mode-pill-icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.hy-mode-pill-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+/* ── Responsive: Tablet ───────────────────────────── */
+
+@media (max-width: 900px) {
+  .hy-mode-dock {
+    bottom: 20px;
+  }
+
+  .hy-mode-dock-inner {
+    gap: 4px;
+    padding: 5px 8px;
+  }
+
+  .hy-mode-pill {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .hy-mode-pill-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* ── Responsive: Mobile ───────────────────────────── */
+
+@media (max-width: 640px) {
+  .hy-mode-dock {
+    bottom: 60px; /* Above mobile control bar */
+    left: 8px;
+    right: 8px;
+    transform: none;
+    width: auto;
+  }
+
+  .hy-mode-dock-inner {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 5px;
+    padding: 5px 8px;
+    justify-content: flex-start;
+  }
+
+  .hy-mode-dock-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hy-mode-pill {
+    min-height: 40px;
+    min-width: 44px; /* Touch-friendly minimum */
+    padding: 6px 12px;
+    flex-shrink: 0;
+  }
+}
+
+/* ── Fullscreen Adjustment ────────────────────────── */
+
+.is-fullscreen .hy-mode-dock {
+  bottom: 28px;
+}
+
+@media (max-width: 640px) {
+  .is-fullscreen .hy-mode-dock {
+    bottom: 60px;
+  }
+}
+
+/* ── 3D Active: Shift dock left to avoid 3D HUD ──── */
+
+.hy-mode-dock.hy-mode-dock--3d {
+  /* When 3D HUD controls are visible on the right, the dock stays centered
+     because the HUD is positioned absolutely and doesn't overlap */
+}

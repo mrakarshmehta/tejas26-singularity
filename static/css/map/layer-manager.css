@@ -1,0 +1,559 @@
+/* ═══════════════════════════════════════════════════════════════════
+   HiddenYatra — Layer Manager Panel & Drawer Styles (Phase 2A)
+   Premium dark glassmorphic slide-out drawer matching HiddenYatra UI
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Backdrop Overlay ──────────────────────────────── */
+.hy-lm-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1150;
+  background: rgba(10, 15, 29, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hy-lm-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Sliding Drawer Container ──────────────────────── */
+.hy-layer-manager {
+  position: absolute;
+  top: 0;
+  right: -380px;
+  width: 360px;
+  max-width: 90vw;
+  height: 100%;
+  z-index: 1200;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-left: 1px solid rgba(255, 122, 24, 0.25);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+  transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-body, 'Inter', -apple-system, sans-serif);
+  color: #f1f5f9;
+}
+
+.hy-layer-manager.open {
+  right: 0;
+}
+
+/* ── Header ───────────────────────────────────────── */
+.hy-lm-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px 14px;
+  background: rgba(15, 23, 42, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.hy-lm-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hy-lm-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hy-lm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.hy-lm-total-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 122, 24, 0.18);
+  color: #FF7A18;
+  border: 1px solid rgba(255, 122, 24, 0.35);
+  letter-spacing: 0.02em;
+}
+
+.hy-lm-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hy-lm-close:hover,
+.hy-lm-close:focus-visible {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+  outline: none;
+}
+
+/* ── Real-Time Search Bar ─────────────────────────── */
+.hy-lm-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.hy-lm-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 13px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.hy-lm-search-input {
+  width: 100%;
+  padding: 8px 32px 8px 34px;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.hy-lm-search-input:focus {
+  border-color: #FF7A18;
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.2);
+}
+
+.hy-lm-search-input::placeholder {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.hy-lm-search-clear {
+  position: absolute;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #94a3b8;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.hy-lm-search-clear:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* ── Quick Action Toolbar ─────────────────────────── */
+.hy-lm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hy-lm-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.hy-lm-action-btn:hover {
+  background: rgba(255, 122, 24, 0.15);
+  border-color: rgba(255, 122, 24, 0.35);
+  color: #FF7A18;
+}
+
+.hy-lm-action-btn:focus-visible {
+  outline: 2px solid #FF7A18;
+  outline-offset: 1px;
+}
+
+.hy-lm-action-icon {
+  font-size: 11px;
+}
+
+/* ── Scrollable Body ──────────────────────────────── */
+.hy-lm-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 122, 24, 0.3) transparent;
+}
+
+.hy-lm-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.hy-lm-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hy-lm-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 122, 24, 0.3);
+  border-radius: 10px;
+}
+
+/* ── Accordion Group Sections ─────────────────────── */
+.hy-lm-accordion-group {
+  margin-bottom: 12px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.hy-lm-accordion-group:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.hy-lm-group-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.hy-lm-group-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hy-lm-group-header:focus-visible {
+  outline: 2px solid #FF7A18;
+  outline-offset: -2px;
+}
+
+.hy-lm-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hy-lm-group-icon {
+  font-size: 15px;
+}
+
+.hy-lm-group-text {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+}
+
+.hy-lm-group-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hy-lm-group-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.hy-lm-chevron {
+  font-size: 12px;
+  color: #64748b;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hy-lm-group-header[aria-expanded="false"] .hy-lm-chevron {
+  transform: rotate(-90deg);
+}
+
+.hy-lm-group-content {
+  padding: 2px 12px 10px;
+  display: block;
+}
+
+/* ── Layer Items & Switches ───────────────────────── */
+.hy-lm-item-container {
+  margin-bottom: 2px;
+}
+
+.hy-lm-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.hy-lm-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.hy-lm-switch-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex: 1;
+  user-select: none;
+}
+
+.hy-lm-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.hy-lm-name {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #cbd5e1;
+  transition: color 0.2s;
+}
+
+.hy-lm-name.is-parent-name {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.hy-lm-item:hover .hy-lm-name {
+  color: #ffffff;
+}
+
+.hy-lm-badge-3d {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #FF7A18, #ff5722);
+  color: white;
+  letter-spacing: 0.04em;
+  margin-left: 4px;
+}
+
+/* ── Custom Toggle Switch ─────────────────────────── */
+.hy-lm-switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.hy-lm-switch-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.hy-lm-slider-mark {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(71, 85, 105, 0.6);
+  border-radius: 20px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hy-lm-slider-mark:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #cbd5e1;
+  border-radius: 50%;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.hy-lm-switch-input:checked + .hy-lm-slider-mark {
+  background-color: #FF7A18;
+  border-color: #FF7A18;
+  box-shadow: 0 0 10px rgba(255, 122, 24, 0.4);
+}
+
+.hy-lm-switch-input:checked + .hy-lm-slider-mark:before {
+  transform: translateX(16px);
+  background-color: #ffffff;
+}
+
+.hy-lm-switch-input:focus-visible + .hy-lm-slider-mark {
+  outline: 2px solid #FF7A18;
+  outline-offset: 2px;
+}
+
+/* ── Hierarchical Children ────────────────────────── */
+.hy-lm-children-wrapper {
+  padding-left: 20px;
+  margin-left: 10px;
+  border-left: 1.5px solid rgba(255, 122, 24, 0.25);
+  margin-top: 2px;
+  margin-bottom: 6px;
+  transition: opacity 0.25s, filter 0.25s;
+}
+
+.hy-lm-children-wrapper.is-disabled {
+  opacity: 0.38;
+  pointer-events: none;
+  filter: grayscale(80%);
+}
+
+.hy-lm-child-item {
+  padding: 5px 8px;
+}
+
+.hy-lm-child-item .hy-lm-name {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+/* ── Footer ───────────────────────────────────────── */
+.hy-lm-footer {
+  padding: 12px 20px;
+  background: rgba(15, 23, 42, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.hy-lm-footer-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hy-lm-dot-active {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.hy-lm-footer-text {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Responsive & Mobile Viewport ─────────────────── */
+@media (max-width: 768px) {
+  .hy-layer-manager {
+    top: auto;
+    bottom: -100%;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 82vh;
+    border-left: none;
+    border-top: 2px solid rgba(255, 122, 24, 0.35);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+    transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hy-layer-manager.open {
+    bottom: 0;
+    right: 0;
+  }
+
+  .hy-lm-header {
+    padding: 14px 16px 12px;
+  }
+
+  .hy-lm-body {
+    padding: 10px 14px 16px;
+    max-height: calc(82vh - 150px);
+  }
+
+  /* 44px minimum touch target for mobile */
+  .hy-lm-item {
+    padding: 8px 10px;
+    min-height: 44px;
+  }
+
+  .hy-lm-action-btn {
+    min-height: 38px;
+  }
+}
+
+/* ── Toolbar Button Badge ─────────────────────────── */
+.hy-layers-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #FF7A18;
+  color: #ffffff;
+  margin-left: 4px;
+  box-shadow: 0 0 8px rgba(255, 122, 24, 0.5);
+  line-height: 1;
+}

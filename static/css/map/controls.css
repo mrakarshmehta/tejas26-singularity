@@ -1,0 +1,217 @@
+/* ═══════════════════════════════════════════════════════════════════
+   HiddenYatra — 3D Controls & Transition Styles
+   Floating 3D controls, loading overlay, toast, and transitions
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── MapLibre Canvas ──────────────────────────────── */
+.hy-maplibre-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+/* ── 3D Toggle Button ─────────────────────────────── */
+.hy-3d-btn {
+  position: relative;
+}
+
+.hy-3d-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  color: white !important;
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.4) !important;
+}
+
+.hy-3d-btn.active .btn-icon {
+  animation: hyTerrainPulse 2s infinite;
+}
+
+/* ── Floating 3D Controls Bar ─────────────────────── */
+.hy-3d-controls {
+  position: absolute;
+  bottom: 80px;
+  right: 16px;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 14px;
+  padding: 10px 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.hy-3d-ctrl-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+.hy-3d-ctrl-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+}
+
+.hy-3d-pitch-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+.hy-3d-pitch-label {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.hy-3d-pitch-value {
+  font-size: 0.75rem;
+  color: #6366f1;
+  font-weight: 800;
+  font-family: var(--font-heading, 'Poppins', sans-serif);
+}
+
+/* ── Loading Overlay ──────────────────────────────── */
+.hy-map-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hy-map-loading-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.hy-map-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: hySpinLoader 0.8s linear infinite;
+}
+
+.hy-map-loading-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  font-family: var(--font-heading, 'Poppins', sans-serif);
+}
+
+.hy-map-loading-sub {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+/* ── MapLibre Popup Override ──────────────────────── */
+.hy-3d-popup .maplibregl-popup-content {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+}
+
+.hy-3d-popup .maplibregl-popup-close-button {
+  color: #94a3b8;
+  font-size: 18px;
+  padding: 4px 8px;
+}
+
+.hy-3d-popup .maplibregl-popup-close-button:hover {
+  color: #ef4444;
+  background: transparent;
+}
+
+.hy-3d-popup .maplibregl-popup-tip {
+  border-top-color: rgba(15, 23, 42, 0.95);
+}
+
+/* ── Marker Popup (Shared Style) ──────────────────── */
+.hy-marker-popup h4 {
+  color: #f1f5f9;
+}
+
+/* ── Keyframe Animations ──────────────────────────── */
+@keyframes hySpinLoader {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hyTerrainPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes hyMarkerPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+@keyframes hyUserPulse {
+  0% { box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.2); }
+  100% { box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2); }
+}
+
+@keyframes hyToastIn {
+  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 640px) {
+  .hy-3d-controls {
+    bottom: 120px;
+    right: 8px;
+    padding: 8px 6px;
+  }
+
+  .hy-3d-ctrl-btn {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+
+  .hy-map-loading-text {
+    font-size: 0.9rem;
+  }
+}
