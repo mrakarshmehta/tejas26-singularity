@@ -97,3 +97,29 @@ class TestArtisanWorkshops(unittest.TestCase):
         data = res.get_json()
         self.assertEqual(data['status'], 'success')
         self.assertGreaterEqual(data['count'], 2)
+
+class TestAuthenticityChecklist(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
+        cls.client = cls.app.test_client()
+
+    def test_authenticity_checklist_data(self):
+        """Verify craft authenticity checklist criteria."""
+        from models.souvenirs import get_authenticity_checklist
+        checklist = get_authenticity_checklist()
+        self.assertGreaterEqual(len(checklist), 3)
+        crafts = [c['craft_type'] for c in checklist]
+        self.assertTrue(any('Mithila' in cr for cr in crafts))
+        self.assertTrue(any('Silk' in cr for cr in crafts))
+
+    def test_authenticity_api(self):
+        """Test /api/v1/souvenirs/authenticity endpoint."""
+        res = self.client.get('/api/v1/souvenirs/authenticity')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data['status'], 'success')
+        self.assertGreaterEqual(data['count'], 3)
