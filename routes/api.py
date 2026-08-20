@@ -1155,3 +1155,14 @@ def api_get_eco_campsites():
         'count': len(campsites),
         'campsites': campsites
     })
+
+@api_bp.route('/treks/fitness', methods=['GET'])
+def api_get_trek_fitness():
+    """JSON API returning difficulty grading criteria and trail preparation guide."""
+    from models.treks import get_trek_fitness_levels
+    levels = get_trek_fitness_levels()
+    return jsonify({
+        'status': 'success',
+        'count': len(levels),
+        'fitness_levels': levels
+    })
