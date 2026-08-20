@@ -33,3 +33,15 @@ This document provides a detailed breakdown of all code changes, root causes, fi
 - **Affected Files**: `tests/test_community.py`, `tests/test_reviews.py`, `tests/test_user_photos.py`, `tests/test_wishlist.py`.
 - **Fix Applied**: Created 4 new test files extending `unittest.TestCase`.
 - **Verification**: Executed `python -m unittest discover tests` — **106 tests passed**.
+
+## 6. Smart Nearby Save State Synchronization (`FIX-06`)
+- **Root Cause**: `.catch()` handler in `SNS.toggleSave()` toggled the star saved class even when network or API request failed.
+- **Affected Files**: `static/js/smart-nearby.js`, `static/js/smart-nearby.min.js`, `routes/wishlist.py`, `static/css/smart-nearby.css`.
+- **Fix Applied**: Added HTTP response status validation, standardized `/wishlist/<id>/toggle` endpoint, added debouncing and loading state, and removed failure-side toggles.
+- **Verification**: Executed contract unit tests in `tests/test_smart_nearby.py` and `tests/test_wishlist.py`.
+
+## 7. WebP Pre-Compression & Image Orientation (`FIX-07`)
+- **Root Cause**: Mobile photos uploaded with EXIF orientation tags appeared rotated; uncompressed PNG/JPEG files caused excessive bandwidth usage.
+- **Affected Files**: `utils/image.py`, `routes/community.py`, `routes/user_photos.py`, `routes/host.py`, `static/js/app.js`.
+- **Fix Applied**: Added `ImageOps.exif_transpose()`, `compress_image_to_webp()`, `validate_dimensions()`, and HTML5 Canvas pre-compression utility.
+- **Verification**: Added automated test coverage in `tests/test_utils.py`.
