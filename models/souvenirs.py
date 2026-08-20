@@ -128,3 +128,28 @@ def get_souvenirs_by_category(cat):
 def get_fair_trade_shopping_guidelines():
     """Return fair-trade ethical buying principles."""
     return FAIR_TRADE_GUIDELINES
+
+ARTISAN_WORKSHOPS_DB = [
+    {
+        "id": "workshop-jitwarpur-kala-gram",
+        "name": "Jitwarpur Mithila Painting Master Artisan Village",
+        "district": "Madhubani",
+        "craft": "Madhubani / Mithila Painting",
+        "visiting_hours": "09:00 AM - 05:00 PM (Daily)",
+        "activities": ["Live pigment grinding demonstrations", "Interactive brush & bamboo nib workshops", "Direct artist studio visits"],
+        "cooperative_contact": "Jitwarpur Shilp Samiti / Gram Panchayat"
+    },
+    {
+        "id": "workshop-nathnagar-silk-cluster",
+        "name": "Nathnagar Pit-Loom Silk Weavers Guild",
+        "district": "Bhagalpur",
+        "craft": "Bhagalpuri Ahimsa Tussar Weaving",
+        "visiting_hours": "10:00 AM - 04:30 PM (Closed Sundays)",
+        "activities": ["Silk cocoon spinning demonstrations", "Pit-loom jacquard weaving observation", "Certified pure silk yarn testing"],
+        "cooperative_contact": "Bhagalpur Silk Weavers Union, Nathnagar"
+    }
+]
+
+def get_all_artisan_workshops():
+    """Return verified artisan craft villages and workshop visit destinations."""
+    return ARTISAN_WORKSHOPS_DB
