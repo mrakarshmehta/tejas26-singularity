@@ -63,5 +63,25 @@ class TestDecoratorExits(unittest.TestCase):
         self.assertTrue(callable(get_session_id))
 
 
+def test_image_dimension_validation(self):
+        """Test validate_dimensions utility with in-memory test image."""
+        import io
+        from PIL import Image
+        from utils.image import validate_dimensions, get_image_metadata
+
+        img_buf = io.BytesIO()
+        img = Image.new('RGB', (300, 200), color='red')
+        img.save(img_buf, format='JPEG')
+        img_buf.seek(0)
+
+        is_valid, w, h = validate_dimensions(img_buf, min_w=100, min_h=100)
+        self.assertTrue(is_valid)
+        self.assertEqual(w, 300)
+        self.assertEqual(h, 200)
+
+        meta = get_image_metadata(img_buf)
+        self.assertEqual(meta.get('format'), 'JPEG')
+        self.assertEqual(meta.get('width'), 300)
+
 if __name__ == '__main__':
     unittest.main()
