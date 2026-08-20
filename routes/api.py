@@ -1280,3 +1280,14 @@ def api_get_classical_treatises():
         'count': len(treatises),
         'treatises': treatises
     })
+
+@api_bp.route('/scholars/nalanda-library', methods=['GET'])
+def api_get_nalanda_library_towers():
+    """JSON API returning Nalanda's 9-story Dharmaganja library towers (Ratnasagara, Ratnodadhi, Ratnaranjaka)."""
+    from models.intellectual_heritage import get_nalanda_library_towers
+    towers = get_nalanda_library_towers()
+    return jsonify({
+        'status': 'success',
+        'count': len(towers),
+        'towers': towers
+    })
