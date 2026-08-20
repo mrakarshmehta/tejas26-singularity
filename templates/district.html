@@ -416,6 +416,7 @@
           <span class="dist-sort-label">Sort by:</span>
           <select id="dist-sort-select" class="dist-sort-select">
             <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>🔥 Most Popular</option>
+            <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>⭐ Highest Rated</option>
             <option value="name" {% if sort_by == 'name' %}selected{% endif %}>🔤 Alphabetical (A-Z)</option>
             <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>🆕 Recently Added</option>
             <option value="nearest">📍 Nearest (Location)</option>
