@@ -117,3 +117,27 @@ def remove_itinerary_item(itinerary_id, item_index):
 
 
 
+
+
+def get_pacing_config(pace='balanced'):
+    """Return pacing preferences: slots per day, max travel distance km, rest duration min."""
+    pacing_presets = {
+        'relaxed': {'places_per_day': 2, 'max_distance_km': 40, 'rest_minutes': 90, 'label': 'Relaxed & Leisurely'},
+        'balanced': {'places_per_day': 3, 'max_distance_km': 80, 'rest_minutes': 60, 'label': 'Balanced Explorer'},
+        'fast': {'places_per_day': 5, 'max_distance_km': 150, 'rest_minutes': 30, 'label': 'Fast-Paced & Intensive'}
+    }
+    return pacing_presets.get(pace, pacing_presets['balanced'])
+
+
+def calculate_daily_slots(total_days, pace='balanced'):
+    """Compute daily place allocation slots for trip duration."""
+    config = get_pacing_config(pace)
+    slots = []
+    for day in range(1, total_days + 1):
+        slots.append({
+            'day': day,
+            'max_places': config['places_per_day'],
+            'target_distance_km': config['max_distance_km'],
+            'pace_label': config['label']
+        })
+    return slots
