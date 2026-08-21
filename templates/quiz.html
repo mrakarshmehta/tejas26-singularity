@@ -112,7 +112,10 @@ function claimCertificate() {
 
     fetch('/api/v1/quiz/certificate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': window.HY_CSRF_TOKEN || '{{ csrf_token() }}'
+        },
         body: JSON.stringify({ name: name, score: score, total: total, badge: badge })
     })
     .then(function(res) { return res.json(); })
@@ -141,7 +144,10 @@ function submitQuiz(e) {
 
     fetch('/api/v1/quiz/evaluate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': window.HY_CSRF_TOKEN || '{{ csrf_token() }}'
+        },
         body: JSON.stringify({ answers: answers })
     })
     .then(function(res) { return res.json(); })

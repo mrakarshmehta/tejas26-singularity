@@ -147,3 +147,73 @@ class TestPasswordSecurity(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
+
+
+class TestApiCSRFProtection(unittest.TestCase):
+    """Test CSRF protection on API POST endpoints."""
+
+    @classmethod
+    def setUpClass(cls):
+        from flask import Flask
+        from routes.api import api_bp
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-security-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-security-secret-key'
+        cls.app.register_blueprint(api_bp, url_prefix='/api')
+        cls.client = cls.app.test_client()
+
+    def test_post_endpoints_reject_missing_csrf(self):
+        """Verify that unprotected POST requests without CSRF token receive 403."""
+        endpoints = [
+            ('/api/eco/pledge', {'name': 'Test', 'email': 'test@example.com'}),
+            ('/api/volunteer/apply', {'name': 'Test', 'email': 'test@example.com', 'phone': '1234567890'}),
+            ('/api/guides/inquire', {'name': 'Test', 'email': 'test@example.com', 'phone': '1234567890'}),
+            ('/api/quiz/evaluate', {'answers': {}}),
+            ('/api/quiz/certificate', {'name': 'Test', 'score': 5, 'total': 6}),
+            ('/api/budget/calculate', {'tier': 'heritage', 'days': 3, 'travelers': 2})
+        ]
+        for url, payload in endpoints:
+            res = self.client.post(url, json=payload)
+            self.assertEqual(res.status_code, 403, f"Endpoint {url} should require CSRF token")
+
+    def test_budget_get_endpoint_untouched(self):
+        """Verify GET /api/budget/calculate works without CSRF."""
+        res = self.client.get('/api/budget/calculate?tier=heritage&days=3&travelers=2')
+        self.assertEqual(res.status_code, 200)
+
+    def test_post_endpoints_accept_valid_csrf(self):
+        """Verify POST requests with valid session and X-CSRF-Token succeed."""
+        with self.client.session_transaction() as sess:
+            sess['_csrf_token'] = 'valid-test-token-xyz'
+        headers = {'X-CSRF-Token': 'valid-test-token-xyz'}
+        res = self.client.post(
+            '/api/budget/calculate',
+            json={'tier': 'heritage', 'days': 3, 'travelers': 2},
+            headers=headers
+        )
+        self.assertEqual(res.status_code, 200)
+
+
+class TestMultiWorkerRateLimiter(unittest.TestCase):
+    """Test multi-worker rate limiter store, rate check, and rate record."""
+
+    def test_rate_limiter_memory_and_store_interface(self):
+        from utils.rate_limiter import RateLimitStore, _rate_check, _rate_record
+        store = RateLimitStore('test_auth')
+        test_ip = '192.168.10.99'
+
+        # Initially not rate limited
+        self.assertFalse(_rate_check(store, test_ip, max_attempts=3, window=60))
+
+        # Record 3 attempts
+        _rate_record(store, test_ip)
+        _rate_record(store, test_ip)
+        _rate_record(store, test_ip)
+
+        # Now should be rate limited
+        self.assertTrue(_rate_check(store, test_ip, max_attempts=3, window=60))
+
+        # Pop / clear attempts for this IP (e.g. on successful login)
+        store.pop(test_ip, None)
+        self.assertFalse(_rate_check(store, test_ip, max_attempts=3, window=60))

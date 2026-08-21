@@ -19,6 +19,8 @@ class TestVolunteerModelAndAPI(unittest.TestCase):
     def setUpClass(cls):
         cls.app = Flask(__name__)
         cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key'
         cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
         cls.client = cls.app.test_client()
 
@@ -82,7 +84,9 @@ class TestVolunteerModelAndAPI(unittest.TestCase):
             "skills": "Outdoor Physical Fitness, Agricultural Interest",
             "motivation": "Passionate about sustainable agro-tourism and supporting local farmer cooperatives."
         }
-        res_post = self.client.post('/api/v1/volunteer/apply', json=payload)
+        with self.client.session_transaction() as sess:
+            sess['_csrf_token'] = 'test-token-123'
+        res_post = self.client.post('/api/v1/volunteer/apply', json=payload, headers={'X-CSRF-Token': 'test-token-123'})
         self.assertEqual(res_post.status_code, 200)
         post_data = res_post.get_json()
         self.assertEqual(post_data['status'], 'success')

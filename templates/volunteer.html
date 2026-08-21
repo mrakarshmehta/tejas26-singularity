@@ -145,7 +145,10 @@ function submitVolunteerApp(e) {
 
     fetch('/api/v1/volunteer/apply', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': window.HY_CSRF_TOKEN || '{{ csrf_token() }}'
+        },
         body: JSON.stringify({
             name: name,
             email: email,

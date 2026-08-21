@@ -17,6 +17,8 @@ class TestQuizModelAndAPI(unittest.TestCase):
     def setUpClass(cls):
         cls.app = Flask(__name__)
         cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key'
         cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
         cls.client = cls.app.test_client()
 
@@ -76,7 +78,9 @@ class TestQuizModelAndAPI(unittest.TestCase):
                 "q-nalanda-library": 0
             }
         }
-        res_eval = self.client.post('/api/v1/quiz/evaluate', json=payload)
+        with self.client.session_transaction() as sess:
+            sess['_csrf_token'] = 'test-token-123'
+        res_eval = self.client.post('/api/v1/quiz/evaluate', json=payload, headers={'X-CSRF-Token': 'test-token-123'})
         self.assertEqual(res_eval.status_code, 200)
         eval_data = res_eval.get_json()
         self.assertEqual(eval_data['status'], 'success')
@@ -92,6 +96,8 @@ class TestQuizDigitalCertificate(unittest.TestCase):
     def setUpClass(cls):
         cls.app = Flask(__name__)
         cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key'
         cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
         cls.client = cls.app.test_client()
 
@@ -111,7 +117,9 @@ class TestQuizDigitalCertificate(unittest.TestCase):
             "total": 6,
             "badge": "Nalanda Scholar"
         }
-        res = self.client.post('/api/v1/quiz/certificate', json=payload)
+        with self.client.session_transaction() as sess:
+            sess['_csrf_token'] = 'test-token-123'
+        res = self.client.post('/api/v1/quiz/certificate', json=payload, headers={'X-CSRF-Token': 'test-token-123'})
         self.assertEqual(res.status_code, 200)
         data = res.get_json()
         self.assertEqual(data['status'], 'success')

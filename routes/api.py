@@ -446,6 +446,7 @@ def api_get_craft_detail(slug):
 
 
 @api_bp.route('/eco/pledge', methods=['POST'])
+@csrf_required
 def api_submit_eco_pledge():
     """Sign the HiddenYatra Responsible Traveler Pledge."""
     from models.eco import validate_pledge_submission
@@ -744,6 +745,7 @@ def api_get_volunteer_program_detail(slug):
 
 
 @api_bp.route('/volunteer/apply', methods=['POST'])
+@csrf_required
 def api_apply_volunteer_program():
     """JSON API to submit a volunteer registration application."""
     from models.volunteer import validate_volunteer_application, calculate_skill_match_score
@@ -1053,6 +1055,7 @@ def api_get_guide_detail(slug):
 
 
 @api_bp.route('/guides/inquire', methods=['POST'])
+@csrf_required
 def api_inquire_guide():
     """JSON API to submit a booking inquiry to a certified tour guide."""
     from models.guides import validate_guide_inquiry
@@ -1293,6 +1296,7 @@ def api_get_nalanda_library_towers():
     })
 
 @api_bp.route('/budget/calculate', methods=['GET', 'POST'])
+@csrf_required
 def api_calculate_trip_budget():
     """JSON API to calculate itemized multi-currency trip budget."""
     from models.budget_planner import calculate_trip_budget
@@ -1380,6 +1384,7 @@ def api_get_quiz_categories():
     })
 
 @api_bp.route('/quiz/evaluate', methods=['POST'])
+@csrf_required
 def api_evaluate_quiz():
     """JSON API to submit user answers, evaluate score, and unlock a digital explorer badge."""
     from models.quiz import evaluate_quiz_submission
@@ -1395,6 +1400,7 @@ def api_evaluate_quiz():
     })
 
 @api_bp.route('/quiz/certificate', methods=['POST'])
+@csrf_required
 def api_generate_quiz_certificate():
     """JSON API to issue a digital certificate for heritage quiz scores."""
     from models.quiz import generate_quiz_certificate

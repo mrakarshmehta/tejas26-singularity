@@ -20,6 +20,8 @@ class TestGuidesModelAndAPI(unittest.TestCase):
     def setUpClass(cls):
         cls.app = Flask(__name__)
         cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key'
         cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
         cls.client = cls.app.test_client()
 
@@ -87,7 +89,9 @@ class TestGuidesModelAndAPI(unittest.TestCase):
             "travel_date": "2026-12-05",
             "group_size": 2
         }
-        res_inquire = self.client.post('/api/v1/guides/inquire', json=inquiry_payload)
+        with self.client.session_transaction() as sess:
+            sess['_csrf_token'] = 'test-token-123'
+        res_inquire = self.client.post('/api/v1/guides/inquire', json=inquiry_payload, headers={'X-CSRF-Token': 'test-token-123'})
         self.assertEqual(res_inquire.status_code, 200)
         inq_data = res_inquire.get_json()
         self.assertEqual(inq_data['status'], 'success')
@@ -103,6 +107,8 @@ class TestGuideEthicsStandards(unittest.TestCase):
     def setUpClass(cls):
         cls.app = Flask(__name__)
         cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key'
         cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
         cls.client = cls.app.test_client()
 
@@ -129,6 +135,8 @@ class TestGuideLicenseVerification(unittest.TestCase):
     def setUpClass(cls):
         cls.app = Flask(__name__)
         cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key'
         cls.app.register_blueprint(api_bp, url_prefix='/api/v1')
         cls.client = cls.app.test_client()
 

@@ -14,33 +14,12 @@ from utils import csrf_required, login_required, get_session_id as _get_session_
 auth_bp = Blueprint('auth', __name__)
 
 
-# ── Rate limiters ──
-_login_attempts = {}
-_signup_attempts = {}
-_otp_attempts = {}
-_MAX_RATE_STORE_SIZE = 500  # Prevent unbounded growth
+from utils.rate_limiter import RateLimitStore, _rate_check, _rate_record
 
-
-def _rate_check(store, ip, max_attempts=5, window=60):
-    """Returns True if rate limited."""
-    now = _time.time()
-    attempts = store.get(ip, [])
-    attempts = [t for t in attempts if now - t < window]
-    store[ip] = attempts
-    # Prevent unbounded growth
-    if len(store) > _MAX_RATE_STORE_SIZE:
-        store.clear()
-        return False
-    if len(attempts) >= max_attempts:
-        return True
-    return False
-
-
-def _rate_record(store, ip):
-    now = _time.time()
-    attempts = store.get(ip, [])
-    attempts.append(now)
-    store[ip] = attempts
+# ── Rate limiters (Multi-Worker Redis/DB with in-memory fallback) ──
+_login_attempts = RateLimitStore('login')
+_signup_attempts = RateLimitStore('signup')
+_otp_attempts = RateLimitStore('otp')
 
 
 def _validate_email(email):

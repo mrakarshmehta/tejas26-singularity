@@ -9,7 +9,7 @@ This report details the security controls, audit findings, and verification step
 | Vulnerability Category (OWASP) | Status | Control Mechanism & Evidence |
 |---|---|---|
 | **A01: Broken Access Control** | **VERIFIED** | Admin endpoints use `@admin_required` session verification decorator in `routes/admin.py`. |
-| **A02: Cryptographic Failures** | **VERIFIED** | Passwords stored using `bcrypt` / `werkzeug.security.generate_password_hash`. |
+| **A02: Cryptographic Failures** | **VERIFIED** | Passwords stored using PBKDF2-HMAC-SHA256 with 260,000 iterations, per-user random salt, and secrets.compare_digest for timing-safe verification, plus a legacy-hash upgrade path. |
 | **A03: Injection (SQLi)** | **VERIFIED** | All database queries in `models/*.py` use parameterized `%s` tuples. Zero string interpolation in SQL queries. |
 | **A04: Insecure Design** | **VERIFIED** | Session state cleared on logout in `routes/auth.py` and `routes/admin.py` to prevent session fixation. |
 | **A05: Security Misconfiguration** | **VERIFIED** | HTTP security headers added in `app.py`: `Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`. |

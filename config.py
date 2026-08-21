@@ -98,3 +98,7 @@ def check_file_size(file_obj):
     size = file_obj.tell()
     file_obj.seek(0)     # Reset to start
     return size <= MAX_SINGLE_FILE_SIZE
+
+# ── Rate Limiting (Multi-Worker Backend) ──
+REDIS_URL = os.environ.get('REDIS_URL', '').strip()
+RATE_LIMIT_BACKEND = os.environ.get('RATE_LIMIT_BACKEND', 'redis' if REDIS_URL else 'db')

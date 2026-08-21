@@ -62,7 +62,10 @@ function submitPledge() {
   
   fetch('/api/eco/pledge', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': window.HY_CSRF_TOKEN || '{{ csrf_token() }}'
+    },
     body: JSON.stringify({name: name, email: email})
   })
   .then(res => res.json())
