@@ -23,15 +23,18 @@ mysql_data_BACKUP_*/
 mysql84_start_log.txt
 mysql84_stderr.log
 
-# Uploads (track verified seed place images; ignore dynamic user uploads)
+# Uploads (track verified seed place & host listing images; ignore dynamic user uploads)
 static/uploads/submissions/*
 !static/uploads/submissions/.gitkeep
 static/uploads/auth/*
 !static/uploads/auth/.gitkeep
-static/uploads/hosts/*
-!static/uploads/hosts/.gitkeep
-!static/uploads/hosts/listings/
-static/uploads/hosts/listings/*
+static/uploads/hosts/profiles/*
+!static/uploads/hosts/profiles/.gitkeep
+static/uploads/hosts/id_docs/*
+!static/uploads/hosts/id_docs/.gitkeep
+!static/uploads/hosts/listings/*.jpg
+!static/uploads/hosts/listings/*.png
+!static/uploads/hosts/listings/*.webp
 !static/uploads/hosts/listings/.gitkeep
 static/hero/*
 !static/hero/.gitkeep

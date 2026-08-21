@@ -1,4 +1,4 @@
-﻿"""
+"""
 HiddenYatra — Database Connection Management & Pooling
 Provides MySQL connection pool singleton and transaction-safe cursor context manager.
 """
@@ -152,8 +152,29 @@ def _sync_seed_cover_images(cur):
         logger.warning("Cover image auto-sync warning: %s", e)
 
 
+def _auto_seed_homestays_if_empty(cur):
+    """Ensure default authentic Bihar homestays are seeded if host_listings has no published listings."""
+    try:
+        cur.execute("""
+            SELECT COUNT(*) AS cnt FROM information_schema.tables
+            WHERE table_schema = %s AND table_name = 'host_listings'
+        """, (DB_NAME,))
+        t_row = cur.fetchone()
+        if not t_row or t_row['cnt'] == 0:
+            return
+        cur.execute("SELECT COUNT(*) AS cnt FROM host_listings WHERE status = 'published'")
+        cnt_row = cur.fetchone()
+        if not cnt_row or cnt_row['cnt'] == 0:
+            logger.info("No published homestays found in host_listings. Auto-seeding 10 demo homestays...")
+            from scripts.seed.seed_homestays import seed_all_homestays
+            n = seed_all_homestays(cur)
+            logger.info("Auto-seeded %d demo homestays successfully.", n)
+    except Exception as e:
+        logger.warning("Homestays auto-seed check warning: %s", e)
+
+
 def init_db():
-    """Initialize MySQL database — run schema SQL if tables don't exist and sync seed images."""
+    """Initialize MySQL database — run schema SQL if tables don't exist, sync seed images, and ensure seed data."""
     conn = get_db()
     try:
         cur = conn.cursor()
@@ -165,6 +186,7 @@ def init_db():
         if row and row['cnt'] > 0:
             logger.info("MySQL database already initialized (tables exist).")
             _sync_seed_cover_images(cur)
+            _auto_seed_homestays_if_empty(cur)
             conn.commit()
             cur.close()
             return
@@ -184,6 +206,8 @@ def init_db():
                     cur.execute(stmt)
                 except Exception as e:
                     logger.warning("Schema statement skipped/warning: %s", e)
+            _sync_seed_cover_images(cur)
+            _auto_seed_homestays_if_empty(cur)
             conn.commit()
             logger.info("MySQL schema created successfully from %s", schema_path)
         else:
