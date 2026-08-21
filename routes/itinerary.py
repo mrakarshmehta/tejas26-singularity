@@ -98,14 +98,56 @@ def delete_trip(itinerary_id):
 
 @itinerary_bp.route('/api/itinerary/search')
 def api_search_places():
-    """Search places for adding to itinerary."""
-    q = request.args.get('q', '')
-    if len(q) < 2:
-        return jsonify([])
-    results = search_places(q, limit=10)
+    """Search places for adding to itinerary or browsing destinations."""
+    q = request.args.get('q', '').strip()
+    category = request.args.get('category', '').strip().lower()
+
+    if not q:
+        try:
+            from models.database import get_cursor
+            with get_cursor() as cur:
+                if category and category != 'all':
+                    cur.execute("""
+                        SELECT p.id, p.name, p.slug, p.category, p.cover_image, p.description,
+                               d.name AS district_name, s.name AS state_name
+                        FROM places p
+                        JOIN states s ON s.id = p.state_id
+                        LEFT JOIN districts d ON d.id = p.district_id
+                        WHERE p.deleted_at IS NULL AND p.category = %s
+                        ORDER BY p.is_featured DESC, p.view_count DESC
+                        LIMIT 30
+                    """, (category,))
+                else:
+                    cur.execute("""
+                        SELECT p.id, p.name, p.slug, p.category, p.cover_image, p.description,
+                               d.name AS district_name, s.name AS state_name
+                        FROM places p
+                        JOIN states s ON s.id = p.state_id
+                        LEFT JOIN districts d ON d.id = p.district_id
+                        WHERE p.deleted_at IS NULL
+                        ORDER BY p.is_featured DESC, p.view_count DESC
+                        LIMIT 30
+                    """)
+                results = cur.fetchall()
+        except Exception:
+            results = []
+    else:
+        try:
+            results = search_places(q, limit=30)
+            if category and category != 'all':
+                results = [p for p in results if p.get('category') == category]
+        except Exception:
+            results = []
+
     return jsonify([{
-        'id': p['id'], 'name': p['name'], 'slug': p['slug'],
-        'state_name': p['state_name'], 'category': p['category']
+        'id': p['id'],
+        'name': p['name'],
+        'slug': p['slug'],
+        'state_name': p.get('state_name', 'Bihar'),
+        'district_name': p.get('district_name') or p.get('state_name', 'Bihar'),
+        'category': p.get('category', 'tourist_spot'),
+        'cover_image': p.get('cover_image') or '',
+        'description': (p.get('description') or '')[:120]
     } for p in results])
 
 
@@ -135,6 +177,16 @@ def api_generate_trip():
     interests = data.get('interests', [])
     companion = data.get('companion', 'solo')  # solo, couple, family, group
     travelers = min(max(int(data.get('travelers', 1)), 1), 20)
+
+    # Optional pinned place_ids selected by user
+    raw_pids = data.get('place_ids', [])
+    place_ids = []
+    if isinstance(raw_pids, (list, tuple)):
+        for pid in raw_pids:
+            try:
+                place_ids.append(int(pid))
+            except (ValueError, TypeError):
+                pass
 
     # ── Budget: accept numeric amount + type, with backward compatibility ──
     budget_amount = data.get('budget_amount')
@@ -220,15 +272,27 @@ def api_generate_trip():
     used_ids = set()
     day_plans = []
 
+    # Map place_id to place dict if provided
+    pinned_places = [p for p in all_places if p['id'] in place_ids] if place_ids else []
+    pinned_queue = list(pinned_places)
+
     for day in range(1, days + 1):
         day_places = []
         
-        # Find highest-scoring unvisited place as Day Anchor
+        # Priority 1: Pick an unvisited pinned place as Day Anchor
         anchor = None
-        for p in candidate_pool:
-            if p['id'] not in used_ids:
-                anchor = p
+        while pinned_queue:
+            cand = pinned_queue.pop(0)
+            if cand['id'] not in used_ids:
+                anchor = cand
                 break
+
+        # If no unvisited pinned place available, pick highest-scoring unvisited candidate
+        if not anchor:
+            for p in candidate_pool:
+                if p['id'] not in used_ids:
+                    anchor = p
+                    break
 
         if not anchor:
             break
@@ -236,9 +300,23 @@ def api_generate_trip():
         day_places.append(anchor)
         used_ids.add(anchor['id'])
 
-        # Find closest unvisited places within 45km radius of the Day Anchor
+        # Find closest unvisited places within 50km radius of the Day Anchor
         while len(day_places) < places_per_day:
             last = day_places[-1]
+
+            # First check if there are any remaining pinned places within reasonable distance (< 75km)
+            nearby_pinned = [
+                p for p in pinned_queue
+                if p['id'] not in used_ids and haversine(last['latitude'], last['longitude'], p['latitude'], p['longitude']) <= 75.0
+            ]
+            if nearby_pinned:
+                best_pinned = min(nearby_pinned, key=lambda p: haversine(last['latitude'], last['longitude'], p['latitude'], p['longitude']))
+                day_places.append(best_pinned)
+                used_ids.add(best_pinned['id'])
+                if best_pinned in pinned_queue:
+                    pinned_queue.remove(best_pinned)
+                continue
+
             candidates = []
 
             for p in candidate_pool:

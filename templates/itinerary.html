@@ -129,6 +129,93 @@
   .day-num { background:#e06010!important; }
 }
 
+/* ── Places Selector & Chips ── */
+.places-section { margin-bottom:var(--space-lg); background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:var(--space-md) var(--space-lg); transition:all .25s ease; }
+.places-section:focus-within { border-color:rgba(255,122,24,.4); }
+.places-section-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:var(--space-md); flex-wrap:wrap; }
+.places-section-title { font-size:.95rem; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px; margin:0; }
+.btn-ai-toggle { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:rgba(99,102,241,.1); border:1px solid rgba(99,102,241,.25); border-radius:var(--radius-full); font-size:.78rem; font-weight:600; color:#818cf8; cursor:pointer; transition:all .2s; }
+.btn-ai-toggle:hover { background:rgba(99,102,241,.2); border-color:#818cf8; transform:translateY(-1px); }
+.btn-ai-toggle.active { background:linear-gradient(135deg,rgba(99,102,241,.25),rgba(20,184,166,.2)); border-color:#818cf8; color:#a5b4fc; box-shadow:0 0 12px rgba(99,102,241,.2); }
+.btn-ai-toggle .ai-sparkle { animation:aiPulse 2s ease infinite; display:inline-block; }
+
+.selected-places-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:var(--space-md); min-height:10px; }
+.place-chip { display:inline-flex; align-items:center; gap:8px; padding:6px 10px 6px 12px; background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-full); font-size:.82rem; font-weight:600; color:var(--text-primary); box-shadow:0 2px 6px rgba(0,0,0,.06); animation:chipPopIn .2s ease-out; transition:all .2s; }
+.place-chip:hover { border-color:var(--primary); transform:translateY(-1px); box-shadow:0 4px 12px rgba(255,122,24,.15); }
+.place-chip-name { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.place-chip-district { font-size:.72rem; color:var(--text-muted); background:rgba(255,255,255,.06); padding:2px 6px; border-radius:6px; }
+.place-chip-remove { width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,.08); border:none; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; line-height:1; transition:all .15s; padding:0; }
+.place-chip-remove:hover { background:rgba(244,63,94,.2); color:#f43f5e; }
+@keyframes chipPopIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+
+.places-actions-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.btn-select-places { display:inline-flex; align-items:center; gap:8px; padding:9px 18px; background:linear-gradient(135deg,rgba(255,122,24,.15),rgba(255,122,24,.05)); border:1px dashed var(--primary); border-radius:var(--radius-lg); color:var(--primary); font-size:.88rem; font-weight:700; cursor:pointer; transition:all .2s; font-family:var(--font-body); }
+.btn-select-places:hover { background:var(--primary); color:#fff; border-style:solid; box-shadow:0 4px 14px rgba(255,122,24,.25); transform:translateY(-1px); }
+.places-selected-count-badge { font-size:.78rem; font-weight:600; color:var(--text-muted); background:rgba(255,255,255,.05); padding:4px 10px; border-radius:var(--radius-full); }
+.btn-clear-places { background:transparent; border:none; color:var(--text-muted); font-size:.78rem; font-weight:600; cursor:pointer; text-decoration:underline; padding:4px; transition:color .2s; }
+.btn-clear-places:hover { color:#f43f5e; }
+
+.ai-mode-banner { display:flex; align-items:center; gap:14px; padding:12px 16px; background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(20,184,166,.08)); border:1px solid rgba(99,102,241,.25); border-radius:var(--radius-lg); animation:fadeInUp .3s ease; }
+.ai-mode-icon { font-size:1.5rem; flex-shrink:0; }
+.ai-mode-content { flex:1; }
+.ai-mode-content strong { display:block; font-size:.88rem; color:#a5b4fc; margin-bottom:2px; }
+.ai-mode-content p { font-size:.78rem; color:var(--text-secondary); margin:0; }
+.btn-switch-manual { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:var(--radius-md); color:var(--text-primary); font-size:.75rem; font-weight:600; padding:6px 12px; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.btn-switch-manual:hover { border-color:var(--primary); color:var(--primary); background:rgba(255,122,24,.08); }
+
+/* ── Select Places Modal / Drawer ── */
+.place-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:1000; display:none; align-items:center; justify-content:center; padding:var(--space-md); opacity:0; transition:opacity .25s ease; }
+.place-modal-overlay.active { display:flex; opacity:1; }
+.place-modal { width:100%; max-width:650px; max-height:85vh; background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-xl); box-shadow:0 20px 50px rgba(0,0,0,.5); display:flex; flex-direction:column; overflow:hidden; transform:scale(.95) translateY(10px); transition:transform .25s ease; }
+.place-modal-overlay.active .place-modal { transform:scale(1) translateY(0); }
+
+.place-modal-header { padding:18px 24px 14px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:flex-start; background:var(--bg-secondary); }
+.place-modal-header h3 { font-size:1.15rem; font-weight:700; margin:0 0 2px 0; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
+.place-modal-subtitle { font-size:.8rem; color:var(--text-muted); margin:0; }
+.place-modal-close { width:32px; height:32px; border-radius:50%; background:transparent; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.place-modal-close:hover { background:rgba(255,255,255,.08); color:var(--text-primary); }
+
+.place-modal-search-wrap { padding:14px 24px 8px; position:relative; display:flex; align-items:center; }
+.place-modal-search-wrap .search-icon { position:absolute; left:38px; color:var(--text-muted); pointer-events:none; }
+.place-search-input { width:100%; padding:10px 38px 10px 42px; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); color:var(--text-primary); font-size:.92rem; font-family:var(--font-body); transition:all .2s; }
+.place-search-input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(255,122,24,.15); }
+.search-clear-btn { position:absolute; right:36px; background:transparent; border:none; color:var(--text-muted); font-size:18px; cursor:pointer; padding:2px; }
+
+.place-modal-filters { padding:6px 24px 12px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; }
+.place-modal-filters::-webkit-scrollbar { display:none; }
+.place-filter-btn { padding:5px 12px; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-full); font-size:.75rem; font-weight:600; color:var(--text-secondary); cursor:pointer; white-space:nowrap; transition:all .2s; }
+.place-filter-btn:hover { border-color:var(--primary-200); }
+.place-filter-btn.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+
+.place-modal-body { flex:1; overflow-y:auto; padding:8px 24px 16px; display:flex; flex-direction:column; gap:8px; min-height:260px; max-height:420px; }
+.place-modal-loading { text-align:center; padding:40px 20px; color:var(--text-muted); font-size:.88rem; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.place-modal-empty { text-align:center; padding:40px 20px; color:var(--text-muted); font-size:.88rem; }
+
+.place-item-card { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-secondary); border:1.5px solid var(--border-color); border-radius:var(--radius-lg); cursor:pointer; user-select:none; transition:all .2s; }
+.place-item-card:hover { border-color:rgba(255,122,24,.4); background:rgba(255,122,24,.03); }
+.place-item-card.selected { border-color:var(--primary); background:linear-gradient(135deg,rgba(255,122,24,.12),rgba(255,122,24,.03)); box-shadow:0 2px 10px rgba(255,122,24,.12); }
+
+.place-item-checkbox { width:20px; height:20px; border-radius:6px; border:2px solid var(--border-color); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; background:var(--bg-card); }
+.place-item-card.selected .place-item-checkbox { background:var(--primary); border-color:var(--primary); }
+.place-item-checkbox svg { display:none; color:#fff; width:13px; height:13px; }
+.place-item-card.selected .place-item-checkbox svg { display:block; }
+
+.place-item-thumb { width:46px; height:46px; border-radius:var(--radius-md); object-fit:cover; background:rgba(255,255,255,.05); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
+.place-item-thumb img { width:100%; height:100%; object-fit:cover; }
+
+.place-item-info { flex:1; min-width:0; }
+.place-item-name { font-size:.9rem; font-weight:700; color:var(--text-primary); margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.place-item-meta { display:flex; align-items:center; gap:8px; font-size:.75rem; color:var(--text-muted); }
+.place-item-cat { font-size:.72rem; padding:1px 6px; border-radius:4px; background:rgba(255,255,255,.06); }
+
+.place-modal-footer { padding:14px 24px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); }
+.place-modal-status { font-size:.85rem; color:var(--text-secondary); font-weight:600; }
+.place-modal-actions { display:flex; gap:10px; }
+.btn-modal-cancel { padding:9px 18px; background:transparent; border:1px solid var(--border-color); border-radius:var(--radius-md); color:var(--text-secondary); font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
+.btn-modal-cancel:hover { border-color:var(--text-muted); color:var(--text-primary); }
+.btn-modal-confirm { padding:9px 22px; background:linear-gradient(135deg,var(--primary),#e0620e); border:none; border-radius:var(--radius-md); color:#fff; font-size:.85rem; font-weight:700; cursor:pointer; transition:all .25s; }
+.btn-modal-confirm:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(255,122,24,.3); }
+
 /* Mobile */
 @media(max-width:600px) {
   .form-row, .form-row-2, .form-row-budget { grid-template-columns:1fr; }
@@ -137,6 +224,11 @@
   .trip-actions { flex-direction:column; }
   .trip-actions button { width:100%; justify-content:center; }
   .timeline-time { width:55px; font-size:.75rem; }
+  .place-modal { max-height:90vh; border-radius:var(--radius-xl) var(--radius-xl) 0 0; margin-top:auto; }
+  .place-modal-overlay { padding:0; align-items:flex-end; }
+  .places-section-header { flex-direction:column; align-items:flex-start; }
+  .btn-ai-toggle { width:100%; justify-content:center; }
+  .place-chip-name { max-width:120px; }
 }
 </style>
 {% endblock %}
@@ -203,6 +295,43 @@
           <button type="button" class="stepper-btn stepper-plus" data-target="trip-travelers" aria-label="Increase travelers">+</button>
         </div>
         <span class="form-hint">Min 1, Max 20 travelers</span>
+      </div>
+    </div>
+
+    <!-- Places you want to visit Section -->
+    <div class="places-section" id="places-section">
+      <div class="places-section-header">
+        <div>
+          <label class="places-section-title">📍 Places you want to visit</label>
+          <span class="form-hint">Choose specific Bihar destinations or let AI build your custom route</span>
+        </div>
+        <button type="button" class="btn-ai-toggle" id="btn-ai-toggle" onclick="toggleAiChooseMode()">
+          <span class="ai-sparkle">✨</span>
+          <span id="ai-toggle-text">Let AI choose for me</span>
+        </button>
+      </div>
+
+      <!-- Selected Places Chips Container -->
+      <div class="selected-places-chips" id="selected-places-chips"></div>
+
+      <!-- Action Buttons -->
+      <div class="places-actions-bar" id="places-actions-bar">
+        <button type="button" class="btn-select-places" id="btn-open-place-modal" onclick="openPlaceModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          <span id="btn-select-places-text">+ Select Places</span>
+        </button>
+        <span class="places-selected-count-badge" id="places-selected-count" style="display:none;">0 selected</span>
+        <button type="button" class="btn-clear-places" id="btn-clear-places" onclick="clearSelectedPlaces()" style="display:none;">Clear All</button>
+      </div>
+
+      <!-- AI Mode Info Banner -->
+      <div class="ai-mode-banner" id="ai-mode-banner" style="display:none;">
+        <span class="ai-mode-icon">✨</span>
+        <div class="ai-mode-content">
+          <strong>Smart AI Discovery Active</strong>
+          <p>AI will automatically select and cluster the highest-rated destinations across Bihar matching your preferences.</p>
+        </div>
+        <button type="button" class="btn-switch-manual" onclick="toggleAiChooseMode()">Custom Pick Places</button>
       </div>
     </div>
 
@@ -298,6 +427,57 @@
   {% endif %}
 </section>
 
+<!-- Select Places Modal -->
+<div class="place-modal-overlay" id="place-modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="place-modal" id="place-modal" role="dialog" aria-modal="true" aria-labelledby="place-modal-title">
+    <div class="place-modal-header">
+      <div>
+        <h3 id="place-modal-title">📍 Select Destinations</h3>
+        <p class="place-modal-subtitle">Search and pick places to include in your trip</p>
+      </div>
+      <button type="button" class="place-modal-close" onclick="closePlaceModal()" aria-label="Close modal">×</button>
+    </div>
+
+    <div class="place-modal-search-wrap">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="place-search-input" class="place-search-input" placeholder="Search places by name, district, or category..." oninput="handlePlaceSearch(this.value)" autocomplete="off" />
+      <button type="button" id="place-search-clear" class="search-clear-btn" onclick="clearPlaceSearch()" style="display:none;">×</button>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="place-modal-filters" id="place-modal-filters">
+      <button type="button" class="place-filter-btn active" data-cat="all" onclick="filterModalByCategory('all')">All Places</button>
+      <button type="button" class="place-filter-btn" data-cat="temple" onclick="filterModalByCategory('temple')">🛕 Temples</button>
+      <button type="button" class="place-filter-btn" data-cat="historical" onclick="filterModalByCategory('historical')">🏛️ Historical</button>
+      <button type="button" class="place-filter-btn" data-cat="nature" onclick="filterModalByCategory('nature')">🌿 Nature</button>
+      <button type="button" class="place-filter-btn" data-cat="waterfall" onclick="filterModalByCategory('waterfall')">💧 Waterfalls</button>
+      <button type="button" class="place-filter-btn" data-cat="fort" onclick="filterModalByCategory('fort')">🏰 Forts</button>
+      <button type="button" class="place-filter-btn" data-cat="hidden_gem" onclick="filterModalByCategory('hidden_gem')">💎 Hidden Gems</button>
+    </div>
+
+    <!-- Scrollable Place List -->
+    <div class="place-modal-body" id="place-modal-list">
+      <div class="place-modal-loading" id="place-modal-loading">
+        <div class="spinner-sm"></div>
+        <span>Loading destinations...</span>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="place-modal-footer">
+      <div class="place-modal-status">
+        <span id="modal-selected-count">0</span> places selected
+      </div>
+      <div class="place-modal-actions">
+        <button type="button" class="btn-modal-cancel" onclick="closePlaceModal()">Cancel</button>
+        <button type="button" class="btn-modal-confirm" id="btn-modal-confirm" onclick="confirmPlaceSelection()">
+          Add Places (<span id="modal-confirm-count">0</span>)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Hidden template for nearby discovery (injected by renderTrip JS) -->
 <div id="sn-discovery-template" style="display:none;">
   {% include "partials/smart_nearby_discovery.html" %}
@@ -311,6 +491,240 @@
 // AI TRIP PLANNER — Form Controller
 // ══════════════════════════════════════════════════════
 
+// ── Places Selection State ──
+let selectedPlaces = [];              // Array of confirmed place objects {id, name, slug, category, district_name, cover_image}
+let stagedModalSelection = new Map(); // Map of placeId -> place object during modal open
+let isAiMode = false;                 // "Let AI choose for me" flag
+let activeModalCategory = 'all';
+let searchDebounceTimer = null;
+let currentLoadedPlaces = [];
+
+function openPlaceModal() {
+  stagedModalSelection.clear();
+  selectedPlaces.forEach(p => stagedModalSelection.set(p.id, p));
+  updateModalCounts();
+
+  const overlay = document.getElementById('place-modal-overlay');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  const searchInput = document.getElementById('place-search-input');
+  searchInput.value = '';
+  document.getElementById('place-search-clear').style.display = 'none';
+
+  activeModalCategory = 'all';
+  document.querySelectorAll('.place-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === 'all');
+  });
+
+  fetchModalPlaces('', 'all');
+  setTimeout(() => searchInput.focus(), 100);
+}
+
+function closePlaceModal() {
+  const overlay = document.getElementById('place-modal-overlay');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleModalOverlayClick(e) {
+  if (e.target.id === 'place-modal-overlay') {
+    closePlaceModal();
+  }
+}
+
+// Escape key closes modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('place-modal-overlay');
+    if (overlay && overlay.classList.contains('active')) {
+      closePlaceModal();
+    }
+  }
+});
+
+function handlePlaceSearch(val) {
+  const clearBtn = document.getElementById('place-search-clear');
+  clearBtn.style.display = val.trim() ? 'block' : 'none';
+
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    fetchModalPlaces(val.trim(), activeModalCategory);
+  }, 250);
+}
+
+function clearPlaceSearch() {
+  const searchInput = document.getElementById('place-search-input');
+  searchInput.value = '';
+  document.getElementById('place-search-clear').style.display = 'none';
+  fetchModalPlaces('', activeModalCategory);
+  searchInput.focus();
+}
+
+function filterModalByCategory(cat) {
+  activeModalCategory = cat;
+  document.querySelectorAll('.place-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  const searchVal = document.getElementById('place-search-input').value.trim();
+  fetchModalPlaces(searchVal, cat);
+}
+
+async function fetchModalPlaces(query = '', category = 'all') {
+  const listEl = document.getElementById('place-modal-list');
+  listEl.innerHTML = '<div class="place-modal-loading"><div class="spinner" style="display:block;border-color:rgba(255,122,24,.3);border-top-color:var(--primary);"></div><span>Loading destinations...</span></div>';
+
+  try {
+    let url = '/api/itinerary/search?';
+    const params = [];
+    if (query) params.push('q=' + encodeURIComponent(query));
+    if (category && category !== 'all') params.push('category=' + encodeURIComponent(category));
+    url += params.join('&');
+
+    const res = await fetch(url);
+    const data = await res.json();
+    currentLoadedPlaces = data;
+    renderModalPlaceList(data);
+  } catch (err) {
+    listEl.innerHTML = '<div class="place-modal-empty">Failed to load destinations. Please try again.</div>';
+  }
+}
+
+function renderModalPlaceList(places) {
+  const listEl = document.getElementById('place-modal-list');
+  if (!places || places.length === 0) {
+    listEl.innerHTML = '<div class="place-modal-empty"><p style="font-size:1.5rem;margin:0 0 8px;">🔍</p>No destinations found matching your search.</div>';
+    return;
+  }
+
+  let html = '';
+  places.forEach(p => {
+    const isSelected = stagedModalSelection.has(p.id);
+    const emoji = getCatEmoji(p.category);
+    const catLabel = (p.category || 'tourist_spot').replace('_', ' ');
+    const district = p.district_name || 'Bihar';
+
+    const thumbHtml = p.cover_image
+      ? `<img src="/static/${p.cover_image}" alt="${p.name}" onerror="this.parentElement.innerHTML='${emoji}'" />`
+      : emoji;
+
+    html += `
+      <div class="place-item-card ${isSelected ? 'selected' : ''}" id="modal-place-card-${p.id}" onclick="toggleModalPlace(${p.id})">
+        <div class="place-item-checkbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="place-item-thumb">${thumbHtml}</div>
+        <div class="place-item-info">
+          <div class="place-item-name">${p.name}</div>
+          <div class="place-item-meta">
+            <span>📍 ${district}</span>
+            <span class="place-item-cat">${emoji} ${catLabel}</span>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  listEl.innerHTML = html;
+}
+
+function toggleModalPlace(placeId) {
+  const place = currentLoadedPlaces.find(p => p.id === placeId) || stagedModalSelection.get(placeId);
+  if (!place) return;
+
+  if (stagedModalSelection.has(placeId)) {
+    stagedModalSelection.delete(placeId);
+  } else {
+    stagedModalSelection.set(placeId, place);
+  }
+
+  const card = document.getElementById(`modal-place-card-${placeId}`);
+  if (card) {
+    card.classList.toggle('selected', stagedModalSelection.has(placeId));
+  }
+
+  updateModalCounts();
+}
+
+function updateModalCounts() {
+  const count = stagedModalSelection.size;
+  const countEl = document.getElementById('modal-selected-count');
+  const confirmEl = document.getElementById('modal-confirm-count');
+  if (countEl) countEl.textContent = count;
+  if (confirmEl) confirmEl.textContent = count;
+}
+
+function confirmPlaceSelection() {
+  selectedPlaces = Array.from(stagedModalSelection.values());
+  if (selectedPlaces.length > 0) {
+    isAiMode = false;
+  }
+  renderSelectedPlaceChips();
+  closePlaceModal();
+}
+
+function removeSelectedPlace(placeId) {
+  selectedPlaces = selectedPlaces.filter(p => p.id !== placeId);
+  renderSelectedPlaceChips();
+}
+
+function clearSelectedPlaces() {
+  selectedPlaces = [];
+  renderSelectedPlaceChips();
+}
+
+function toggleAiChooseMode() {
+  isAiMode = !isAiMode;
+  renderSelectedPlaceChips();
+}
+
+function renderSelectedPlaceChips() {
+  const chipsContainer = document.getElementById('selected-places-chips');
+  const actionsBar = document.getElementById('places-actions-bar');
+  const aiBanner = document.getElementById('ai-mode-banner');
+  const aiToggleBtn = document.getElementById('btn-ai-toggle');
+  const selectBtnText = document.getElementById('btn-select-places-text');
+  const countBadge = document.getElementById('places-selected-count');
+  const clearBtn = document.getElementById('btn-clear-places');
+
+  if (isAiMode) {
+    aiBanner.style.display = 'flex';
+    actionsBar.style.display = 'none';
+    chipsContainer.style.display = 'none';
+    aiToggleBtn.classList.add('active');
+    return;
+  }
+
+  aiBanner.style.display = 'none';
+  actionsBar.style.display = 'flex';
+  chipsContainer.style.display = 'flex';
+  aiToggleBtn.classList.remove('active');
+
+  if (selectedPlaces.length === 0) {
+    chipsContainer.innerHTML = '<span style="font-size:0.82rem;color:var(--text-muted);font-style:italic;padding:4px 0;">No specific places selected yet. Click below to add destinations or use AI mode.</span>';
+    selectBtnText.textContent = '+ Select Places';
+    countBadge.style.display = 'none';
+    clearBtn.style.display = 'none';
+  } else {
+    let html = '';
+    selectedPlaces.forEach(p => {
+      const emoji = getCatEmoji(p.category);
+      const district = p.district_name || 'Bihar';
+      html += `
+        <div class="place-chip" id="chip-place-${p.id}">
+          <span>${emoji}</span>
+          <span class="place-chip-name" title="${p.name}">${p.name}</span>
+          <span class="place-chip-district">${district}</span>
+          <button type="button" class="place-chip-remove" onclick="removeSelectedPlace(${p.id})" aria-label="Remove ${p.name}">×</button>
+        </div>`;
+    });
+    chipsContainer.innerHTML = html;
+    selectBtnText.textContent = '+ Add More Places';
+    countBadge.textContent = `${selectedPlaces.length} selected`;
+    countBadge.style.display = 'inline-block';
+    clearBtn.style.display = 'inline-block';
+  }
+}
+
 // ── Helper: read current form values from DOM ──
 function getFormValues() {
   return {
@@ -319,7 +733,8 @@ function getFormValues() {
     budgetAmount: parseInt(document.getElementById('trip-budget-amount').value) || 0,
     budgetType: document.getElementById('trip-budget-type').value || 'per_day',
     companion: (document.querySelector('.travel-mode-card.selected') || {}).dataset?.mode || 'solo',
-    interests: [...document.querySelectorAll('.interest-tag.selected')].map(t => t.dataset.cat)
+    interests: [...document.querySelectorAll('.interest-tag.selected')].map(t => t.dataset.cat),
+    place_ids: isAiMode ? [] : selectedPlaces.map(p => p.id)
   };
 }
 
@@ -353,6 +768,7 @@ document.querySelectorAll('.stepper-btn').forEach(function(btn) {
     }
     input.value = val;
     updateBudgetHint();
+renderSelectedPlaceChips();
   });
 });
 
@@ -445,7 +861,8 @@ async function generateTrip() {
         budget_amount: v.budgetAmount,
         budget_type: v.budgetType,
         companion: v.companion,
-        interests: v.interests
+        interests: v.interests,
+        place_ids: v.place_ids
       })
     });
     currentTrip = await res.json();

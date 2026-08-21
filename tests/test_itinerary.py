@@ -75,3 +75,38 @@ class TestItineraryScoring(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class TestItinerarySearchAndSelection(unittest.TestCase):
+    """Unit tests for the Select Places search API and generate integration."""
+
+    @classmethod
+    def setUpClass(cls):
+        from flask import Flask
+        from routes.itinerary import itinerary_bp
+        cls.app = Flask(__name__)
+        cls.app.config['TESTING'] = True
+        cls.app.secret_key = 'test-secret-key-itin'
+        cls.app.config['SECRET_KEY'] = 'test-secret-key-itin'
+        cls.app.register_blueprint(itinerary_bp)
+        cls.client = cls.app.test_client()
+
+    def test_search_places_api_response_structure(self):
+        """Test GET /api/itinerary/search returns structured list with required keys."""
+        res = self.client.get('/api/itinerary/search?category=all')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertIsInstance(data, list)
+        if len(data) > 0:
+            item = data[0]
+            self.assertIn('id', item)
+            self.assertIn('name', item)
+            self.assertIn('slug', item)
+            self.assertIn('category', item)
+            self.assertIn('district_name', item)
+
+    def test_search_places_with_query(self):
+        """Test GET /api/itinerary/search?q=gaya returns matching results."""
+        res = self.client.get('/api/itinerary/search?q=gaya')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertIsInstance(data, list)
