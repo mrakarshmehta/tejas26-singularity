@@ -591,9 +591,11 @@ function resetAllFilters() {
 }
 
 // Event Listeners
+let _searchDebounce = null;
 document.getElementById('map-search-input').addEventListener('input', (e) => {
   document.getElementById('search-clear').style.display = e.target.value ? 'block' : 'none';
-  applyFilters();
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(() => applyFilters(), 200);
 });
 
 document.getElementById('search-clear').addEventListener('click', () => {
@@ -1017,9 +1019,11 @@ window._hyInitGoogleMap = function() {
     renderSidebarList(placesData);
 
     /* ── Event Listeners ────────────────────────────── */
+    let _searchDebounce = null;
     document.getElementById('map-search-input').addEventListener('input', (e) => {
       document.getElementById('search-clear').style.display = e.target.value ? 'block' : 'none';
-      applyFilters();
+      clearTimeout(_searchDebounce);
+      _searchDebounce = setTimeout(() => applyFilters(), 200);
     });
 
     document.getElementById('search-clear').addEventListener('click', () => {

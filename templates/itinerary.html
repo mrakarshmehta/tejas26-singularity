@@ -938,7 +938,7 @@ function renderTrip(data) {
     if (day.recommended_hotels && day.recommended_hotels.length > 0) {
       html += `
         <div style="margin-top:6px;padding:10px 14px;background:rgba(99,102,241,0.08);border-radius:8px;font-size:0.82rem;">
-          <strong style="color:#818cf8;">🏨 Recommended Stays:</strong> ${day.recommended_hotels.map(h => `${h.name} (${h.price_range}) ★ ${h.rating || 4.3}`).join(' · ')}
+          <strong style="color:#818cf8;">🏨 Recommended Stays:</strong> ${day.recommended_hotels.map(h => { const pr = (h.price_range || '').replace(/^\?{2,3}/, '₹'); return `${h.name} (${pr || 'Contact for rates'}) ★ ${h.rating || 4.3}`; }).join(' · ')}
         </div>`;
     }
 

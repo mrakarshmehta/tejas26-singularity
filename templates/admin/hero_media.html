@@ -3,6 +3,10 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<style>
+  .hero-media-card.hero-active  { border: 1px solid var(--accent-emerald); }
+  .hero-media-card.hero-inactive { border: 1px solid var(--border-color); }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -86,7 +90,7 @@
       {% if media %}
       <div id="hero-media-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-lg);">
         {% for item in media %}
-        <div class="hero-media-card" data-id="{{ item.id }}" style="background:var(--bg-elevated);border:1px solid {% if item.is_active %}var(--accent-emerald){% else %}var(--border-color){% endif %};border-radius:var(--radius-lg);overflow:hidden;position:relative;transition:all 0.3s;">
+        <div class="hero-media-card {% if item.is_active %}hero-active{% else %}hero-inactive{% endif %}" data-id="{{ item.id }}" style="background:var(--bg-elevated);border-radius:var(--radius-lg);overflow:hidden;position:relative;transition:all 0.3s;">
           <!-- Preview -->
           <div style="aspect-ratio:16/9;overflow:hidden;background:#111;position:relative;">
             {% if item.media_type == 'video' %}

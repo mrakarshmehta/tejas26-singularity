@@ -3,17 +3,31 @@ HiddenYatra — Stays & Homestays Traveller Discovery Routes
 Provides public browsing, filtering, search, and detail views for host listings.
 """
 import logging
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session, abort
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, abort, jsonify
 
 from models.listings import (
     get_published_listings, get_listing_by_slug, get_listing_by_id,
     increment_view_count, get_listing_photos, AMENITY_OPTIONS
 )
 from models.database import get_all_districts_admin
+from models.connection import get_cursor
 
 logger = logging.getLogger(__name__)
 
 stays_bp = Blueprint('stays', __name__)
+
+
+@stays_bp.route('/api/seed-homestays', methods=['GET', 'POST'])
+def api_seed_homestays():
+    """Instant on-demand endpoint to seed authentic Bihar homestays into MySQL database."""
+    try:
+        from scripts.seed.seed_homestays import seed_all_homestays
+        with get_cursor(commit=True) as cur:
+            n = seed_all_homestays(cur)
+        return jsonify({'success': True, 'seeded': n, 'message': f'Successfully seeded {n} homestays!'})
+    except Exception as e:
+        logger.error("Failed to seed homestays via API: %s", e)
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @stays_bp.route('/stays')
@@ -44,6 +58,19 @@ def browse_stays():
     }
 
     listings, total = get_published_listings(page=page, per_page=per_page, filters=filters)
+
+    # Auto-seed on first load if database has 0 published stays
+    has_active_filters = any([district_id, listing_type, max_price, min_guests, verified_only, amenity_filter, query])
+    if total == 0 and not has_active_filters:
+        try:
+            from scripts.seed.seed_homestays import seed_all_homestays
+            with get_cursor(commit=True) as cur:
+                seed_all_homestays(cur)
+            listings, total = get_published_listings(page=page, per_page=per_page, filters=filters)
+            logger.info("Auto-seeded homestays on /stays initial request. Total now: %d", total)
+        except Exception as e:
+            logger.warning("Auto-seed homestays on request warning: %s", e)
+
     total_pages = max(1, (total + per_page - 1) // per_page)
 
     districts = get_all_districts_admin()

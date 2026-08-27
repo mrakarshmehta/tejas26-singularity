@@ -1,4 +1,4 @@
-﻿"""
+"""
 HiddenYatra — Ultimate AI Search Engine (Phase 2.5)
 Production-grade intelligent search with:
   - Fuzzy matching (Levenshtein ≤ 2)
@@ -848,7 +848,7 @@ class SearchIndex:
 
     # ── MAIN SEARCH ──────────────────────────────────────────
 
-    def search(self, query, limit=12, filters=None, user_lat=None, user_lng=None):
+    def search(self, query, limit=12, filters=None, user_lat=None, user_lng=None, seq_id=None):
         """Main search function with NL parsing, filters, nearby, and multi-tier ranking.
 
         Args:
@@ -1256,12 +1256,12 @@ def rebuild_search_index():
     return idx.size
 
 
-def instant_search(query, limit=12, filters=None, user_lat=None, user_lng=None):
+def instant_search(query, limit=12, filters=None, user_lat=None, user_lng=None, seq_id=None):
     """Public API: perform instant search with optional filters and geolocation."""
     t0 = time.perf_counter()
     idx = get_search_index()
     results = idx.search(query, limit=limit, filters=filters,
-                         user_lat=user_lat, user_lng=user_lng)
+                         user_lat=user_lat, user_lng=user_lng, seq_id=seq_id)
     elapsed_ms = (time.perf_counter() - t0) * 1000
     _analytics.log_search(query, len(results), elapsed_ms)
     return results

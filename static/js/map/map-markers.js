@@ -23,6 +23,8 @@
     cultural:      '#8b5cf6',
     mountain:      '#6366f1',
     museum:        '#d97706',
+    hotel:         '#2563eb',
+    homestay:      '#059669',
     default:       '#6366f1',
   };
 
@@ -40,6 +42,8 @@
     cultural:      '🎭',
     mountain:      '⛰️',
     museum:        '🏛️',
+    hotel:         '🏨',
+    homestay:      '🏡',
     default:       '📍',
   };
 
@@ -57,6 +61,8 @@
     cultural:      'Cultural',
     mountain:      'Mountain',
     museum:        'Museum',
+    hotel:         'Hotel',
+    homestay:      'Homestay',
   };
 
   /* ── Shared Marker Factory ───────────────────────── */

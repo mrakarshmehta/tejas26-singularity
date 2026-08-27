@@ -21,6 +21,7 @@ if (typeof window !== 'undefined' && 'ontouchstart' in window) {
     constructor(options) {
       this.leafletAdapter = options.leafletAdapter;
       this.maplibreAdapter = options.maplibreAdapter || null;
+      this.googleAdapter = options.googleAdapter || null;
 
       /** @type {HTMLElement|null} */
       this._panel = null;
@@ -412,7 +413,17 @@ if (typeof window !== 'undefined' && 'ontouchstart' in window) {
       if (!def) return;
 
       // Route to correct map engine
-      const is3DMode = state && state.is3D();
+      const isGoogleEngine = (root.MAP_ENGINE === 'google' || Boolean(this.googleAdapter));
+
+      if (isGoogleEngine && this.googleAdapter) {
+        // Google Maps Engine
+        try {
+          await this.googleAdapter.toggleLayer(layerId, visible);
+        } catch (e) {
+          console.warn(`[MapControls] Google toggleLayer(${layerId}) handled:`, e.message || e);
+        }
+        return;
+      }
 
       // Leaflet Engine
       if (def.engineSupport.includes('leaflet') && this.leafletAdapter) {

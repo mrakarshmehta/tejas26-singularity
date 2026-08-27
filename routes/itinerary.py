@@ -407,7 +407,7 @@ def api_generate_trip():
 
         if day_places:
             # Fetch local foods for visited districts
-            district_ids = [p.get('district_id') for p in day_places if p.get('district_id')]
+            district_ids = list(dict.fromkeys(p.get('district_id') for p in day_places if p.get('district_id')))
             foods = []
             for did in district_ids:
                 df = get_district_foods(did)
@@ -421,7 +421,14 @@ def api_generate_trip():
                     {'name': 'Tilkut', 'description': 'Sesame seed and jaggery brittle specialty from Gaya.'}
                 ]
 
-            day_data['recommended_foods'] = [{'name': f['name'], 'description': (f.get('description') or '')[:90]} for f in foods[:3]]
+            seen_food_names = set()
+            unique_foods = []
+            for f in foods:
+                if f.get('name') and f['name'] not in seen_food_names:
+                    seen_food_names.add(f['name'])
+                    unique_foods.append(f)
+
+            day_data['recommended_foods'] = [{'name': f['name'], 'description': (f.get('description') or '')[:90]} for f in unique_foods[:3]]
 
             # Fetch hotels/stays for main day place
             main_p = day_places[0]

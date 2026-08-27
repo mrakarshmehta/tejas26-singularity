@@ -1035,7 +1035,16 @@
 </div>
 {% endblock %}
 
+{% block extra_css %}
+{% if skip_base_leaflet %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endif %}
+{% endblock %}
+
 {% block extra_js %}
+{% if skip_base_leaflet %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endif %}
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
 <script>

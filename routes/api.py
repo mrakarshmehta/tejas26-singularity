@@ -135,6 +135,9 @@ def api_instant_search():
     user_lat = request.args.get('lat', type=float)
     user_lng = request.args.get('lng', type=float)
 
+    # Sequence ID for async request correlation
+    seq_id = request.args.get('seq_id', type=int)
+
     results = instant_search(q, limit=limit, filters=filters, seq_id=seq_id,
                              user_lat=user_lat, user_lng=user_lng)
 

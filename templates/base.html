@@ -294,6 +294,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   {% endif %}
 
+  <!-- HY Namespace (must exist before app.min.js) -->
+  <script>window.HY = window.HY || {};</script>
   <!-- App JS (Minified for Production) -->
   <script src="{{ url_for('static', filename='js/app.min.js') }}?v=9"></script>
   <!-- Instant Search Engine -->
