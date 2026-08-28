@@ -171,7 +171,7 @@
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
 }
 
 .map-sidebar-close {
@@ -310,7 +310,7 @@
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
 }
 
 .preview-rating {
@@ -451,7 +451,7 @@
 .spi-name {
   font-size: 0.86rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -853,4 +853,291 @@
 }
 .map-marker-pin:hover {
   transform: scale(1.18);
+}
+
+/* ═══════════════════════════════════════════════════════
+   UX ENHANCEMENTS — Category Groups, Actions, Nearby
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Collapsible Category Group Toggle ─────────── */
+.filter-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-group-toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+}
+
+.filter-group-toggle .toggle-arrow {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+  font-size: 0.7rem;
+}
+
+.filter-group-toggle.open .toggle-arrow {
+  transform: rotate(90deg);
+}
+
+/* Collapsible chip containers */
+.filter-chips-collapsible {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-top: 0;
+  transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.2s ease;
+}
+
+.filter-chips-collapsible.expanded {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 6px;
+}
+
+/* ── Secondary Action Row ──────────────────────── */
+.preview-actions-secondary {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-action-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-action-sm:hover {
+  background: rgba(255, 122, 24, 0.12);
+  border-color: rgba(255, 122, 24, 0.3);
+  color: var(--primary);
+}
+
+/* Save button saved state */
+.btn-action-sm.saved {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+/* ── Nearby Category Tabs ──────────────────────── */
+.nearby-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.nearby-tab {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nearby-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+
+.nearby-tab.active {
+  background: rgba(255, 122, 24, 0.15);
+  border-color: rgba(255, 122, 24, 0.4);
+  color: var(--primary);
+}
+
+/* ── Selected Marker Visual Emphasis ───────────── */
+.hy-marker-selected {
+  filter: drop-shadow(0 0 12px rgba(255, 122, 24, 0.7)) drop-shadow(0 0 24px rgba(255, 122, 24, 0.3));
+  z-index: 999 !important;
+  animation: hy-marker-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hy-marker-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* ── Mobile Bottom Sheet for Selected Place ────── */
+@media (max-width: 768px) {
+  .map-place-preview {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-height: 55vh;
+    border-radius: 20px 20px 0 0 !important;
+    background: rgba(10, 10, 15, 0.96) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5) !important;
+    z-index: 200 !important;
+    overflow-y: auto;
+    animation: slide-up 0.3s ease-out;
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Bottom sheet drag handle */
+  .map-place-preview::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    margin: 8px auto 4px;
+  }
+
+  .map-preview-img-wrapper {
+    height: 120px !important;
+    border-radius: 12px !important;
+    margin: 0 12px !important;
+  }
+
+  .map-preview-body {
+    padding: 10px 16px 20px !important;
+  }
+
+  .preview-actions {
+    flex-wrap: wrap;
+  }
+
+  .preview-actions-secondary {
+    justify-content: center;
+  }
+}
+
+/* Light theme: secondary actions */
+[data-theme="light"] .btn-action-sm {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .btn-action-sm:hover {
+  background: rgba(255, 122, 24, 0.08);
+  border-color: rgba(255, 122, 24, 0.25);
+  color: var(--primary);
+}
+
+[data-theme="light"] .filter-group-toggle {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .nearby-tab {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .nearby-tab.active {
+  background: rgba(255, 122, 24, 0.1);
+}
+
+/* Light mode: nearby items text fix */
+[data-theme="light"] .nearby-item strong {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .nearby-item {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .nearby-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Light mode: preview card name */
+[data-theme="light"] .map-preview-name {
+  color: var(--text-primary) !important;
+}
+
+/* Light mode: empty state text */
+[data-theme="light"] .map-empty-state h4 {
+  color: var(--text-primary) !important;
+}
+
+/* Light mode: sidebar list item name */
+[data-theme="light"] .spi-name {
+  color: var(--text-primary) !important;
+}
+
+/* ── Google Maps InfoWindow Popup Styling ─────────── */
+.gm-style .gm-style-iw-c {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 122, 24, 0.15) !important;
+  padding: 12px !important;
+  color: #f8fafc !important;
+}
+
+.gm-style .gm-style-iw-tc::after {
+  background: rgba(15, 23, 42, 0.96) !important;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.hy-gmp-popup-card {
+  color: #f8fafc !important;
+}
+
+.hy-gmp-popup-card h4 {
+  color: #ffffff !important;
+}
+
+.hy-gmp-popup-card div {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.gm-style .gm-style-iw button.gm-ui-hover-effect {
+  filter: invert(1) brightness(2) !important;
+  opacity: 0.8 !important;
 }

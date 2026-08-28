@@ -63,7 +63,7 @@
   <div class="map-sidebar" id="map-sidebar">
     <div class="map-sidebar-header">
       <div>
-        <h2 class="map-sidebar-title">🧭 Bihar GIS Explorer</h2>
+        <h2 class="map-sidebar-title">🧭 Explore Bihar</h2>
         <p style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
           Showing <strong id="map-results-count" style="color:var(--primary);">0</strong> destinations
         </p>
@@ -71,24 +71,50 @@
       <button class="map-sidebar-close" id="sidebar-close" aria-label="Close sidebar">✕</button>
     </div>
 
-    <!-- Category Chips Bar -->
+    <!-- Category Chips Bar — Grouped -->
     <div class="map-filters">
-      <label class="map-filter-label">Filter by Category</label>
       <div class="filter-chips" id="map-category-filters">
+        <!-- Popular (always visible) -->
         <button class="filter-chip active" data-category="">All</button>
+        <button class="filter-chip" data-category="tourist_spot">📸 Tourist</button>
+        <button class="filter-chip" data-category="hidden_gem">💎 Hidden Gem</button>
+        <button class="filter-chip" data-category="temple">🛕 Temple</button>
+        <button class="filter-chip" data-category="nature">🌿 Nature</button>
         <button class="filter-chip" data-category="hotel">🏨 Hotel</button>
+        <button class="filter-chip" data-category="food_place">🍽️ Food</button>
+      </div>
+
+      <!-- More Categories (collapsed by default) -->
+      <button class="filter-group-toggle" id="toggle-more-cats" onclick="this.nextElementSibling.classList.toggle('expanded');this.classList.toggle('open')">
+        More Categories <span class="toggle-arrow">▸</span>
+      </button>
+      <div class="filter-chips filter-chips-collapsible" id="more-category-filters">
+        <button class="filter-chip" data-category="historical">🏛️ Historical</button>
+        <button class="filter-chip" data-category="waterfall">💧 Waterfall</button>
+        <button class="filter-chip" data-category="mountain">⛰️ Mountain</button>
+        <button class="filter-chip" data-category="cultural">🎭 Cultural</button>
+        <button class="filter-chip" data-category="adventure">🧗 Adventure</button>
+        <button class="filter-chip" data-category="lake">🌊 Lake / River</button>
+        <button class="filter-chip" data-category="wildlife">🦁 Wildlife</button>
+        <button class="filter-chip" data-category="beach">🏖️ Beach</button>
+        <button class="filter-chip" data-category="market">🛍️ Market</button>
+        <button class="filter-chip" data-category="museum">🏛️ Museum</button>
+        <button class="filter-chip" data-category="homestay">🏡 Homestay</button>
+      </div>
+
+      <!-- Essentials (collapsed) -->
+      <button class="filter-group-toggle" id="toggle-essentials" onclick="this.nextElementSibling.classList.toggle('expanded');this.classList.toggle('open')">
+        🆘 Essentials <span class="toggle-arrow">▸</span>
+      </button>
+      <div class="filter-chips filter-chips-collapsible" id="essentials-filters">
         <button class="filter-chip" data-category="hospital">🏥 Hospital</button>
-        <button class="filter-chip" data-category="petrol_pump">⛽ Petrol Pump</button>
-        <button class="filter-chip" data-category="restaurant">🍽️ Restaurant</button>
         <button class="filter-chip" data-category="pharmacy">💊 Pharmacy</button>
         <button class="filter-chip" data-category="atm">🏧 ATM</button>
-        <button class="filter-chip" data-category="police_station">👮 Police Station</button>
+        <button class="filter-chip" data-category="police_station">👮 Police</button>
+        <button class="filter-chip" data-category="petrol_pump">⛽ Petrol</button>
+        <button class="filter-chip" data-category="railway_station">🚂 Railway</button>
         <button class="filter-chip" data-category="bus_stand">🚌 Bus Stand</button>
-        <button class="filter-chip" data-category="railway_station">🚂 Railway Station</button>
         <button class="filter-chip" data-category="parking">🅿️ Parking</button>
-        {% for code, label in categories %}
-        <button class="filter-chip" data-category="{{ code }}">{{ label }}</button>
-        {% endfor %}
       </div>
     </div>
 
@@ -112,15 +138,29 @@
         <!-- Quick Attributes -->
         <div class="preview-tags" id="preview-tags"></div>
 
-        <!-- Action Row -->
+        <!-- Action Row — Primary -->
         <div class="preview-actions">
-          <a href="#" class="btn btn-primary btn-sm flex-1" id="preview-link">Explore Details →</a>
-          <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" id="preview-directions-btn" title="Open Google Maps Directions">🧭 Route</a>
+          <a href="#" class="btn btn-primary btn-sm flex-1" id="preview-link">View Details</a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" id="preview-directions-btn" title="Open Google Maps Directions">🧭 Directions</a>
+        </div>
+        <!-- Action Row — Secondary -->
+        <div class="preview-actions-secondary">
+          <a href="/itinerary" class="btn-action-sm" id="preview-plan-btn" title="Plan a trip including this place">🗺️ Plan Trip</a>
+          <button class="btn-action-sm" id="preview-save-btn" title="Save to wishlist" onclick="toggleWishlist()">♡ Save</button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-action-sm" id="preview-gmaps-btn" title="Open in Google Maps">📍 Google Maps</a>
         </div>
 
         <!-- Nearby Recommendations Section -->
         <div class="nearby-section" id="nearby-section" style="display:none;">
-          <h4 class="nearby-title">🌐 Nearby Attractions (<span id="nearby-radius">25km</span>)</h4>
+          <h4 class="nearby-title">📍 Nearby Places</h4>
+          <div class="nearby-tabs" id="nearby-tabs">
+            <button class="nearby-tab active" data-nearby-cat="" onclick="filterNearby('')">All</button>
+            <button class="nearby-tab" data-nearby-cat="temple" onclick="filterNearby('temple')">🛕</button>
+            <button class="nearby-tab" data-nearby-cat="nature" onclick="filterNearby('nature')">🌿</button>
+            <button class="nearby-tab" data-nearby-cat="food_place" onclick="filterNearby('food_place')">🍽️</button>
+            <button class="nearby-tab" data-nearby-cat="hotel" onclick="filterNearby('hotel')">🏨</button>
+            <button class="nearby-tab" data-nearby-cat="hidden_gem" onclick="filterNearby('hidden_gem')">💎</button>
+          </div>
           <div class="nearby-list" id="nearby-list"></div>
         </div>
       </div>
@@ -819,14 +859,19 @@ window._hyInitGoogleMap = function() {
       const directionsUrl = rawMapsLink || `https://www.google.com/maps/dir/?api=1&destination=${p.latitude},${p.longitude}`;
       document.getElementById('preview-directions-btn').href = directionsUrl;
 
-      // Distance text
+      // Distance text — honest Haversine label
       const distEl = document.getElementById('preview-distance');
       if (p.distance_km) {
-        distEl.textContent = `⚡ ${p.distance_km} km from your location`;
+        distEl.textContent = `📍 Approx. ${p.distance_km} km away`;
         distEl.style.display = 'block';
       } else {
         distEl.style.display = 'none';
       }
+
+      // Google Maps link
+      const gmapsLink = `https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`;
+      const gmapsBtn = document.getElementById('preview-gmaps-btn');
+      if (gmapsBtn) gmapsBtn.href = gmapsLink;
 
       // Quick Tags
       const tagsEl = document.getElementById('preview-tags');
@@ -840,7 +885,11 @@ window._hyInitGoogleMap = function() {
       populateNearbyPlaces(p);
 
       preview.style.display = 'block';
-      document.getElementById('map-sidebar').classList.add('open');
+      const sidebar = document.getElementById('map-sidebar');
+      if (sidebar) {
+        sidebar.classList.add('open');
+        preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
     window.selectPlace = selectPlace;
 
@@ -850,43 +899,69 @@ window._hyInitGoogleMap = function() {
     }
     window.hidePreview = hidePreview;
 
-    function populateNearbyPlaces(target) {
-      const nearbySection = document.getElementById('nearby-section');
-      const nearbyList = document.getElementById('nearby-list');
-      nearbyList.innerHTML = '';
+    /* ── Nearby Places with category filter ─── */
+    let _nearbyCache = [];
+    let _nearbyTarget = null;
 
+    function populateNearbyPlaces(target) {
+      _nearbyTarget = target;
+      const nearbySection = document.getElementById('nearby-section');
       const targetLat = parseFloat(target.latitude);
       const targetLng = parseFloat(target.longitude);
 
-      const nearby = placesData.filter(p => {
+      _nearbyCache = placesData.filter(p => {
         const lat = parseFloat(p.latitude);
         const lng = parseFloat(p.longitude);
         if (p.id === target.id || isNaN(lat) || isNaN(lng)) return false;
         const d = calcDistance(targetLat, targetLng, lat, lng);
         p._distToTarget = Math.round(d * 10) / 10;
         return d <= 25;
-      }).sort((a, b) => a._distToTarget - b._distToTarget).slice(0, 3);
+      }).sort((a, b) => a._distToTarget - b._distToTarget);
 
-      if (nearby.length > 0) {
-        nearby.forEach(np => {
-          const item = document.createElement('a');
-          item.href = `/place/${encodeURIComponent(np.slug)}`;
-          item.className = 'nearby-item';
-          item.innerHTML = `
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-size:0.8rem;color:white;">${escapeHTML(np.name)}</strong>
-              <span style="font-size:0.72rem;color:var(--primary);">${np._distToTarget}km</span>
-            </div>
-            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">
-              📍 ${escapeHTML(np.district_name || np.state_name || 'Bihar')}
-            </div>
-          `;
-          nearbyList.appendChild(item);
-        });
-        nearbySection.style.display = 'block';
-      } else {
-        nearbySection.style.display = 'none';
+      // Reset tab
+      document.querySelectorAll('.nearby-tab').forEach(t => t.classList.remove('active'));
+      const allTab = document.querySelector('.nearby-tab[data-nearby-cat=""]');
+      if (allTab) allTab.classList.add('active');
+
+      renderNearbyList(_nearbyCache.slice(0, 5));
+      nearbySection.style.display = _nearbyCache.length > 0 ? 'block' : 'none';
+    }
+
+    function filterNearby(cat) {
+      document.querySelectorAll('.nearby-tab').forEach(t => t.classList.remove('active'));
+      const active = document.querySelector(`.nearby-tab[data-nearby-cat="${cat}"]`);
+      if (active) active.classList.add('active');
+      const filtered = cat ? _nearbyCache.filter(p => (p.category || '') === cat) : _nearbyCache;
+      renderNearbyList(filtered.slice(0, 5));
+    }
+    window.filterNearby = filterNearby;
+
+    function renderNearbyList(items) {
+      const nearbyList = document.getElementById('nearby-list');
+      nearbyList.innerHTML = '';
+      if (items.length === 0) {
+        nearbyList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--text-muted);font-size:0.78rem;">No nearby places in this category</div>';
+        return;
       }
+      items.forEach(np => {
+        const catEmoji = (window.HYMapMarkers ? window.HYMapMarkers.getEmoji(np.category) : '📍') || '📍';
+        const item = document.createElement('a');
+        item.href = `/place/${encodeURIComponent(np.slug)}`;
+        item.className = 'nearby-item';
+        item.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:0.9rem;">${catEmoji}</span>
+              <strong class="nearby-item-name" style="font-size:0.8rem;color:var(--text-primary);">${escapeHTML(np.name)}</strong>
+            </div>
+            <span style="font-size:0.72rem;color:var(--primary);font-weight:600;">${np._distToTarget} km</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;padding-left:22px;">
+            ${escapeHTML(np.district_name || 'Bihar')}
+          </div>
+        `;
+        nearbyList.appendChild(item);
+      });
     }
 
     function createSidebarListItem(p) {
@@ -954,7 +1029,7 @@ window._hyInitGoogleMap = function() {
 
     function applyFilters() {
       const query = (document.getElementById('map-search-input').value || '').trim().toLowerCase();
-      const activeChip = document.querySelector('#map-category-filters .filter-chip.active');
+      const activeChip = document.querySelector('.map-filters .filter-chip.active');
       const category = activeChip ? (activeChip.dataset.category || '') : '';
       const district = (document.getElementById('map-district-filter').value || '').toLowerCase();
       const state = (document.getElementById('map-state-filter').value || '').toLowerCase();
@@ -1004,9 +1079,13 @@ window._hyInitGoogleMap = function() {
       document.getElementById('search-clear').style.display = 'none';
       document.getElementById('map-district-filter').value = '';
       document.getElementById('map-state-filter').value = '';
-      document.querySelectorAll('#map-category-filters .filter-chip').forEach(c => c.classList.remove('active'));
-      const allChip = document.querySelector('#map-category-filters .filter-chip[data-category=""]');
+      // Clear ALL chips across all groups
+      document.querySelectorAll('.map-filters .filter-chip').forEach(c => c.classList.remove('active'));
+      const allChip = document.querySelector('.map-filters .filter-chip[data-category=""]');
       if (allChip) allChip.classList.add('active');
+      // Collapse expanded groups
+      document.querySelectorAll('.filter-chips-collapsible').forEach(g => g.classList.remove('expanded'));
+      document.querySelectorAll('.filter-group-toggle').forEach(t => t.classList.remove('open'));
       hidePreview();
       applyFilters();
       googleMap.panTo({ lat: 25.0961, lng: 85.3131 });
@@ -1032,13 +1111,47 @@ window._hyInitGoogleMap = function() {
       applyFilters();
     });
 
-    document.querySelectorAll('#map-category-filters .filter-chip').forEach(chip => {
+    // Bind ALL filter chips across all groups (popular + more + essentials)
+    const allFilterChips = document.querySelectorAll('.map-filters .filter-chip');
+    allFilterChips.forEach(chip => {
       chip.addEventListener('click', () => {
-        document.querySelectorAll('#map-category-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        // Remove active from ALL chips in ALL groups
+        allFilterChips.forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
         applyFilters();
       });
     });
+
+    // Wishlist toggle (uses session-based wishlist)
+    function toggleWishlist() {
+      if (!activePlace) return;
+      const btn = document.getElementById('preview-save-btn');
+      const placeId = activePlace.id;
+      fetch(`/wishlist/toggle/${placeId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': '{{ csrf_token() }}'
+        }
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.wishlisted) {
+            btn.innerHTML = '♥ Saved';
+            btn.classList.add('saved');
+          } else {
+            btn.innerHTML = '♡ Save';
+            btn.classList.remove('saved');
+          }
+        })
+        .catch(() => {
+          // Fallback: toggle visual state
+          const isSaved = btn.classList.toggle('saved');
+          btn.innerHTML = isSaved ? '♥ Saved' : '♡ Save';
+        });
+    }
+    window.toggleWishlist = toggleWishlist;
 
     document.getElementById('map-district-filter').addEventListener('change', applyFilters);
     document.getElementById('map-state-filter').addEventListener('change', applyFilters);
