@@ -1557,19 +1557,59 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
+  /* IMPORTANT: .navbar has backdrop-filter which creates a containing block,
+     so position:fixed on children resolves relative to .navbar, not viewport.
+     Use position:absolute + top:100% to place drawer below navbar. */
   .nav-links {
     display: none;
-    position: fixed; top: var(--navbar-height);
-    left: 0; right: 0; bottom: 0;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
     background: var(--bg-primary);
     flex-direction: column;
-    padding: var(--space-xl);
-    gap: var(--space-xs);
+    justify-content: flex-start;
+    padding: 12px 20px 20px;
+    gap: 2px;
+    max-height: calc(100vh - var(--navbar-height));
+    max-height: calc(100dvh - var(--navbar-height));
     overflow-y: auto;
     border-top: 1px solid var(--border-color);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
     z-index: var(--z-overlay);
   }
   .nav-links.active { display: flex; }
+  .nav-links .nav-link {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 500;
+    min-height: 48px;
+    box-sizing: border-box;
+  }
+  .nav-links .nav-link:hover,
+  .nav-links .nav-link.active {
+    background: var(--primary-50);
+  }
+  .nav-links .nav-link-cta {
+    margin-top: 8px;
+    justify-content: center;
+  }
+  .nav-links .nav-profile-dropdown {
+    width: 100%;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+  }
+  .nav-links .nav-profile-btn {
+    width: 100%;
+    justify-content: flex-start;
+    min-height: 48px;
+  }
+  .nav-links .theme-toggle {
+    margin-top: 4px;
+    align-self: flex-start;
+  }
   .nav-mobile-toggle { display: flex; }
   .nav-search { max-width: 200px; }
 }
@@ -1577,14 +1617,19 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 @media (max-width: 768px) {
   .nav-links {
     display: none;
-    position: fixed; top: var(--navbar-height);
-    left: 0; right: 0; bottom: 0;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
     background: var(--bg-primary);
     flex-direction: column;
-    padding: var(--space-xl);
-    gap: var(--space-xs);
+    justify-content: flex-start;
+    padding: 12px 20px 20px;
+    gap: 2px;
+    max-height: calc(100vh - var(--navbar-height));
+    max-height: calc(100dvh - var(--navbar-height));
     overflow-y: auto;
     border-top: 1px solid var(--border-color);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
     z-index: var(--z-overlay);
   }
   .nav-links.active { display: flex; }
