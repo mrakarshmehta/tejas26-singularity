@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %}{{ app_name }} — Discover Bihar's Hidden Gems & Modern Tourism Platform{% endblock %}
-{% block meta_desc %}Explore ancient heritage, hidden waterfalls, local street food, and AI-powered trip planning across all 38 districts of Bihar with HiddenYatra.{% endblock %}
+{% block meta_desc %}Explore ancient heritage, hidden waterfalls, local street food, and smart trip planning across Bihar's districts with HiddenYatra.{% endblock %}
 
 {% block extra_meta %}
 <!-- OpenGraph Social Sharing -->
 <meta property="og:title" content="HiddenYatra — Discover Bihar's Hidden Gems">
-<meta property="og:description" content="Explore ancient heritage, hidden waterfalls, local street food, and AI-powered trip planning across all 38 districts of Bihar.">
+<meta property="og:description" content="Explore ancient heritage, hidden waterfalls, local street food, and smart trip planning across Bihar's districts.">
 <meta property="og:image" content="{{ url_for('static', filename='og-default.png', _external=True) }}">
 <meta property="og:url" content="{{ request.url }}">
 <meta property="og:type" content="website">
@@ -388,10 +388,22 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 }
 
 @media (max-width: 768px) {
-  .hero { min-height: 90vh; }
-  .hero-cta-group { flex-direction: column; align-items: center; }
+  .hero {
+    min-height: calc(100vh - 70px);
+    min-height: calc(100dvh - 70px);
+    padding-bottom: 80px;
+  }
+  .hero-inner { padding: var(--space-lg) var(--space-md); }
+  .hero-badge { font-size: 0.75rem; padding: 6px 16px; margin-bottom: var(--space-md); }
+  .hero-title { margin-bottom: var(--space-md); }
+  .hero-subtitle { margin-bottom: var(--space-lg); font-size: 0.92rem; }
+  .hero-cta-group { flex-direction: column; align-items: center; margin-bottom: var(--space-md); }
+  .hero-cta { padding: 12px 26px; font-size: 0.9rem; width: 100%; max-width: 280px; justify-content: center; }
   .hero-search-wrapper { padding: 4px 4px 4px 18px; }
   .hero-search-btn { padding: 12px 22px; font-size: 0.88rem; }
+  .hero-quick-links { display: none; }
+  .hero-slide-dots { bottom: 90px; }
+  .hero-scroll-hint { bottom: 70px; }
 }
 </style>
 {% endblock %}
@@ -428,7 +440,7 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
   <div class="hero-inner">
     <div class="hero-badge">
       <span class="badge-dot"></span>
-      Exploring Bihar — {{ stats.districts }} Districts • {{ stats.places }} Verified Places
+      Exploring Bihar — {{ stats.places }} Verified Places • 20 Covered Districts • 14 Hidden Gems
     </div>
 
     <h1 class="hero-title">
@@ -437,7 +449,7 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
     </h1>
 
     <p class="hero-subtitle">
-      Explore ancient temples, hidden waterfalls, local street food, and AI-curated itineraries across every district — from Bodh Gaya to Madhubani.
+      Explore ancient temples, hidden waterfalls, local street food, and plan trips across Bihar — from Bodh Gaya to Madhubani.
     </p>
 
     <!-- Glass Search Bar -->
@@ -494,16 +506,16 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 <!-- ═══ LIVE STATISTICS TICKER ═══ -->
 <section class="stats-bar reveal" aria-label="Platform Statistics">
   <div class="stat-item">
-    <span class="stat-number" data-target="{{ stats.districts }}">0</span>
-    <span class="stat-label">Districts</span>
+    <span class="stat-number" data-target="20">0</span>
+    <span class="stat-label">Districts Covered</span>
   </div>
   <div class="stat-item">
     <span class="stat-number" data-target="{{ stats.places }}">0</span>
     <span class="stat-label">Verified Places</span>
   </div>
   <div class="stat-item">
-    <span class="stat-number" data-target="{{ stats.specialties }}">0</span>
-    <span class="stat-label">Local Foods</span>
+    <span class="stat-number" data-target="14">0</span>
+    <span class="stat-label">Hidden Gems</span>
   </div>
   <div class="stat-item">
     <span class="stat-number" data-target="{{ stats.reviews }}">0</span>
@@ -557,9 +569,9 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
   <div class="section-header">
     <div>
       <h2 class="section-title">🗺️ Explore Bihar by <span class="text-gradient-saffron">District</span></h2>
-      <p style="color:var(--text-muted);font-size:0.9rem;margin-top:4px;">Browse hidden gems sorted by all 38 districts</p>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-top:4px;">Browse hidden gems across Bihar's districts</p>
     </div>
-    <a href="{{ url_for('main.state_detail', slug='bihar') }}" class="section-link">All 38 Districts →</a>
+    <a href="{{ url_for('main.state_detail', slug='bihar') }}" class="section-link">All Districts →</a>
   </div>
   <div class="districts-visual-grid stagger-children">
     {% set district_colors = ['#FF7A18', '#00BFA6', '#6366F1', '#F43F5E', '#8B5CF6', '#3B82F6', '#F59E0B', '#10B981', '#06B6D4', '#EC4899', '#14B8A6', '#EF4444'] %}
@@ -599,7 +611,7 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       </div>
       <h3 class="why-title">100% Verified Gems</h3>
-      <p class="why-desc">Detailed info, authentic photos, and accurate GPS coordinates for hidden places across all 38 Bihar districts.</p>
+      <p class="why-desc">Detailed info, authentic photos, and accurate GPS coordinates for hidden places across Bihar's districts.</p>
     </div>
 
     <!-- Feature 2 -->

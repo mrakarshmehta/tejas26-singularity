@@ -368,8 +368,8 @@
         if (!el.querySelector('.hy-dist-badge')) {
           const badge = document.createElement('span');
           badge.className = 'hy-dist-badge';
-          badge.textContent = HY.formatDist(dist);
-          badge.style.cssText = 'position:absolute;top:8px;left:8px;z-index:5;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;background:rgba(0,0,0,0.7);color:#00BFA6;backdrop-filter:blur(4px);';
+          badge.textContent = '📍 ' + HY.formatDist(dist);
+          badge.style.cssText = 'position:absolute;bottom:10px;left:10px;z-index:5;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;background:rgba(0,0,0,0.75);color:#00BFA6;backdrop-filter:blur(4px);box-shadow:0 2px 8px rgba(0,0,0,0.3);';
           el.style.position = 'relative';
           el.appendChild(badge);
         }

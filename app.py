@@ -49,6 +49,8 @@ def create_app():
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
     app.config['PERMANENT_SESSION_LIFETIME'] = 14400  # 4 hours
     app.config['SESSION_COOKIE_SECURE'] = IS_PRODUCTION
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.jinja_env.auto_reload = True
 
     # Ensure upload directories exist
     for folder in [UPLOAD_FOLDER]:
