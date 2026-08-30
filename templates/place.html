@@ -56,6 +56,12 @@
     </div>
     {% endif %}
     <div class="place-hero-actions">
+      <a href="/itinerary?place_id={{ place.id }}" class="btn-action-pill" style="background:linear-gradient(135deg,var(--primary),#e0620e);color:#fff;border-color:var(--primary);font-weight:700;box-shadow:0 4px 14px rgba(255,122,24,0.35);">
+        🧳 Plan Trip
+      </a>
+      <a href="/explore?place_id={{ place.id }}" class="btn-action-pill" style="background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.3);color:#fff;">
+        🗺️ View on Map
+      </a>
       <button class="btn-action-pill" id="wishlist-toggle" onclick="toggleWishlist({{ place.id }})">
         <span id="wishlist-icon">🤍</span> <span id="wishlist-text">Save</span>
       </button>
@@ -774,12 +780,16 @@
         {% if accommodations %}<div class="map-legend-item"><span class="map-legend-dot dot-hotel"></span> Hotels</div>{% endif %}
         {% if specialties %}<div class="map-legend-item"><span class="map-legend-dot dot-food"></span> Food</div>{% endif %}
       </div>
-      <div class="map-actions">
+      <div class="map-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;">
+        <a href="/explore?place_id={{ place.id }}" class="btn btn-primary btn-sm" style="text-align:center;justify-content:center;">🗺️ Explore Map</a>
         {% if place.maps_link %}
-        <a href="{{ place.maps_link }}" target="_blank" class="btn btn-outline btn-sm">Open in Google Maps</a>
+        <a href="{{ place.maps_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="text-align:center;justify-content:center;">📍 Google Maps</a>
         {% else %}
-        <a href="https://www.google.com/maps?q={{ place.latitude }},{{ place.longitude }}" target="_blank" class="btn btn-outline btn-sm">Get Directions</a>
+        <a href="https://www.google.com/maps/dir/?api=1&destination={{ place.latitude }},{{ place.longitude }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="text-align:center;justify-content:center;">🧭 Directions</a>
         {% endif %}
+      </div>
+      <div style="margin-top:8px;">
+        <a href="/itinerary?place_id={{ place.id }}" class="btn btn-saffron btn-sm" style="width:100%;text-align:center;justify-content:center;font-weight:700;box-shadow:0 3px 10px rgba(255,122,24,0.25);">🧳 Plan a Trip Here →</a>
       </div>
       <p class="distance-text" id="distance-text"></p>
     </div>

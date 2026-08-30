@@ -1000,5 +1000,52 @@ async function saveTrip() {
     alert('Failed to save. Please try again.');
   }
 }
+
+// ── Auto-prefill from URL parameters (?place_id=, ?companion=, ?days=, ?budget=, ?category=) ──
+(async function initFromUrlParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const placeId = params.get('place_id');
+    const placeSlug = params.get('place');
+    const companion = params.get('companion');
+    const days = params.get('days');
+    const budget = params.get('budget');
+    const category = params.get('category');
+
+    if (days) {
+      const dInput = document.getElementById('trip-days');
+      if (dInput) dInput.value = Math.min(Math.max(parseInt(days) || 3, 1), 30);
+    }
+    if (companion) {
+      const card = document.querySelector(`.travel-mode-card[data-mode="${companion}"]`);
+      if (card) card.click();
+    }
+    if (budget) {
+      const bInput = document.getElementById('trip-budget-amount');
+      if (bInput) bInput.value = Math.max(parseInt(budget) || 3000, 500);
+    }
+    if (category) {
+      const tag = document.querySelector(`.interest-tag[data-cat="${category}"]`);
+      if (tag) tag.classList.add('selected');
+    }
+
+    if (placeId || placeSlug) {
+      const q = placeSlug || placeId;
+      const res = await fetch(`/api/itinerary/search?q=${encodeURIComponent(q)}`);
+      const places = await res.json();
+      if (places && places.length > 0) {
+        const match = places.find(p => String(p.id) === String(placeId) || p.slug === placeSlug) || places[0];
+        if (match) {
+          isAiMode = false;
+          selectedPlaces = [match];
+          renderSelectedPlaceChips();
+        }
+      }
+    }
+    updateBudgetHint();
+  } catch (err) {
+    console.warn('[Itinerary] URL param prefill skipped:', err);
+  }
+})();
 </script>
 {% endblock %}

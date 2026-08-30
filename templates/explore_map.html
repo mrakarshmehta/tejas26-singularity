@@ -65,7 +65,7 @@
       <div>
         <h2 class="map-sidebar-title">🧭 Explore Bihar</h2>
         <p style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
-          Showing <strong id="map-results-count" style="color:var(--primary);">0</strong> destinations
+          Showing <strong id="map-results-count" style="color:var(--primary);">0</strong> destinations across 20 districts
         </p>
       </div>
       <button class="map-sidebar-close" id="sidebar-close" aria-label="Close sidebar">✕</button>
@@ -489,10 +489,16 @@ function selectPlace(p, marker) {
   const directionsUrl = rawMapsLink || `https://www.google.com/maps/dir/?api=1&destination=${p.latitude},${p.longitude}`;
   document.getElementById('preview-directions-btn').href = directionsUrl;
 
+  const planBtn = document.getElementById('preview-plan-btn');
+  if (planBtn) planBtn.href = '/itinerary?place_id=' + encodeURIComponent(p.id);
+
+  const gmapsBtn = document.getElementById('preview-gmaps-btn');
+  if (gmapsBtn) gmapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`;
+
   // Distance text
   const distEl = document.getElementById('preview-distance');
   if (p.distance_km) {
-    distEl.textContent = `⚡ ${p.distance_km} km from your location`;
+    distEl.textContent = `⚡ Approx. ${p.distance_km} km from your location`;
     distEl.style.display = 'block';
   } else {
     distEl.style.display = 'none';
@@ -727,6 +733,53 @@ document.addEventListener('keydown', (e) => {
 
 // Initial Render
 renderMarkers(ALL_PLACES);
+
+// URL query parameter handler for Leaflet
+try {
+  const urlParams = new URLSearchParams(window.location.search);
+  const qPlaceId = urlParams.get('place_id');
+  const qPlaceSlug = urlParams.get('place');
+  const qCategory = urlParams.get('category');
+  const qDistrict = urlParams.get('district');
+  const qNearMe = urlParams.get('near_me');
+
+  if (qCategory) {
+    const chip = document.querySelector(`.map-filters .filter-chip[data-category="${qCategory}"]`);
+    if (chip) {
+      document.querySelectorAll('.map-filters .filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const collapsible = chip.closest('.filter-chips-collapsible');
+      if (collapsible) {
+        collapsible.classList.add('expanded');
+        if (collapsible.previousElementSibling) collapsible.previousElementSibling.classList.add('open');
+      }
+      applyFilters();
+    }
+  }
+  if (qDistrict) {
+    const distEl = document.getElementById('map-district-filter');
+    if (distEl) {
+      distEl.value = qDistrict;
+      applyFilters();
+    }
+  }
+  if (qPlaceId || qPlaceSlug) {
+    const target = ALL_PLACES.find(p => String(p.id) === String(qPlaceId) || p.slug === qPlaceSlug);
+    if (target) {
+      setTimeout(() => {
+        selectPlace(target, null);
+        if (target.latitude && target.longitude) {
+          map.setView([parseFloat(target.latitude), parseFloat(target.longitude)], 13);
+        }
+      }, 400);
+    }
+  }
+  if (qNearMe === '1' || qNearMe === 'true') {
+    triggerNearMe();
+  }
+} catch (err) {
+  console.warn('[HYMap Leaflet] Query param handler error:', err);
+}
 </script>
 {% endif %}
 
@@ -872,6 +925,10 @@ window._hyInitGoogleMap = function() {
       const gmapsLink = `https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`;
       const gmapsBtn = document.getElementById('preview-gmaps-btn');
       if (gmapsBtn) gmapsBtn.href = gmapsLink;
+
+      // Plan Trip Link prefilled with selected place
+      const planBtn = document.getElementById('preview-plan-btn');
+      if (planBtn) planBtn.href = '/itinerary?place_id=' + encodeURIComponent(p.id);
 
       // Quick Tags
       const tagsEl = document.getElementById('preview-tags');
@@ -1225,6 +1282,52 @@ window._hyInitGoogleMap = function() {
         }
       }
     });
+
+    /* ── Auto-select from URL query params (?place_id=, ?category=, ?district=, ?near_me=) ── */
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const qPlaceId = urlParams.get('place_id');
+      const qPlaceSlug = urlParams.get('place');
+      const qCategory = urlParams.get('category');
+      const qDistrict = urlParams.get('district');
+      const qNearMe = urlParams.get('near_me');
+
+      if (qCategory) {
+        const chip = document.querySelector(`.map-filters .filter-chip[data-category="${qCategory}"]`);
+        if (chip) {
+          allFilterChips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          const collapsible = chip.closest('.filter-chips-collapsible');
+          if (collapsible) {
+            collapsible.classList.add('expanded');
+            if (collapsible.previousElementSibling) collapsible.previousElementSibling.classList.add('open');
+          }
+          applyFilters();
+        }
+      }
+      if (qDistrict) {
+        const distEl = document.getElementById('map-district-filter');
+        if (distEl) {
+          distEl.value = qDistrict;
+          applyFilters();
+        }
+      }
+      if (qPlaceId || qPlaceSlug) {
+        const target = placesData.find(p => String(p.id) === String(qPlaceId) || p.slug === qPlaceSlug);
+        if (target) {
+          setTimeout(() => {
+            if (hyMap.googleAdapter) {
+              hyMap.googleAdapter.selectPlaceById(target.id);
+            }
+          }, 350);
+        }
+      }
+      if (qNearMe === '1' || qNearMe === 'true') {
+        triggerNearMe();
+      }
+    } catch (e) {
+      console.warn('[HYMap] Query param handler error:', e);
+    }
 
     console.log('[HYMap] ✅ Google Maps Engine & Advanced Markers initialized');
   } catch (err) {

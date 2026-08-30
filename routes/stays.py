@@ -75,6 +75,9 @@ def browse_stays():
 
     districts = get_all_districts_admin()
 
+    # Build pagination args excluding 'page' to avoid duplicate keyword in url_for
+    pagination_args = {k: v for k, v in request.args.items() if k != 'page'}
+
     return render_template(
         'stays/browse.html',
         listings=listings,
@@ -83,6 +86,7 @@ def browse_stays():
         total_pages=total_pages,
         districts=districts,
         filters=filters,
+        pagination_args=pagination_args,
         amenity_catalog={(a.get('key') or a.get('code')): a for a in AMENITY_OPTIONS}
     )
 
