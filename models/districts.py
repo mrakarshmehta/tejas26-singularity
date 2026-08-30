@@ -2,6 +2,7 @@
 HiddenYatra — States, Districts, and Blocks Database Operations
 Manages hierarchy: State → District → Block.
 """
+import os
 import logging
 try:
     import pymysql
@@ -13,6 +14,97 @@ except (ImportError, Exception):
 from models.connection import get_db, get_cursor, slugify
 
 logger = logging.getLogger(__name__)
+
+
+def _get_district_places_images_map():
+    """Returns a dict mapping district_id -> list of place cover_images."""
+    try:
+        with get_cursor() as cur:
+            cur.execute("""
+                SELECT district_id, cover_image 
+                FROM places 
+                WHERE deleted_at IS NULL AND cover_image IS NOT NULL AND cover_image != ''
+                ORDER BY is_featured DESC, id ASC
+            """)
+            rows = cur.fetchall()
+        places_map = {}
+        for r in rows:
+            places_map.setdefault(r['district_id'], []).append(r['cover_image'])
+        return places_map
+    except Exception as e:
+        logger.warning("Error fetching district places images map: %s", e)
+        return {}
+
+
+def resolve_district_display_image(district, places_map=None, base_dir=None):
+    """
+    Implements strict 4-step graceful fallback chain:
+    1. Valid district cover_image (if http/https or existing local file in static/uploads/districts or static/uploads/places)
+    2. First valid place cover_image belonging to this district (if http/https or existing local file in static/uploads/places)
+    3. district.image_url (if http/https)
+    4. None (triggers clean, designed gradient/emoji fallback in UI)
+    """
+    if not district:
+        return None
+
+    if base_dir is None:
+        try:
+            from config import BASE_DIR
+            base_dir = BASE_DIR
+        except ImportError:
+            base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+    # 1. Valid district cover_image
+    cover = district.get('cover_image') or ''
+    if cover:
+        if cover.startswith(('http://', 'https://')):
+            return cover
+        dist_path = os.path.join(base_dir, 'static', 'uploads', 'districts', cover)
+        if os.path.isfile(dist_path):
+            return f"/static/uploads/districts/{cover}"
+        places_path = os.path.join(base_dir, 'static', 'uploads', 'places', cover)
+        if os.path.isfile(places_path):
+            return f"/static/uploads/places/{cover}"
+
+    # 2. First valid tourism/place image belonging to that district
+    if places_map is None:
+        places_map = _get_district_places_images_map()
+
+    place_images = places_map.get(district.get('id'), [])
+    for p_img in place_images:
+        if not p_img:
+            continue
+        if p_img.startswith(('http://', 'https://')):
+            return p_img
+        p_path = os.path.join(base_dir, 'static', 'uploads', 'places', p_img)
+        if os.path.isfile(p_path):
+            return f"/static/uploads/places/{p_img}"
+
+    # 3. district.image_url if valid and reachable http URL
+    img_url = district.get('image_url') or ''
+    if img_url and img_url.startswith(('http://', 'https://')):
+        return img_url
+
+    # 4. Clean gradient/emoji fallback
+    return None
+
+
+def enrich_districts_images(districts, base_dir=None):
+    """Enriches a list of district dicts with 'display_image' key using the fallback chain."""
+    if not districts:
+        return districts
+    places_map = _get_district_places_images_map()
+    for d in districts:
+        d['display_image'] = resolve_district_display_image(d, places_map=places_map, base_dir=base_dir)
+    return districts
+
+
+def enrich_district_image(district, base_dir=None):
+    """Enriches a single district dict with 'display_image' key."""
+    if not district:
+        return district
+    district['display_image'] = resolve_district_display_image(district, base_dir=base_dir)
+    return district
 
 
 def get_all_states():
@@ -92,7 +184,8 @@ def get_districts_by_state(state_id):
             GROUP BY d.id
             ORDER BY d.sort_order ASC, d.name ASC
         """, (state_id,))
-        return cur.fetchall()
+        rows = cur.fetchall()
+        return enrich_districts_images(rows)
 
 
 def create_district(state_id, name, description='', famous_for='', cover_image='', image_url=''):
@@ -148,7 +241,8 @@ def get_district_by_id(district_id):
             JOIN states s ON s.id = d.state_id
             WHERE d.id = %s
         """, (district_id,))
-        return cur.fetchone()
+        row = cur.fetchone()
+        return enrich_district_image(row)
 
 
 def get_district_by_slug(state_id, slug):
@@ -161,7 +255,8 @@ def get_district_by_slug(state_id, slug):
             JOIN states s ON s.id = d.state_id
             WHERE d.state_id = %s AND d.slug = %s
         """, (state_id, slug))
-        return cur.fetchone()
+        row = cur.fetchone()
+        return enrich_district_image(row)
 
 
 def get_all_districts_admin():
@@ -176,7 +271,8 @@ def get_all_districts_admin():
             GROUP BY d.id
             ORDER BY d.sort_order ASC, d.name ASC
         """)
-        return cur.fetchall()
+        rows = cur.fetchall()
+        return enrich_districts_images(rows)
 
 
 def update_district(district_id, **kwargs):
@@ -246,7 +342,8 @@ def get_districts_for_homepage(limit=12):
             ORDER BY d.sort_order ASC, d.name ASC
             LIMIT %s
         """, (limit,))
-        return cur.fetchall()
+        rows = cur.fetchall()
+        return enrich_districts_images(rows)
 
 
 def get_featured_districts():
@@ -262,7 +359,8 @@ def get_featured_districts():
             GROUP BY d.id
             ORDER BY d.sort_order ASC
         """)
-        return cur.fetchall()
+        rows = cur.fetchall()
+        return enrich_districts_images(rows)
 
 
 def get_blocks_by_district(district_id):

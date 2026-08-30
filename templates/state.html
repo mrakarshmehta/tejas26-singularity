@@ -314,7 +314,9 @@
     {% set fd_colors = ['linear-gradient(135deg, #FF7A18, #F43F5E)', 'linear-gradient(135deg, #00BFA6, #3B82F6)', 'linear-gradient(135deg, #6366F1, #8B5CF6)', 'linear-gradient(135deg, #F59E0B, #10B981)'] %}
     {% for d in featured_d[:4] %}
     <a href="{{ url_for('main.district_detail', state_slug=state.slug, district_slug=d.slug) }}" class="featured-district-card">
-      <div class="fd-bg" style="background: {% if d.cover_image %}url('{% if d.cover_image.startswith('http') %}{{ d.cover_image }}{% else %}{{ url_for('static', filename='uploads/districts/' + d.cover_image) }}{% endif %}') center/cover{% elif d.image_url %}url('{{ d.image_url }}') center/cover{% else %}{{ fd_colors[loop.index0 % 4] }}{% endif %};"></div>
+      <div class="fd-bg" style="{% if d.display_image %}background: url('{{ d.display_image }}') center/cover;{% else %}background: {{ fd_colors[loop.index0 % 4] }}; display: flex; align-items: center; justify-content: center; font-size: 3rem;{% endif %}">
+        {% if not d.display_image %}<span style="opacity: 0.35;">🗺️</span>{% endif %}
+      </div>
       <div class="fd-overlay"></div>
       <div class="fd-content">
         <span class="fd-badge">⭐ FEATURED</span>
@@ -339,10 +341,8 @@
        class="district-premium-card"
        data-name="{{ district.name|lower }}"
        data-places="{{ district.place_count }}">
-      {% if district.cover_image %}
-      <div class="dpc-cover" style="background-image:url('{% if district.cover_image.startswith('http') %}{{ district.cover_image }}{% else %}{{ url_for('static', filename='uploads/districts/' + district.cover_image) }}{% endif %}');"></div>
-      {% elif district.image_url %}
-      <div class="dpc-cover" style="background-image:url('{{ district.image_url }}');"></div>
+      {% if district.display_image %}
+      <div class="dpc-cover" style="background-image:url('{{ district.display_image }}');"></div>
       {% else %}
       <div class="dpc-cover-fallback" style="background:linear-gradient(135deg, {{ card_colors[loop.index0 % 12] }}15, {{ card_colors[(loop.index0 + 4) % 12] }}15);">
         🗺️

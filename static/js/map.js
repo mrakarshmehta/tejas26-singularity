@@ -38,10 +38,11 @@ function _escHtml(str) {
 let placeMap = null;
 let hotelMarkers = [];
 let foodMarkers = [];
+let googlePlaceMapInstance = null;
 
 function focusMapMarker(type, index) {
   const markers = type === 'hotel' ? hotelMarkers : foodMarkers;
-  if (!markers[index] || !placeMap) return;
+  if (!markers[index]) return;
 
   // Scroll to map
   const mapEl = document.getElementById('place-map');
@@ -49,14 +50,32 @@ function focusMapMarker(type, index) {
     mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
-  // Pan and zoom to marker
   const marker = markers[index];
-  placeMap.setView(marker.getLatLng(), 15, { animate: true });
 
-  // Open popup
-  setTimeout(() => {
-    marker.openPopup();
-  }, 400);
+  // If Google Maps instance
+  if (googlePlaceMapInstance) {
+    const pos = marker.getPosition ? marker.getPosition() : marker.position;
+    if (pos) {
+      const lat = typeof pos.lat === 'function' ? pos.lat() : pos.lat;
+      const lng = typeof pos.lng === 'function' ? pos.lng() : pos.lng;
+      googlePlaceMapInstance.panTo({ lat: lat, lng: lng });
+      googlePlaceMapInstance.setZoom(15);
+    }
+    if (marker._infoWindow) {
+      setTimeout(() => {
+        marker._infoWindow.open({
+          map: googlePlaceMapInstance,
+          anchor: marker
+        });
+      }, 300);
+    }
+  } else if (placeMap && typeof placeMap.setView === 'function') {
+    // Leaflet
+    placeMap.setView(marker.getLatLng(), 15, { animate: true });
+    setTimeout(() => {
+      marker.openPopup();
+    }, 400);
+  }
 
   // Highlight the card
   const cardId = type === 'hotel' ? `accommodation-${index}` : `specialty-${index}`;
@@ -72,198 +91,433 @@ function focusMapMarker(type, index) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// Light tile layer for Leaflet (Clean OpenStreetMap tiles with NO watermark)
+const TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-  // Light tile layer
-  const TILE_URL = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-  const TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>';
-
-  /* ── Place Detail Map ───────────────────────────── */
+function initPlaceDetailMap() {
   const placeMapEl = document.getElementById("place-map");
-  if (placeMapEl && typeof L !== "undefined") {
-    const lat = parseFloat(placeMapEl.dataset.lat);
-    const lng = parseFloat(placeMapEl.dataset.lng);
-    const name = placeMapEl.dataset.name || "Location";
+  if (!placeMapEl || placeMapEl._initialized) return;
 
-    if (!isNaN(lat) && !isNaN(lng)) {
-      placeMap = L.map("place-map", {
-        scrollWheelZoom: false,
-        zoomControl: true,
-      }).setView([lat, lng], 13);
+  const lat = parseFloat(placeMapEl.dataset.lat);
+  const lng = parseFloat(placeMapEl.dataset.lng);
+  const name = placeMapEl.dataset.name || "Location";
 
-      L.tileLayer(TILE_URL, { attribution: TILE_ATTR, maxZoom: 18 }).addTo(placeMap);
+  if (isNaN(lat) || isNaN(lng)) return;
 
-      // Custom marker icon — Place (indigo)
-      const placeIcon = L.divIcon({
-        html: '<div style="background:linear-gradient(135deg,#6366f1,#4f46e5);width:16px;height:16px;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 10px rgba(99,102,241,0.5)"></div>',
-        className: "",
-        iconSize: [16, 16],
-        iconAnchor: [8, 8],
+  // ── 1. Google Maps Engine (Primary) ─────────────────────
+  if (typeof google !== "undefined" && google.maps && google.maps.Map) {
+    placeMapEl._initialized = true;
+    const mapId = placeMapEl.dataset.mapId || undefined;
+
+    const mapOptions = {
+      center: { lat: lat, lng: lng },
+      zoom: 13,
+      mapId: mapId,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      zoomControl: true,
+      scrollwheel: false,
+    };
+
+    const gMap = new google.maps.Map(placeMapEl, mapOptions);
+    googlePlaceMapInstance = gMap;
+
+    // Primary place marker
+    let placeMarker;
+    const placeContent = document.createElement('div');
+    placeContent.innerHTML = '<div style="background:linear-gradient(135deg,#6366f1,#4f46e5);width:22px;height:22px;border-radius:50%;border:3px solid white;box-shadow:0 2px 10px rgba(99,102,241,0.6);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:bold;">📍</div>';
+
+    if (google.maps.marker && google.maps.marker.AdvancedMarkerElement && mapId) {
+      try {
+        placeMarker = new google.maps.marker.AdvancedMarkerElement({
+          map: gMap,
+          position: { lat: lat, lng: lng },
+          title: name,
+          content: placeContent
+        });
+      } catch (err) {
+        placeMarker = new google.maps.Marker({
+          map: gMap,
+          position: { lat: lat, lng: lng },
+          title: name,
+        });
+      }
+    } else {
+      placeMarker = new google.maps.Marker({
+        map: gMap,
+        position: { lat: lat, lng: lng },
+        title: name,
       });
+    }
 
-      L.marker([lat, lng], { icon: placeIcon }).addTo(placeMap).bindPopup(
-        `<strong>${_escHtml(name)}</strong><br><small>📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}</small><br><a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:#6366f1;font-size:12px;">Open in Google Maps</a>`
-      );
+    const placeInfoWindow = new google.maps.InfoWindow({
+      content: `<div style="color:#0f172a;font-family:sans-serif;font-size:13px;padding:4px;"><strong style="font-size:14px;">${_escHtml(name)}</strong><br><span style="color:#64748b;font-size:11px;">📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}</span><br><a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" rel="noopener noreferrer" style="color:#6366f1;font-size:12px;text-decoration:none;font-weight:600;display:inline-block;margin-top:4px;">Open in Google Maps ↗</a></div>`
+    });
+    placeMarker._infoWindow = placeInfoWindow;
 
-      const bounds = L.latLngBounds([[lat, lng]]);
+    if (placeMarker.addListener) {
+      placeMarker.addListener('click', () => {
+        placeInfoWindow.open({ map: gMap, anchor: placeMarker });
+      });
+    }
 
-      // ── Hotel markers (orange) ──────────────────
-      const hotelsJson = placeMapEl.dataset.hotels;
-      if (hotelsJson) {
-        try {
-          const hotels = JSON.parse(hotelsJson);
-          const hotelIcon = L.divIcon({
-            html: '<div style="background:linear-gradient(135deg,#f59e0b,#d97706);width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(245,158,11,0.5)"></div>',
-            className: "",
-            iconSize: [12, 12],
-            iconAnchor: [6, 6],
-          });
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend({ lat: lat, lng: lng });
 
-          hotels.forEach((h, idx) => {
-            if (h.latitude && h.longitude) {
-              const popup = `<strong>🏨 ${_escHtml(h.name)}</strong><br><small>${h.type ? _escHtml(h.type.charAt(0).toUpperCase() + h.type.slice(1)) : 'Hotel'}</small>${h.price_range ? '<br>💰 ' + _escHtml(h.price_range) : ''}${h.address ? '<br>📍 ' + _escHtml(h.address) : ''}<br><a href="https://www.google.com/maps?q=${h.latitude},${h.longitude}" target="_blank" style="color:#6366f1;font-size:12px;">Directions</a>`;
-              const marker = L.marker([h.latitude, h.longitude], { icon: hotelIcon })
-                .addTo(placeMap)
-                .bindPopup(popup);
+    // Hotel markers
+    hotelMarkers = [];
+    const hotelsJson = placeMapEl.dataset.hotels;
+    if (hotelsJson) {
+      try {
+        const hotels = JSON.parse(hotelsJson);
+        hotels.forEach((h, idx) => {
+          if (h.latitude && h.longitude) {
+            const hLat = parseFloat(h.latitude);
+            const hLng = parseFloat(h.longitude);
+            if (!isNaN(hLat) && !isNaN(hLng)) {
+              let hMarker;
+              const hContent = document.createElement('div');
+              hContent.innerHTML = '<div style="background:linear-gradient(135deg,#f59e0b,#d97706);width:16px;height:16px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;color:white;font-size:8px;">🏨</div>';
 
-              // Click marker → highlight card
-              marker.on('click', () => {
-                document.querySelectorAll('.map-active').forEach(el => el.classList.remove('map-active'));
-                const card = document.getElementById(`accommodation-${idx}`);
-                if (card) {
-                  card.classList.add('map-active');
-                  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  setTimeout(() => card.classList.remove('map-active'), 4000);
+              if (google.maps.marker && google.maps.marker.AdvancedMarkerElement && mapId) {
+                try {
+                  hMarker = new google.maps.marker.AdvancedMarkerElement({
+                    map: gMap,
+                    position: { lat: hLat, lng: hLng },
+                    title: h.name,
+                    content: hContent
+                  });
+                } catch (e) {
+                  hMarker = new google.maps.Marker({
+                    map: gMap,
+                    position: { lat: hLat, lng: hLng },
+                    title: h.name
+                  });
                 }
-              });
+              } else {
+                hMarker = new google.maps.Marker({
+                  map: gMap,
+                  position: { lat: hLat, lng: hLng },
+                  title: h.name
+                });
+              }
 
-              hotelMarkers.push(marker);
-              bounds.extend([h.latitude, h.longitude]);
+              const hInfo = new google.maps.InfoWindow({
+                content: `<div style="color:#0f172a;font-family:sans-serif;font-size:12px;padding:4px;"><strong style="font-size:13px;">🏨 ${_escHtml(h.name)}</strong><br><span style="color:#64748b;">${h.type ? _escHtml(h.type.charAt(0).toUpperCase() + h.type.slice(1)) : 'Hotel'}</span>${h.price_range ? '<br><span style="color:#059669;font-weight:600;">💰 ' + _escHtml(h.price_range) + '</span>' : ''}${h.address ? '<br><span style="color:#64748b;">📍 ' + _escHtml(h.address) + '</span>' : ''}<br><a href="https://www.google.com/maps?q=${hLat},${hLng}" target="_blank" rel="noopener noreferrer" style="color:#6366f1;font-size:11px;font-weight:600;display:inline-block;margin-top:4px;">Directions ↗</a></div>`
+              });
+              hMarker._infoWindow = hInfo;
+
+              if (hMarker.addListener) {
+                hMarker.addListener('click', () => {
+                  hInfo.open({ map: gMap, anchor: hMarker });
+                  document.querySelectorAll('.map-active').forEach(el => el.classList.remove('map-active'));
+                  const card = document.getElementById(`accommodation-${idx}`);
+                  if (card) {
+                    card.classList.add('map-active');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => card.classList.remove('map-active'), 4000);
+                  }
+                });
+              }
+
+              hotelMarkers.push(hMarker);
+              bounds.extend({ lat: hLat, lng: hLng });
             } else {
               hotelMarkers.push(null);
             }
-          });
-        } catch (e) { /* ignore parse errors */ }
-      }
+          } else {
+            hotelMarkers.push(null);
+          }
+        });
+      } catch (e) { /* ignore parse errors */ }
+    }
 
-      // ── Food/Specialty markers (green) ──────────
-      const foodsJson = placeMapEl.dataset.foods;
-      if (foodsJson) {
-        try {
-          const foods = JSON.parse(foodsJson);
-          const foodIcon = L.divIcon({
-            html: '<div style="background:linear-gradient(135deg,#22c55e,#16a34a);width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(34,197,94,0.5)"></div>',
-            className: "",
-            iconSize: [12, 12],
-            iconAnchor: [6, 6],
-          });
+    // Food markers
+    foodMarkers = [];
+    const foodsJson = placeMapEl.dataset.foods;
+    if (foodsJson) {
+      try {
+        const foods = JSON.parse(foodsJson);
+        foods.forEach((f, idx) => {
+          if (f.latitude && f.longitude) {
+            const fLat = parseFloat(f.latitude);
+            const fLng = parseFloat(f.longitude);
+            if (!isNaN(fLat) && !isNaN(fLng)) {
+              let fMarker;
+              const fContent = document.createElement('div');
+              fContent.innerHTML = '<div style="background:linear-gradient(135deg,#22c55e,#16a34a);width:16px;height:16px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(34,197,94,0.5);display:flex;align-items:center;justify-content:center;color:white;font-size:8px;">🍛</div>';
 
-          foods.forEach((f, idx) => {
-            if (f.latitude && f.longitude) {
-              const popup = `<strong>🍛 ${_escHtml(f.name)}</strong><br><small>${_escHtml(f.category || 'Food')}</small>${f.where_to_find ? '<br>📍 ' + _escHtml(f.where_to_find) : ''}<br><a href="https://www.google.com/maps?q=${f.latitude},${f.longitude}" target="_blank" style="color:#6366f1;font-size:12px;">Directions</a>`;
-              const marker = L.marker([f.latitude, f.longitude], { icon: foodIcon })
-                .addTo(placeMap)
-                .bindPopup(popup);
-
-              // Click marker → highlight card
-              marker.on('click', () => {
-                document.querySelectorAll('.map-active').forEach(el => el.classList.remove('map-active'));
-                const card = document.getElementById(`specialty-${idx}`);
-                if (card) {
-                  card.classList.add('map-active');
-                  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  setTimeout(() => card.classList.remove('map-active'), 4000);
+              if (google.maps.marker && google.maps.marker.AdvancedMarkerElement && mapId) {
+                try {
+                  fMarker = new google.maps.marker.AdvancedMarkerElement({
+                    map: gMap,
+                    position: { lat: fLat, lng: fLng },
+                    title: f.name,
+                    content: fContent
+                  });
+                } catch (e) {
+                  fMarker = new google.maps.Marker({
+                    map: gMap,
+                    position: { lat: fLat, lng: fLng },
+                    title: f.name
+                  });
                 }
-              });
+              } else {
+                fMarker = new google.maps.Marker({
+                  map: gMap,
+                  position: { lat: fLat, lng: fLng },
+                  title: f.name
+                });
+              }
 
-              foodMarkers.push(marker);
-              bounds.extend([f.latitude, f.longitude]);
+              const fInfo = new google.maps.InfoWindow({
+                content: `<div style="color:#0f172a;font-family:sans-serif;font-size:12px;padding:4px;"><strong style="font-size:13px;">🍛 ${_escHtml(f.name)}</strong><br><span style="color:#64748b;">${_escHtml(f.category || 'Food')}</span>${f.where_to_find ? '<br><span style="color:#64748b;">📍 ' + _escHtml(f.where_to_find) + '</span>' : ''}<br><a href="https://www.google.com/maps?q=${fLat},${fLng}" target="_blank" rel="noopener noreferrer" style="color:#6366f1;font-size:11px;font-weight:600;display:inline-block;margin-top:4px;">Directions ↗</a></div>`
+              });
+              fMarker._infoWindow = fInfo;
+
+              if (fMarker.addListener) {
+                fMarker.addListener('click', () => {
+                  fInfo.open({ map: gMap, anchor: fMarker });
+                  document.querySelectorAll('.map-active').forEach(el => el.classList.remove('map-active'));
+                  const card = document.getElementById(`specialty-${idx}`);
+                  if (card) {
+                    card.classList.add('map-active');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => card.classList.remove('map-active'), 4000);
+                  }
+                });
+              }
+
+              foodMarkers.push(fMarker);
+              bounds.extend({ lat: fLat, lng: fLng });
             } else {
               foodMarkers.push(null);
             }
-          });
-        } catch (e) { /* ignore parse errors */ }
-      }
-
-      // Fit bounds if we have extra markers
-      if (hotelMarkers.some(m => m) || foodMarkers.some(m => m)) {
-        placeMap.fitBounds(bounds.pad(0.3));
-      }
-
-      // Show user distance
-      const distText = document.getElementById("distance-text");
-      if (distText && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const R = 6371;
-            const dLat = ((pos.coords.latitude - lat) * Math.PI) / 180;
-            const dLon = ((pos.coords.longitude - lng) * Math.PI) / 180;
-            const a =
-              Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos((lat * Math.PI) / 180) *
-              Math.cos((pos.coords.latitude * Math.PI) / 180) *
-              Math.sin(dLon / 2) *
-              Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            const km = R * c;
-            distText.textContent = `You are approximately ${Math.round(km)} km away`;
-          },
-          () => {
-            distText.textContent = "";
+          } else {
+            foodMarkers.push(null);
           }
-        );
-      }
-
-      // ── User location marker (blue dot) ──
-      let userMarker = null;
-
-      function placeUserMarker(lat, lng) {
-        if (!placeMap) return;
-        if (userMarker) {
-          placeMap.removeLayer(userMarker);
-          userMarker = null;
-        }
-        const blueIcon = L.divIcon({
-          html: '<div style="background:#3B82F6;width:18px;height:18px;border-radius:50%;border:3px solid white;box-shadow:0 2px 12px rgba(59,130,246,0.7)"></div>',
-          className: '',
-          iconSize: [18, 18],
-          iconAnchor: [9, 9],
         });
-        userMarker = L.marker([lat, lng], { icon: blueIcon }).addTo(placeMap);
-        // Pulse animation ring
-        var ring = L.circleMarker([lat, lng], {
-          radius: 22,
-          color: '#3B82F6',
-          fillColor: '#3B82F6',
-          fillOpacity: 0.1,
-          weight: 2,
-          opacity: 0.3,
-        }).addTo(placeMap);
-        // Store ring reference for cleanup
-        userMarker._ring = ring;
-        // Fade out ring over 2s then remove
-        setTimeout(function () {
-          if (userMarker && userMarker._ring) {
-            placeMap.removeLayer(userMarker._ring);
-            userMarker._ring = null;
-          }
-        }, 2000);
-      }
-
-      // Check for cached location on page load
-      var cached = window.HY && HY.getLocation();
-      if (cached) {
-        setTimeout(function () { placeUserMarker(cached.lat, cached.lng); }, 400);
-      }
-
-      // Listen for live location updates
-      document.addEventListener('hy-location-updated', function (e) {
-        if (e.detail && e.detail.lat && e.detail.lng) {
-          placeUserMarker(e.detail.lat, e.detail.lng);
-        }
-      });
+      } catch (e) { /* ignore parse errors */ }
     }
+
+    // Fit bounds if multiple markers exist
+    if (hotelMarkers.some(m => m) || foodMarkers.some(m => m)) {
+      gMap.fitBounds(bounds, 30);
+    }
+
+    // User distance calculation
+    const distText = document.getElementById("distance-text");
+    if (distText && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const R = 6371;
+          const dLat = ((pos.coords.latitude - lat) * Math.PI) / 180;
+          const dLon = ((pos.coords.longitude - lng) * Math.PI) / 180;
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((lat * Math.PI) / 180) *
+            Math.cos((pos.coords.latitude * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const km = R * c;
+          distText.textContent = `You are approximately ${Math.round(km)} km away`;
+        },
+        () => {
+          distText.textContent = "";
+        }
+      );
+    }
+
+    return;
   }
+
+  // ── 2. Leaflet Fallback (using standard OSM tiles with NO watermark) ───
+  if (typeof L !== "undefined") {
+    placeMapEl._initialized = true;
+    placeMap = L.map("place-map", {
+      scrollWheelZoom: false,
+      zoomControl: true,
+    }).setView([lat, lng], 13);
+
+    L.tileLayer(TILE_URL, { attribution: TILE_ATTR, maxZoom: 18 }).addTo(placeMap);
+
+    // Custom marker icon — Place (indigo)
+    const placeIcon = L.divIcon({
+      html: '<div style="background:linear-gradient(135deg,#6366f1,#4f46e5);width:16px;height:16px;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 10px rgba(99,102,241,0.5)"></div>',
+      className: "",
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+    });
+
+    L.marker([lat, lng], { icon: placeIcon }).addTo(placeMap).bindPopup(
+      `<strong>${_escHtml(name)}</strong><br><small>📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}</small><br><a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:#6366f1;font-size:12px;">Open in Google Maps</a>`
+    );
+
+    const bounds = L.latLngBounds([[lat, lng]]);
+
+    // Hotel markers (orange)
+    hotelMarkers = [];
+    const hotelsJson = placeMapEl.dataset.hotels;
+    if (hotelsJson) {
+      try {
+        const hotels = JSON.parse(hotelsJson);
+        const hotelIcon = L.divIcon({
+          html: '<div style="background:linear-gradient(135deg,#f59e0b,#d97706);width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(245,158,11,0.5)"></div>',
+          className: "",
+          iconSize: [12, 12],
+          iconAnchor: [6, 6],
+        });
+
+        hotels.forEach((h, idx) => {
+          if (h.latitude && h.longitude) {
+            const popup = `<strong>🏨 ${_escHtml(h.name)}</strong><br><small>${h.type ? _escHtml(h.type.charAt(0).toUpperCase() + h.type.slice(1)) : 'Hotel'}</small>${h.price_range ? '<br>💰 ' + _escHtml(h.price_range) : ''}${h.address ? '<br>📍 ' + _escHtml(h.address) : ''}<br><a href="https://www.google.com/maps?q=${h.latitude},${h.longitude}" target="_blank" style="color:#6366f1;font-size:12px;">Directions</a>`;
+            const marker = L.marker([h.latitude, h.longitude], { icon: hotelIcon })
+              .addTo(placeMap)
+              .bindPopup(popup);
+
+            // Click marker → highlight card
+            marker.on('click', () => {
+              document.querySelectorAll('.map-active').forEach(el => el.classList.remove('map-active'));
+              const card = document.getElementById(`accommodation-${idx}`);
+              if (card) {
+                card.classList.add('map-active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => card.classList.remove('map-active'), 4000);
+              }
+            });
+
+            hotelMarkers.push(marker);
+            bounds.extend([h.latitude, h.longitude]);
+          } else {
+            hotelMarkers.push(null);
+          }
+        });
+      } catch (e) { /* ignore parse errors */ }
+    }
+
+    // Food/Specialty markers (green)
+    foodMarkers = [];
+    const foodsJson = placeMapEl.dataset.foods;
+    if (foodsJson) {
+      try {
+        const foods = JSON.parse(foodsJson);
+        const foodIcon = L.divIcon({
+          html: '<div style="background:linear-gradient(135deg,#22c55e,#16a34a);width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(34,197,94,0.5)"></div>',
+          className: "",
+          iconSize: [12, 12],
+          iconAnchor: [6, 6],
+        });
+
+        foods.forEach((f, idx) => {
+          if (f.latitude && f.longitude) {
+            const popup = `<strong>🍛 ${_escHtml(f.name)}</strong><br><small>${_escHtml(f.category || 'Food')}</small>${f.where_to_find ? '<br>📍 ' + _escHtml(f.where_to_find) : ''}<br><a href="https://www.google.com/maps?q=${f.latitude},${f.longitude}" target="_blank" style="color:#6366f1;font-size:12px;">Directions</a>`;
+            const marker = L.marker([f.latitude, f.longitude], { icon: foodIcon })
+              .addTo(placeMap)
+              .bindPopup(popup);
+
+            // Click marker → highlight card
+            marker.on('click', () => {
+              document.querySelectorAll('.map-active').forEach(el => el.classList.remove('map-active'));
+              const card = document.getElementById(`specialty-${idx}`);
+              if (card) {
+                card.classList.add('map-active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => card.classList.remove('map-active'), 4000);
+              }
+            });
+
+            foodMarkers.push(marker);
+            bounds.extend([f.latitude, f.longitude]);
+          } else {
+            foodMarkers.push(null);
+          }
+        });
+      } catch (e) { /* ignore parse errors */ }
+    }
+
+    // Fit bounds if we have extra markers
+    if (hotelMarkers.some(m => m) || foodMarkers.some(m => m)) {
+      placeMap.fitBounds(bounds.pad(0.3));
+    }
+
+    // Show user distance
+    const distText = document.getElementById("distance-text");
+    if (distText && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const R = 6371;
+          const dLat = ((pos.coords.latitude - lat) * Math.PI) / 180;
+          const dLon = ((pos.coords.longitude - lng) * Math.PI) / 180;
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((lat * Math.PI) / 180) *
+            Math.cos((pos.coords.latitude * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const km = R * c;
+          distText.textContent = `You are approximately ${Math.round(km)} km away`;
+        },
+        () => {
+          distText.textContent = "";
+        }
+      );
+    }
+
+    // User location marker (blue dot)
+    let userMarker = null;
+
+    function placeUserMarker(lat, lng) {
+      if (!placeMap) return;
+      if (userMarker) {
+        placeMap.removeLayer(userMarker);
+        userMarker = null;
+      }
+      const blueIcon = L.divIcon({
+        html: '<div style="background:#3B82F6;width:18px;height:18px;border-radius:50%;border:3px solid white;box-shadow:0 2px 12px rgba(59,130,246,0.7)"></div>',
+        className: '',
+        iconSize: [18, 18],
+        iconAnchor: [9, 9],
+      });
+      userMarker = L.marker([lat, lng], { icon: blueIcon }).addTo(placeMap);
+      var ring = L.circleMarker([lat, lng], {
+        radius: 22,
+        color: '#3B82F6',
+        fillColor: '#3B82F6',
+        fillOpacity: 0.1,
+        weight: 2,
+        opacity: 0.3,
+      }).addTo(placeMap);
+      userMarker._ring = ring;
+      setTimeout(function () {
+        if (userMarker && userMarker._ring) {
+          placeMap.removeLayer(userMarker._ring);
+          userMarker._ring = null;
+        }
+      }, 2000);
+    }
+
+    var cached = window.HY && HY.getLocation();
+    if (cached) {
+      setTimeout(function () { placeUserMarker(cached.lat, cached.lng); }, 400);
+    }
+
+    document.addEventListener('hy-location-updated', function (e) {
+      if (e.detail && e.detail.lat && e.detail.lng) {
+        placeUserMarker(e.detail.lat, e.detail.lng);
+      }
+    });
+  }
+}
+
+// Global callback for Google Maps API script
+window._hyInitPlaceDetailMap = initPlaceDetailMap;
+
+document.addEventListener("DOMContentLoaded", () => {
+  initPlaceDetailMap();
 
   /* ── Admin Map (click to set coordinates) ────────── */
   const adminMapEl = document.getElementById("admin-map");

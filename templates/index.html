@@ -565,7 +565,9 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
     {% set district_colors = ['#FF7A18', '#00BFA6', '#6366F1', '#F43F5E', '#8B5CF6', '#3B82F6', '#F59E0B', '#10B981', '#06B6D4', '#EC4899', '#14B8A6', '#EF4444'] %}
     {% for d in districts[:12] %}
     <a href="{{ url_for('main.district_detail', state_slug='bihar', district_slug=d.slug) }}" class="district-visual-card" id="district-card-{{ d.slug }}">
-      <div class="district-visual-bg" style="background: {% if d.cover_image %}url('{% if d.cover_image.startswith('http') %}{{ d.cover_image }}{% else %}{{ url_for('static', filename='uploads/districts/' + d.cover_image) }}{% endif %}') center/cover{% elif d.image_url %}url('{{ d.image_url }}') center/cover{% else %}linear-gradient(135deg, {{ district_colors[loop.index0 % 12] }}22, {{ district_colors[(loop.index0 + 3) % 12] }}22){% endif %};"></div>
+      <div class="district-visual-bg" style="{% if d.display_image %}background: url('{{ d.display_image }}') center/cover;{% else %}background: linear-gradient(135deg, {{ district_colors[loop.index0 % 12] }}22, {{ district_colors[(loop.index0 + 3) % 12] }}22); display: flex; align-items: center; justify-content: center; font-size: 2.5rem;{% endif %}">
+        {% if not d.display_image %}<span style="opacity: 0.3;">🗺️</span>{% endif %}
+      </div>
       <div class="district-visual-overlay"></div>
       <div class="district-visual-content">
         <h3 class="district-visual-name">{{ d.name }}</h3>
