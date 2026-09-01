@@ -1,4 +1,4 @@
-﻿"""Admin panel routes — login, dashboard, add/edit/delete places, moderation."""
+"""Admin panel routes — login, dashboard, add/edit/delete places, moderation."""
 import os
 import uuid
 import time as _time
@@ -655,8 +655,21 @@ def save_uploaded_image(file_obj, place_id):
 # Hero Media Manager
 # ──────────────────────────────────────────────
 from config import BASE_DIR as _BASE_DIR
-HERO_UPLOAD = os.path.join(_BASE_DIR, 'static', 'hero')
+HERO_UPLOAD = os.path.join(_BASE_DIR, 'static', 'uploads', 'hero')
 os.makedirs(HERO_UPLOAD, exist_ok=True)
+
+# One-time migration: copy hero files from old ephemeral location to persistent disk
+_OLD_HERO_DIR = os.path.join(_BASE_DIR, 'static', 'hero')
+if os.path.isdir(_OLD_HERO_DIR):
+    import shutil
+    for _fn in os.listdir(_OLD_HERO_DIR):
+        if _fn.startswith('.'):
+            continue
+        _src = os.path.join(_OLD_HERO_DIR, _fn)
+        _dst = os.path.join(HERO_UPLOAD, _fn)
+        if os.path.isfile(_src) and not os.path.exists(_dst):
+            shutil.copy2(_src, _dst)
+            logger.info("Migrated hero file: %s -> %s", _src, _dst)
 
 ALLOWED_VIDEO = {'mp4', 'webm'}
 

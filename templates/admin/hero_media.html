@@ -94,9 +94,9 @@
           <!-- Preview -->
           <div style="aspect-ratio:16/9;overflow:hidden;background:#111;position:relative;">
             {% if item.media_type == 'video' %}
-            <video src="/static/hero/{{ item.filename }}" style="width:100%;height:100%;object-fit:cover;" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>
+            <video src="/static/uploads/hero/{{ item.filename }}" style="width:100%;height:100%;object-fit:cover;" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>
             {% else %}
-            <img src="/static/hero/{{ item.filename }}" alt="{{ item.title }}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+            <img src="/static/uploads/hero/{{ item.filename }}" alt="{{ item.title }}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
             {% endif %}
           </div>
 
