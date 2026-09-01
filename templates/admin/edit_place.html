@@ -265,10 +265,48 @@
   <!-- ═══ SPECIALTIES ═══ -->
   <div class="form-section">
     <h2 class="form-section-title">🍛 Local Specialties</h2>
+    <div id="specialties-container">
+      {% for spec in specialties %}
+      <div class="specialty-form-row">
+        <input type="text" name="spec_name[]" class="form-input" value="{{ spec.name }}" placeholder="Name">
+        <input type="text" name="spec_description[]" class="form-input" value="{{ spec.description }}" placeholder="Description">
+        <select name="spec_category[]" class="form-select">
+          {% for code, label in specialty_categories %}
+          <option value="{{ code }}" {% if spec.category == code %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="spec_where[]" class="form-input" value="{{ spec.where_to_find }}" placeholder="Where to find">
+        <button type="button" class="btn btn-danger btn-sm remove-spec-btn" onclick="this.closest('.specialty-form-row').remove()">✕</button>
+      </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="btn btn-outline btn-sm" id="add-specialty-btn">+ Add Specialty</button>
+  </div>
 
+  <!-- ═══ EDIT HISTORY ═══ -->
+  {% if edit_history %}
+  <div class="form-section">
+    <h2 class="form-section-title">📋 Edit History</h2>
+    {% for log in edit_history %}
+    <div class="history-item">
+      <span>{% if log.action == 'edit' %}✏️{% elif log.action == 'approve' %}✅{% elif log.action == 'cover_change' %}📷{% else %}📝{% endif %}</span>
+      <span style="flex:1;">{{ log.details }}</span>
+      <span style="color:var(--text-muted);">{{ log.created_at.strftime('%Y-%m-%d %H:%M') if log.created_at else '' }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ═══ ACTIONS ═══ -->
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Save all changes to {{ place.name }}?')">💾 Update Place</button>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">Cancel</a>
+    <span style="flex:1;"></span>
+    <span style="font-size:0.8rem;color:var(--text-muted);">ID: {{ place.id }} • Slug: {{ place.slug }} • Views: {{ place.view_count or 0 }}</span>
+  </div>
 </form>
 <!-- ═══ MAIN EDIT FORM ENDS HERE ═══ -->
-<!-- Image upload forms must be OUTSIDE the main form (HTML forbids nested forms) -->
+<!-- Image upload forms are OUTSIDE the main form (HTML forbids nested forms) -->
 
 <!-- ═══ COVER IMAGE (separate form) ═══ -->
 <div class="form-section">
@@ -364,52 +402,6 @@
     </div>
   </form>
 </div>
-
-<!-- ═══ REOPEN form for specialties ═══ -->
-<form method="POST" enctype="multipart/form-data" class="admin-form" id="edit-form-specialties">
-{{ csrf_input() }}
-  <div class="form-section">
-    <h2 class="form-section-title">🍛 Local Specialties</h2>
-    <div id="specialties-container">
-      {% for spec in specialties %}
-      <div class="specialty-form-row">
-        <input type="text" name="spec_name[]" class="form-input" value="{{ spec.name }}" placeholder="Name">
-        <input type="text" name="spec_description[]" class="form-input" value="{{ spec.description }}" placeholder="Description">
-        <select name="spec_category[]" class="form-select">
-          {% for code, label in specialty_categories %}
-          <option value="{{ code }}" {% if spec.category == code %}selected{% endif %}>{{ label }}</option>
-          {% endfor %}
-        </select>
-        <input type="text" name="spec_where[]" class="form-input" value="{{ spec.where_to_find }}" placeholder="Where to find">
-        <button type="button" class="btn btn-danger btn-sm remove-spec-btn" onclick="this.closest('.specialty-form-row').remove()">✕</button>
-      </div>
-      {% endfor %}
-    </div>
-    <button type="button" class="btn btn-outline btn-sm" id="add-specialty-btn">+ Add Specialty</button>
-  </div>
-
-  <!-- ═══ EDIT HISTORY ═══ -->
-  {% if edit_history %}
-  <div class="form-section">
-    <h2 class="form-section-title">📋 Edit History</h2>
-    {% for log in edit_history %}
-    <div class="history-item">
-      <span>{% if log.action == 'edit' %}✏️{% elif log.action == 'approve' %}✅{% elif log.action == 'cover_change' %}📷{% else %}📝{% endif %}</span>
-      <span style="flex:1;">{{ log.details }}</span>
-      <span style="color:var(--text-muted);">{{ log.created_at.strftime('%Y-%m-%d %H:%M') if log.created_at else '' }}</span>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <!-- ═══ ACTIONS ═══ -->
-  <div class="form-actions">
-    <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Save all changes to {{ place.name }}?')">💾 Update Place</button>
-    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">Cancel</a>
-    <span style="flex:1;"></span>
-    <span style="font-size:0.8rem;color:var(--text-muted);">ID: {{ place.id }} • Slug: {{ place.slug }} • Views: {{ place.view_count or 0 }}</span>
-  </div>
-</form>
 {% endblock %}
 
 {% block extra_js %}
