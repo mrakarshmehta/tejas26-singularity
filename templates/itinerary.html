@@ -89,6 +89,39 @@
 .budget-total { text-align:center; margin-top:var(--space-md); padding-top:var(--space-md); border-top:1px solid var(--border-color); }
 .budget-total .amount { font-size:1.6rem; font-weight:800; background:linear-gradient(135deg,var(--primary),var(--secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 
+/* ── Travel Distance Metrics (Tejas 2.2) ── */
+.travel-efficiency-banner { background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(20,184,166,.06)); border:1px solid rgba(99,102,241,.2); border-radius:var(--radius-xl); padding:var(--space-lg); margin-bottom:var(--space-xl); }
+.efficiency-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-md); margin-bottom:var(--space-sm); }
+.efficiency-stat { text-align:center; padding:var(--space-md); background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); transition:transform .2s; }
+.efficiency-stat:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.1); }
+.efficiency-icon { display:block; font-size:1.3rem; margin-bottom:4px; }
+.efficiency-value { display:block; font-size:1.2rem; font-weight:800; color:var(--text-primary); }
+.efficiency-label { display:block; font-size:.72rem; font-weight:600; color:var(--text-muted); margin-top:2px; text-transform:uppercase; letter-spacing:.5px; }
+.efficiency-note { font-size:.82rem; color:var(--text-secondary); text-align:center; padding:8px 12px; background:rgba(255,255,255,.03); border-radius:var(--radius-md); }
+
+/* Hop Distance Connector */
+.hop-distance-connector { display:flex; align-items:center; gap:8px; padding:6px 0; margin:2px 0 2px 70px; }
+.hop-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(99,102,241,.25),transparent); }
+.hop-badge { flex-shrink:0; padding:3px 10px; background:rgba(99,102,241,.1); border:1px solid rgba(99,102,241,.2); border-radius:var(--radius-full); font-size:.72rem; font-weight:700; color:#a5b4fc; white-space:nowrap; }
+
+/* Day Distance Footer */
+.day-distance-footer { display:flex; justify-content:space-between; align-items:center; padding:10px 16px; margin-top:8px; background:rgba(20,184,166,.06); border-top:1px solid rgba(20,184,166,.12); border-radius:0 0 var(--radius-lg) var(--radius-lg); font-size:.8rem; color:var(--text-secondary); }
+
+/* Algorithm Details Toggle */
+.algo-details-toggle { display:flex; align-items:center; gap:6px; padding:8px 16px; background:transparent; border:1px dashed rgba(99,102,241,.3); border-radius:var(--radius-md); color:var(--text-muted); font-size:.78rem; font-weight:600; cursor:pointer; transition:all .2s; margin-top:var(--space-sm); width:100%; justify-content:center; }
+.algo-details-toggle:hover { border-color:rgba(99,102,241,.6); color:var(--text-secondary); background:rgba(99,102,241,.04); }
+.algo-details-panel { display:none; margin-top:var(--space-sm); padding:14px 18px; background:var(--bg-card); border:1px solid rgba(99,102,241,.15); border-radius:var(--radius-lg); font-size:.78rem; color:var(--text-secondary); line-height:1.6; }
+.algo-details-panel.open { display:block; animation:fadeInUp .3s ease; }
+.algo-details-panel h4 { font-size:.85rem; font-weight:700; color:var(--text-primary); margin:0 0 8px; }
+.algo-details-panel code { background:rgba(99,102,241,.1); padding:2px 6px; border-radius:4px; font-size:.75rem; color:#a5b4fc; }
+.algo-details-panel ul { margin:6px 0; padding-left:18px; }
+.algo-details-panel li { margin-bottom:4px; }
+
+@media(max-width:600px) {
+  .efficiency-stats { grid-template-columns:repeat(2,1fr); }
+  .hop-distance-connector { margin-left:0; }
+}
+
 /* Day Timeline */
 .day-card { background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-xl); margin-bottom:var(--space-lg); overflow:hidden; }
 .day-header { padding:var(--space-md) var(--space-lg); background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(20,184,166,.05)); border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:12px; }
@@ -897,6 +930,54 @@ function renderTrip(data) {
           <div class="budget-item"><div class="amount">₹${c.entry_fees.toLocaleString('en-IN')}</div><div class="label">Entry Fees</div></div>
         </div>
         <div class="budget-total"><div class="label">Total Estimated Package (${companionLabel}${travelersText})</div><div class="amount">₹${c.total.toLocaleString('en-IN')}</div></div>
+      </div>
+
+      <div class="travel-efficiency-banner">
+        <div class="efficiency-stats">
+          <div class="efficiency-stat">
+            <span class="efficiency-icon">🗺️</span>
+            <span class="efficiency-value">${data.total_trip_km || 0} km</span>
+            <span class="efficiency-label">Total Distance</span>
+          </div>
+          <div class="efficiency-stat">
+            <span class="efficiency-icon">📍</span>
+            <span class="efficiency-value">${data.itinerary ? data.itinerary.reduce((s,d) => s + d.places.length, 0) : 0}</span>
+            <span class="efficiency-label">Stops</span>
+          </div>
+          <div class="efficiency-stat">
+            <span class="efficiency-icon">${data.efficiency_score >= 70 ? '✅' : '⚡'}</span>
+            <span class="efficiency-value">${data.efficiency_score || 0}%</span>
+            <span class="efficiency-label">Route Efficiency</span>
+          </div>
+          <div class="efficiency-stat">
+            <span class="efficiency-icon">📏</span>
+            <span class="efficiency-value">${data.total_trip_km && data.days ? Math.round(data.total_trip_km / data.days) : 0} km</span>
+            <span class="efficiency-label">Avg/Day</span>
+          </div>
+        </div>
+        <div class="efficiency-note">${data.backtrack_detected ? '⚠️ Minor backtracking detected — consider reordering stops' : '✅ Optimized routing — geographic proximity clustering active'}</div>
+        <button type="button" class="algo-details-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.algo-arrow').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
+          🔬 Algorithm Details <span class="algo-arrow">▼</span>
+        </button>
+        <div class="algo-details-panel">
+          <h4>📐 Travel Distance Metrics — Formulas</h4>
+          <ul>
+            <li><strong>Haversine Distance</strong>: <code>d = 2R × arctan2(√a, √(1−a))</code> where <code>a = sin²(Δlat/2) + cos(lat₁)·cos(lat₂)·sin²(Δlng/2)</code>, R = 6,371 km</li>
+            <li><strong>Per-Hop Distance</strong>: Haversine between consecutive stops within each day</li>
+            <li><strong>Day Distance</strong>: Sum of all hop distances for that day</li>
+            <li><strong>Total Trip Distance</strong>: Sum of all day distances</li>
+            <li><strong>Efficiency Score</strong>: <code>min(100, (straight-line first→last ÷ total distance) × 100)</code> — higher means less detour</li>
+            <li><strong>Backtracking</strong>: Detected when stop[i] is closer to stop[i−2] than 50% of the hop from stop[i−1] to stop[i]</li>
+          </ul>
+          <h4>🧩 Clustering Algorithm</h4>
+          <ul>
+            <li>Anchor selection: highest-scored unvisited place (or pinned place)</li>
+            <li>Cluster radius: 50 km from day anchor via Haversine</li>
+            <li>Greedy nearest-neighbor within cluster for each subsequent stop</li>
+            <li>3 stops per day (morning → afternoon → evening)</li>
+          </ul>
+          <p style="color:var(--text-muted);font-size:.72rem;margin-top:8px;">All distances are geodesic (as-the-crow-flies). Actual road distances may vary. No ML or AI models used — deterministic algorithm.</p>
+        </div>
       </div>`;
 
   data.itinerary.forEach(day => {
@@ -910,7 +991,17 @@ function renderTrip(data) {
           </div>
         </div>
         <div class="day-places">`;
-    day.places.forEach(p => {
+    day.places.forEach((p, idx) => {
+      // Show hop distance connector before each place (except the first)
+      if (idx > 0 && day.hop_distances && day.hop_distances[idx - 1] !== undefined) {
+        const hopKm = day.hop_distances[idx - 1];
+        html += `
+          <div class="hop-distance-connector">
+            <div class="hop-line"></div>
+            <div class="hop-badge">🚗 ${hopKm} km</div>
+            <div class="hop-line"></div>
+          </div>`;
+      }
       html += `
           <div class="timeline-item">
             <div class="timeline-time">
@@ -942,6 +1033,14 @@ function renderTrip(data) {
         </div>`;
     }
 
+    // Day distance footer
+    if (day.total_day_km > 0) {
+      html += `
+        <div class="day-distance-footer">
+          <span>📏 Day ${day.day} total travel: <strong>${day.total_day_km} km</strong></span>
+          <span>${day.backtrack_detected ? '⚠️ Minor backtrack' : '✅ No backtracking'}</span>
+        </div>`;
+    }
     html += `</div></div>`;
   });
 

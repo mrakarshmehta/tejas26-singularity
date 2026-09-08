@@ -38,7 +38,7 @@ Set variables in `.env`:
 FLASK_ENV=development
 FLASK_DEBUG=0
 SECRET_KEY=change-me-to-a-random-64-char-string
-ADMIN_PASSWORD=admin_password_123
+ADMIN_PASSWORD=<set-a-strong-admin-password>
 
 DB_HOST=127.0.0.1
 DB_PORT=3306

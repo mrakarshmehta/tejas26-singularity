@@ -1418,3 +1418,241 @@ def api_generate_quiz_certificate():
         'status': 'success',
         'certificate': cert
     })
+
+
+# ══════════════════════════════════════════════════════════════
+# TEJAS 2.2 — Culture Map Layer API
+# ══════════════════════════════════════════════════════════════
+
+# District centroid coordinates for culture items lacking exact coords
+_DISTRICT_CENTROIDS = {
+    'patna': (25.6093, 85.1376), 'gaya': (24.7955, 84.9994),
+    'nalanda': (25.1288, 85.4454), 'bhagalpur': (25.2425, 86.9842),
+    'madhubani': (26.3540, 86.0820), 'darbhanga': (26.1542, 85.8918),
+    'muzaffarpur': (26.1209, 85.3647), 'vaishali': (25.6840, 85.1940),
+    'saran': (25.8424, 84.6538), 'sitamarhi': (26.5903, 85.4867),
+    'samastipur': (25.8568, 85.7800), 'munger': (25.3745, 86.4735),
+    'banka': (24.8877, 86.9223), 'rohtas': (24.9717, 84.0063),
+    'buxar': (25.5643, 83.9810), 'bhojpur': (25.5630, 84.6525),
+    'siwan': (26.2240, 84.3600), 'west champaran': (26.7230, 84.4390),
+    'kaimur': (25.0500, 83.5840),
+}
+
+def _resolve_coords(district_name):
+    """Resolve coordinates from a district name using known centroids."""
+    if not district_name:
+        return None
+    key = district_name.strip().lower()
+    # Try exact match first
+    if key in _DISTRICT_CENTROIDS:
+        return _DISTRICT_CENTROIDS[key]
+    # Try partial match
+    for dk, coords in _DISTRICT_CENTROIDS.items():
+        if dk in key or key in dk:
+            return coords
+    return None
+
+
+@api_bp.route('/culture-map')
+def api_culture_map():
+    """Culture Map Layer API — aggregates archaeological sites, crafts centers,
+    festivals, performing arts, and gastronomy trails into map-renderable items.
+    Only items with resolvable coordinates are returned."""
+    from models.archaeology import get_all_archaeological_sites
+    from models.crafts import get_all_crafts, ARTISAN_CENTERS_DB
+    from models.festivals import get_all_festivals
+    from models.performing_arts import get_all_performing_arts
+    from models.gastronomy import get_all_dishes
+
+    items = []
+
+    # 1. Archaeological Sites — have exact coordinates
+    for site in get_all_archaeological_sites():
+        coords = site.get('coordinates', {})
+        if coords.get('lat') and coords.get('lng'):
+            items.append({
+                'id': site['id'],
+                'name': site['title'],
+                'slug': site['slug'],
+                'category': 'heritage',
+                'subcategory': site.get('category', 'Archaeological Site'),
+                'icon': '🏛️',
+                'lat': coords['lat'],
+                'lng': coords['lng'],
+                'district': site.get('district', ''),
+                'period': site.get('period', ''),
+                'description': (site.get('description', '') or '')[:160],
+                'detail_url': f"/archaeology/{site['slug']}",
+            })
+
+    # 2. Artisan Craft Centers — have lat/lng
+    for center in ARTISAN_CENTERS_DB:
+        if center.get('lat') and center.get('lng'):
+            items.append({
+                'id': f"craft-{center['id']}",
+                'name': center['center_name'],
+                'slug': center.get('craft_slug', ''),
+                'category': 'crafts',
+                'subcategory': 'Artisan Center',
+                'icon': '🎨',
+                'lat': center['lat'],
+                'lng': center['lng'],
+                'district': center.get('district', ''),
+                'period': '',
+                'description': (center.get('experience', '') or '')[:160],
+                'detail_url': f"/crafts/{center.get('craft_slug', '')}",
+            })
+
+    # 3. Festivals — resolve from primary_districts
+    for fest in get_all_festivals():
+        districts = fest.get('primary_districts', [])
+        if districts:
+            coords = _resolve_coords(districts[0])
+            if coords:
+                items.append({
+                    'id': f"fest-{fest['id']}",
+                    'name': fest['name'],
+                    'slug': fest['slug'],
+                    'category': 'festivals',
+                    'subcategory': fest.get('category', 'Festival'),
+                    'icon': fest.get('icon', '🎭'),
+                    'lat': coords[0],
+                    'lng': coords[1],
+                    'district': districts[0],
+                    'period': fest.get('month_name', ''),
+                    'description': (fest.get('significance', '') or '')[:160],
+                    'detail_url': f"/festivals/{fest['slug']}",
+                })
+
+    # 4. Performing Arts — resolve from region districts
+    _ART_DISTRICT_MAP = {
+        'art-bidesiya-theater': 'Saran',
+        'art-chhau-mask-dance': 'West Champaran',
+        'art-domkach-women-dance': 'Patna',
+        'art-kajari-monsoon-song': 'Buxar',
+        'art-sohar-birth-chants': 'Madhubani',
+    }
+    for art in get_all_performing_arts():
+        dist = _ART_DISTRICT_MAP.get(art['id'], '')
+        coords = _resolve_coords(dist)
+        if coords:
+            items.append({
+                'id': art['id'],
+                'name': art['title'],
+                'slug': art['slug'],
+                'category': 'performing_arts',
+                'subcategory': art.get('category', 'Folk Art'),
+                'icon': art.get('icon', '🎭'),
+                'lat': coords[0],
+                'lng': coords[1],
+                'district': dist,
+                'period': '',
+                'description': (art.get('summary', '') or '')[:160],
+                'detail_url': f"/performing-arts/{art['slug']}",
+            })
+
+    # 5. Gastronomy — resolve from origin_district
+    for dish in get_all_dishes():
+        origin = dish.get('origin_district', '')
+        if origin and origin != 'All Bihar':
+            # Take first district if comma-separated
+            first_dist = origin.split('&')[0].split(',')[0].strip()
+            coords = _resolve_coords(first_dist)
+            if coords:
+                items.append({
+                    'id': dish['id'],
+                    'name': dish['name'],
+                    'slug': dish['slug'],
+                    'category': 'local_food',
+                    'subcategory': dish.get('category', 'Local Dish'),
+                    'icon': dish.get('icon', '🍲'),
+                    'lat': coords[0],
+                    'lng': coords[1],
+                    'district': first_dist,
+                    'period': '',
+                    'description': (dish.get('description', '') or '')[:160],
+                    'detail_url': f"/gastronomy/{dish['slug']}",
+                })
+
+    # Optional category filter
+    cat_filter = request.args.get('category', '').strip().lower()
+    if cat_filter and cat_filter != 'all':
+        items = [i for i in items if i['category'] == cat_filter]
+
+    return jsonify({
+        'status': 'success',
+        'count': len(items),
+        'categories': {
+            'heritage': len([i for i in items if i['category'] == 'heritage']),
+            'crafts': len([i for i in items if i['category'] == 'crafts']),
+            'festivals': len([i for i in items if i['category'] == 'festivals']),
+            'performing_arts': len([i for i in items if i['category'] == 'performing_arts']),
+            'local_food': len([i for i in items if i['category'] == 'local_food']),
+        },
+        'items': items,
+    })
+
+
+# ══════════════════════════════════════════════════════════════
+# TEJAS 2.2 — Bihar Tourism Discovery Snapshot API
+# ══════════════════════════════════════════════════════════════
+
+@api_bp.route('/discovery-snapshot')
+def api_discovery_snapshot():
+    """Bihar Tourism Discovery Snapshot — real platform coverage stats.
+    Uses ONLY verified queryable database counts. No fabricated metrics."""
+    from models.database import get_cursor
+    from models.archaeology import ARCHAEOLOGICAL_SITES_DB
+    from models.crafts import BIHAR_GI_CRAFTS, ARTISAN_CENTERS_DB
+    from models.festivals import BIHAR_FESTIVALS
+    from models.performing_arts import PERFORMING_ARTS_DB, FOLK_INSTRUMENTS_DB, FOLK_ARTIST_GUILDS_DB
+    from models.gastronomy import GASTRONOMY_DISHES_DB, CULINARY_TRAILS
+
+    # Database-backed counts
+    db_stats = {}
+    try:
+        with get_cursor() as cur:
+            cur.execute("""
+                SELECT
+                    (SELECT COUNT(*) FROM places WHERE deleted_at IS NULL) AS verified_places,
+                    (SELECT COUNT(DISTINCT district_id) FROM places WHERE deleted_at IS NULL AND district_id IS NOT NULL) AS districts_covered,
+                    (SELECT COUNT(*) FROM places WHERE deleted_at IS NULL AND is_hidden_gem = 1) AS hidden_gems,
+                    (SELECT COUNT(*) FROM places WHERE deleted_at IS NULL AND latitude IS NOT NULL AND longitude IS NOT NULL) AS geo_mapped_places,
+                    (SELECT COUNT(DISTINCT category) FROM places WHERE deleted_at IS NULL) AS place_categories
+            """)
+            db_stats = dict(cur.fetchone())
+    except Exception:
+        db_stats = {
+            'verified_places': 0, 'districts_covered': 0,
+            'hidden_gems': 0, 'geo_mapped_places': 0, 'place_categories': 0
+        }
+
+    # Culture data counts from in-memory models (verified data)
+    culture_stats = {
+        'archaeological_sites': len(ARCHAEOLOGICAL_SITES_DB),
+        'gi_crafts': len(BIHAR_GI_CRAFTS),
+        'artisan_centers': len(ARTISAN_CENTERS_DB),
+        'festivals': len(BIHAR_FESTIVALS),
+        'performing_arts': len(PERFORMING_ARTS_DB),
+        'folk_instruments': len(FOLK_INSTRUMENTS_DB),
+        'folk_guilds': len(FOLK_ARTIST_GUILDS_DB),
+        'heritage_dishes': len(GASTRONOMY_DISHES_DB),
+        'culinary_trails': len(CULINARY_TRAILS),
+    }
+
+    total_culture_records = sum(culture_stats.values())
+
+    return jsonify({
+        'status': 'success',
+        'label': 'Bihar Tourism Discovery Snapshot',
+        'subtitle': 'Current Platform Coverage',
+        'platform': {
+            'verified_places': db_stats.get('verified_places', 0),
+            'districts_covered': db_stats.get('districts_covered', 0),
+            'hidden_gems': db_stats.get('hidden_gems', 0),
+            'geo_mapped_places': db_stats.get('geo_mapped_places', 0),
+            'place_categories': db_stats.get('place_categories', 0),
+        },
+        'culture': culture_stats,
+        'total_culture_records': total_culture_records,
+    })

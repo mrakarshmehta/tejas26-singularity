@@ -21,7 +21,7 @@ python app.py
 
 Open `http://localhost:5000` in your browser.
 
-Admin panel: `http://localhost:5000/admin` (default password: `admin@hidden123`)
+Admin panel: `http://localhost:5000/admin` (password set via `ADMIN_PASSWORD` in `.env`)
 
 ---
 

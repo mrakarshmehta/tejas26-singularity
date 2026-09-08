@@ -353,6 +353,62 @@ def api_generate_trip():
 
         day_plans.append(day_places)
 
+    # ── Travel Distance Metrics (Tejas 2.2) ──
+    total_trip_km = 0.0
+    day_distance_data = []
+
+    for day_places in day_plans:
+        hop_distances = []
+        day_km = 0.0
+        backtrack = False
+
+        for i in range(1, len(day_places)):
+            prev = day_places[i - 1]
+            curr = day_places[i]
+            if prev.get('latitude') and prev.get('longitude') and curr.get('latitude') and curr.get('longitude'):
+                d = haversine(prev['latitude'], prev['longitude'], curr['latitude'], curr['longitude'])
+                d = round(d, 1)
+            else:
+                d = 0.0
+            hop_distances.append(d)
+            day_km += d
+
+            # Backtracking: if place[i] is closer to place[i-2] than to place[i-1]
+            if i >= 2 and not backtrack:
+                pp = day_places[i - 2]
+                if pp.get('latitude') and pp.get('longitude') and curr.get('latitude') and curr.get('longitude'):
+                    dist_to_prev_prev = haversine(pp['latitude'], pp['longitude'], curr['latitude'], curr['longitude'])
+                    if dist_to_prev_prev < d * 0.5:
+                        backtrack = True
+
+        day_km = round(day_km, 1)
+        total_trip_km += day_km
+        day_distance_data.append({
+            'hop_distances': hop_distances,
+            'total_km': day_km,
+            'backtrack_detected': backtrack,
+        })
+
+    total_trip_km = round(total_trip_km, 1)
+
+    # Efficiency: straight-line first→last across all days vs actual total
+    all_day_places_flat = [p for dp in day_plans for p in dp]
+    if len(all_day_places_flat) >= 2:
+        first_p = all_day_places_flat[0]
+        last_p = all_day_places_flat[-1]
+        if first_p.get('latitude') and last_p.get('latitude'):
+            optimal_km = haversine(first_p['latitude'], first_p['longitude'],
+                                   last_p['latitude'], last_p['longitude'])
+        else:
+            optimal_km = 0
+        efficiency_score = round((optimal_km / max(total_trip_km, 1)) * 100, 0) if total_trip_km > 0 else 100
+        efficiency_score = min(efficiency_score, 100)
+    else:
+        efficiency_score = 100
+        optimal_km = 0
+
+    any_backtrack = any(dd['backtrack_detected'] for dd in day_distance_data)
+
     # Budget & Pricing Engine — uses user's per-day budget and travelers count
     # Split per-day budget into proportional categories
     transport_ratio = 0.20
@@ -382,6 +438,9 @@ def api_generate_trip():
         'budget_per_day': budget_per_day,
         'companion': companion,
         'estimated_cost': total_budget,
+        'total_trip_km': total_trip_km,
+        'efficiency_score': int(efficiency_score),
+        'backtrack_detected': any_backtrack,
         'itinerary': []
     }
 
@@ -396,10 +455,17 @@ def api_generate_trip():
         districts = list(dict.fromkeys(p.get('district_name', '') for p in day_places if p.get('district_name')))
         district_text = ', '.join(districts) if districts else 'Bihar'
 
+        # Inject distance metrics for this day
+        dd = day_distance_data[day_num - 1] if day_num - 1 < len(day_distance_data) else {'hop_distances': [], 'total_km': 0, 'backtrack_detected': False}
+        pacing_km_note = f" • ~{dd['total_km']} km travel" if dd['total_km'] > 0 else ''
+
         day_data = {
             'day': day_num,
             'title': f"Day {day_num} — {district_text}",
-            'pacing_note': f"Cluster tour in {district_text} • Short travel time between locations",
+            'pacing_note': f"Cluster tour in {district_text}{pacing_km_note}",
+            'total_day_km': dd['total_km'],
+            'hop_distances': dd['hop_distances'],
+            'backtrack_detected': dd['backtrack_detected'],
             'places': [],
             'recommended_foods': [],
             'recommended_hotels': []

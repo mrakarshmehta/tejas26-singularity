@@ -389,33 +389,43 @@
 
     /**
      * Handle click on a place marker.
+     * Smoothly flies to the marker with intelligent zoom.
      * @param {Object} place
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
     handlePlaceMarkerClick(place, marker) {
-      // Update selected visual
+      // Update selected visual — deselect previous
       if (this._selectedMarker && this._selectedMarker !== marker) {
         root.HYGoogleMarkerFactory.setSelected(this._selectedMarker, false);
       }
       this._selectedMarker = marker;
       root.HYGoogleMarkerFactory.setSelected(marker, true);
 
-      // Pan smoothly to marker
+      // Smooth fly-to with intelligent zoom
       const lat = parseFloat(place.latitude);
       const lng = parseFloat(place.longitude);
       if (!isNaN(lat) && !isNaN(lng)) {
-        this.map.panTo({ lat, lng });
+        this._smoothFlyTo(lat, lng);
       }
 
-      // Open shared InfoWindow
+      // Open shared InfoWindow after a brief delay for animation
       const infoWindow = this.getInfoWindow();
       if (infoWindow && root.HYGoogleMarkerFactory) {
-        infoWindow.setContent(root.HYGoogleMarkerFactory.buildPlacePopupHTML(place));
-        infoWindow.open({
-          map: this.map,
-          anchor: marker,
-          shouldFocus: false,
-        });
+        const openInfo = () => {
+          infoWindow.setContent(root.HYGoogleMarkerFactory.buildPlacePopupHTML(place));
+          infoWindow.open({
+            map: this.map,
+            anchor: marker,
+            shouldFocus: false,
+          });
+        };
+        // If zooming, wait for animation; otherwise open immediately
+        const currentZoom = this.map.getZoom();
+        if (currentZoom < 12) {
+          setTimeout(openInfo, 500);
+        } else {
+          openInfo();
+        }
       }
 
       // Trigger callback to update sidebar & preview drawer
@@ -430,6 +440,35 @@
           event: 'place-select',
           place: place,
         });
+      }
+    }
+
+    /**
+     * Smooth animated fly-to a coordinate with intelligent zoom.
+     * Only zooms in if currently farther out. Never zooms out from closer.
+     * @param {number} lat
+     * @param {number} lng
+     * @private
+     */
+    _smoothFlyTo(lat, lng) {
+      const currentZoom = this.map.getZoom();
+      const TARGET_ZOOM = 13;
+
+      // Only zoom in if we're farther out; never zoom out from a closer view
+      const targetZoom = Math.max(currentZoom, TARGET_ZOOM);
+
+      if (currentZoom < 11) {
+        // Far out — use a 2-step zoom: slight pull then fly in
+        this.map.moveCamera({ center: { lat, lng }, zoom: targetZoom });
+      } else {
+        // Already close — smooth pan, optionally nudge zoom
+        this.map.panTo({ lat, lng });
+        if (currentZoom < TARGET_ZOOM) {
+          // Gently zoom in after a brief pan start
+          setTimeout(() => {
+            this.map.setZoom(TARGET_ZOOM);
+          }, 150);
+        }
       }
     }
 
@@ -470,7 +509,7 @@
      * @param {string} layerId - 'hotels' | 'homestays' | 'waterfalls_geo' | 'waterfalls'
      * @param {Object} geojsonData
      */
-    addPointMarkerLayer(layerId, geojsonData) {
+    addPointMarkerLayer(layerId, data) {
       if (this._pointLayersMarkers.has(layerId)) {
         // Already instantiated — restore visibility
         const pMap = this._pointLayersMarkers.get(layerId);
@@ -478,20 +517,36 @@
         return;
       }
 
-      if (!geojsonData || !geojsonData.features || !root.HYGoogleMarkerFactory) return;
+      if (!data || !root.HYGoogleMarkerFactory) return;
 
       const markerMap = new Map();
-      geojsonData.features.forEach((feature, idx) => {
-        const marker = root.HYGoogleMarkerFactory.createMarker(this.map, feature, {
-          type: layerId,
-          onClick: (feat, m) => this.handlePointMarkerClick(feat, layerId, m),
-        });
 
-        if (marker) {
-          const fid = (feature.properties && (feature.properties.id || feature.properties.osm_id || feature.properties.slug)) || idx;
-          markerMap.set(fid, marker);
-        }
-      });
+      // Support both Culture items array ({ items: [...] }) and GeoJSON ({ features: [...] })
+      if (data.items && Array.isArray(data.items)) {
+        data.items.forEach((item, idx) => {
+          const marker = root.HYGoogleMarkerFactory.createMarker(this.map, item, {
+            type: layerId,
+            onClick: (itm, m) => this.handlePointMarkerClick(itm, layerId, m),
+          });
+
+          if (marker) {
+            const fid = item.id || item.slug || idx;
+            markerMap.set(fid, marker);
+          }
+        });
+      } else if (data.features && Array.isArray(data.features)) {
+        data.features.forEach((feature, idx) => {
+          const marker = root.HYGoogleMarkerFactory.createMarker(this.map, feature, {
+            type: layerId,
+            onClick: (feat, m) => this.handlePointMarkerClick(feat, layerId, m),
+          });
+
+          if (marker) {
+            const fid = (feature.properties && (feature.properties.id || feature.properties.osm_id || feature.properties.slug)) || idx;
+            markerMap.set(fid, marker);
+          }
+        });
+      }
 
       this._pointLayersMarkers.set(layerId, markerMap);
       this._overlays.set(layerId, { type: 'point-markers', markers: markerMap });
@@ -500,25 +555,35 @@
 
     /**
      * Handle click on a point layer marker.
-     * @param {Object} feature
+     * @param {Object} featureOrItem
      * @param {string} layerId
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      */
-    handlePointMarkerClick(feature, layerId, marker) {
-      const coords = feature.geometry ? feature.geometry.coordinates : null;
-      if (coords) {
-        this.map.panTo({ lat: coords[1], lng: coords[0] });
+    handlePointMarkerClick(featureOrItem, layerId, marker) {
+      let lat, lng;
+      if (featureOrItem.lat !== undefined && featureOrItem.lng !== undefined) {
+        lat = parseFloat(featureOrItem.lat);
+        lng = parseFloat(featureOrItem.lng);
+      } else if (featureOrItem.geometry && featureOrItem.geometry.coordinates) {
+        lng = featureOrItem.geometry.coordinates[0];
+        lat = featureOrItem.geometry.coordinates[1];
+      }
+
+      if (!isNaN(lat) && !isNaN(lng)) {
+        this.map.panTo({ lat, lng });
       }
 
       let html = '';
-      const props = feature.properties || {};
+      const props = featureOrItem.properties || featureOrItem;
 
       if (layerId === 'hotels') {
-        html = root.HYGoogleMarkerFactory.buildHotelPopupHTML(props, coords);
+        html = root.HYGoogleMarkerFactory.buildHotelPopupHTML(props, [lng, lat]);
       } else if (layerId === 'homestays') {
-        html = root.HYGoogleMarkerFactory.buildHomestayPopupHTML(props, coords);
+        html = root.HYGoogleMarkerFactory.buildHomestayPopupHTML(props, [lng, lat]);
       } else if (layerId === 'waterfalls_geo' || layerId === 'waterfalls') {
-        html = root.HYGoogleMarkerFactory.buildWaterfallPopupHTML(props, coords);
+        html = root.HYGoogleMarkerFactory.buildWaterfallPopupHTML(props, [lng, lat]);
+      } else if (layerId.startsWith('culture') || (props.category && ['heritage', 'festivals', 'crafts', 'performing_arts', 'local_food'].includes(props.category))) {
+        html = root.HYGoogleMarkerFactory.buildCulturePopupHTML(props, [lng, lat]);
       } else {
         html = `<div style="padding:4px;"><strong>${props.name || 'Location'}</strong></div>`;
       }
@@ -538,7 +603,7 @@
         root.HYMapState._notify('layer', {
           layerId,
           event: 'feature-click',
-          feature: feature,
+          feature: featureOrItem,
         });
       }
     }
@@ -549,7 +614,22 @@
      * @param {boolean} visible
      */
     async toggleLayer(layerId, visible) {
-      const isPointLayer = (layerId === 'hotels' || layerId === 'homestays' || layerId === 'waterfalls_geo' || layerId === 'waterfalls');
+      // Handle Culture parent group toggle
+      if (layerId === 'culture') {
+        const cultureChildren = ['culture_heritage', 'culture_festivals', 'culture_crafts', 'culture_performing_arts', 'culture_food'];
+        for (const childId of cultureChildren) {
+          await this.toggleLayer(childId, visible);
+        }
+        return;
+      }
+
+      const isPointLayer = (
+        layerId === 'hotels' ||
+        layerId === 'homestays' ||
+        layerId === 'waterfalls_geo' ||
+        layerId === 'waterfalls' ||
+        layerId.startsWith('culture_')
+      );
 
       if (isPointLayer) {
         if (visible) {

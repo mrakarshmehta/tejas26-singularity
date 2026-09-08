@@ -48,6 +48,16 @@
         <span class="btn-label">Near Me</span>
       </button>
 
+      <button class="bar-btn" id="discovery-snapshot-btn" title="Bihar Tourism Discovery Snapshot — Verified Platform Coverage" aria-label="Discovery Snapshot" onclick="toggleDiscoverySnapshot()">
+        <span class="btn-icon">📊</span>
+        <span class="btn-label">Snapshot</span>
+      </button>
+
+      <button class="bar-btn" id="share-view-btn" title="Copy shareable link to this map view" aria-label="Share this view" onclick="shareMapView()">
+        <span class="btn-icon">🔗</span>
+        <span class="btn-label">Share</span>
+      </button>
+
       <button class="bar-btn" id="fullscreen-btn" title="Toggle Fullscreen Map" aria-label="Toggle Fullscreen">
         <span class="btn-icon">⛶</span>
         <span class="btn-label">Fullscreen</span>
@@ -182,11 +192,184 @@
       <span>📍 Near Me</span>
     </button>
   </div>
+  <!-- Discovery Snapshot Modal / Drawer (Tejas 2.2) -->
+  <div class="hy-snapshot-backdrop" id="snapshot-backdrop" onclick="closeDiscoverySnapshot()" style="display:none;"></div>
+  <div class="hy-snapshot-panel" id="snapshot-panel" role="dialog" aria-modal="true" aria-labelledby="snapshot-title" style="display:none;">
+    <div class="hy-snapshot-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.5rem;">📊</span>
+        <div>
+          <h3 id="snapshot-title" class="hy-snapshot-title">Bihar Tourism Discovery Snapshot</h3>
+          <p class="hy-snapshot-subtitle">Verified Platform Coverage • Real-Time Database Metrics</p>
+        </div>
+      </div>
+      <button class="hy-snapshot-close" onclick="closeDiscoverySnapshot()" aria-label="Close Discovery Snapshot">✕</button>
+    </div>
+
+    <div class="hy-snapshot-body" id="snapshot-body">
+      <div class="hy-snapshot-loading" id="snapshot-loading">
+        <div class="hy-snapshot-spinner"></div>
+        <p>Querying verified platform coverage metrics...</p>
+      </div>
+      <div class="hy-snapshot-content" id="snapshot-content" style="display:none;"></div>
+      <div class="hy-snapshot-error" id="snapshot-error" style="display:none;">
+        <p>⚠️ Unable to load discovery metrics at this time.</p>
+        <button class="bar-btn" onclick="fetchDiscoverySnapshot()" style="margin:10px auto;display:inline-block;">Retry</button>
+      </div>
+    </div>
+
+    <div class="hy-snapshot-footer">
+      <span>🔒 Verified queryable data from production MySQL database and cultural registry. No synthetic or fabricated metrics.</span>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
+<script>
+// ═══════════════════════════════════════════════════════
+// TEJAS 2.2 — Discovery Snapshot Controller
+// ═══════════════════════════════════════════════════════
+let _snapshotLoaded = false;
+
+function toggleDiscoverySnapshot() {
+  const panel = document.getElementById('snapshot-panel');
+  if (!panel) return;
+  if (panel.style.display === 'none' || panel.style.display === '') {
+    openDiscoverySnapshot();
+  } else {
+    closeDiscoverySnapshot();
+  }
+}
+window.toggleDiscoverySnapshot = toggleDiscoverySnapshot;
+
+function openDiscoverySnapshot() {
+  const backdrop = document.getElementById('snapshot-backdrop');
+  const panel = document.getElementById('snapshot-panel');
+  if (backdrop) backdrop.style.display = 'block';
+  if (panel) panel.style.display = 'flex';
+  if (!_snapshotLoaded) {
+    fetchDiscoverySnapshot();
+  }
+}
+window.openDiscoverySnapshot = openDiscoverySnapshot;
+
+function closeDiscoverySnapshot() {
+  const backdrop = document.getElementById('snapshot-backdrop');
+  const panel = document.getElementById('snapshot-panel');
+  if (backdrop) backdrop.style.display = 'none';
+  if (panel) panel.style.display = 'none';
+}
+window.closeDiscoverySnapshot = closeDiscoverySnapshot;
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeDiscoverySnapshot();
+  }
+});
+
+async function fetchDiscoverySnapshot() {
+  const loading = document.getElementById('snapshot-loading');
+  const content = document.getElementById('snapshot-content');
+  const errorEl = document.getElementById('snapshot-error');
+  if (loading) loading.style.display = 'block';
+  if (content) content.style.display = 'none';
+  if (errorEl) errorEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/discovery-snapshot');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.status !== 'success') throw new Error('API reported failure');
+
+    renderDiscoverySnapshot(data);
+    _snapshotLoaded = true;
+    if (loading) loading.style.display = 'none';
+    if (content) content.style.display = 'block';
+  } catch (err) {
+    console.error('[DiscoverySnapshot] Failed to fetch:', err);
+    if (loading) loading.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'block';
+  }
+}
+window.fetchDiscoverySnapshot = fetchDiscoverySnapshot;
+
+function renderDiscoverySnapshot(data) {
+  const content = document.getElementById('snapshot-content');
+  if (!content) return;
+  const p = data.platform || {};
+  const c = data.culture || {};
+
+  content.innerHTML = `
+    <div class="hy-snapshot-section">
+      <h4 class="hy-snapshot-sec-title">📍 Platform Destinations</h4>
+      <div class="hy-snapshot-grid">
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🗺️</span>
+          <div class="hy-stat-val">${p.verified_places || 0}</div>
+          <div class="hy-stat-lbl">Verified Places</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🏛️</span>
+          <div class="hy-stat-val">${p.districts_covered || 0}<span class="hy-stat-sub">/38</span></div>
+          <div class="hy-stat-lbl">Districts Covered</div>
+        </div>
+        <div class="hy-snapshot-stat-card highlight-gem">
+          <span class="hy-stat-icon">💎</span>
+          <div class="hy-stat-val">${p.hidden_gems || 0}</div>
+          <div class="hy-stat-lbl">Hidden Gems</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🧭</span>
+          <div class="hy-stat-val">${p.geo_mapped_places || 0}</div>
+          <div class="hy-stat-lbl">Geo-Mapped Places</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🏷️</span>
+          <div class="hy-stat-val">${p.place_categories || 0}</div>
+          <div class="hy-stat-lbl">Place Categories</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hy-snapshot-section" style="margin-top:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h4 class="hy-snapshot-sec-title" style="margin:0;">🏺 Cultural Heritage Registry</h4>
+        <span class="hy-snapshot-total-pill">${data.total_culture_records || 0} Verified Records</span>
+      </div>
+      <div class="hy-snapshot-grid">
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🏛️</span>
+          <div class="hy-stat-val">${c.archaeological_sites || 0}</div>
+          <div class="hy-stat-lbl">Archaeological Sites</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🎨</span>
+          <div class="hy-stat-val">${c.gi_crafts || 0} <span class="hy-stat-sub">GI</span> • ${c.artisan_centers || 0}</div>
+          <div class="hy-stat-lbl">GI Crafts & Centers</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🎪</span>
+          <div class="hy-stat-val">${c.festivals || 0}</div>
+          <div class="hy-stat-lbl">Cultural Festivals</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🎭</span>
+          <div class="hy-stat-val">${c.performing_arts || 0} <span class="hy-stat-sub">Arts</span> • ${c.folk_instruments || 0}</div>
+          <div class="hy-stat-lbl">Performing Arts & Guilds</div>
+        </div>
+        <div class="hy-snapshot-stat-card">
+          <span class="hy-stat-icon">🍲</span>
+          <div class="hy-stat-val">${c.heritage_dishes || 0} <span class="hy-stat-sub">Dishes</span> • ${c.culinary_trails || 0}</div>
+          <div class="hy-stat-lbl">Heritage Gastronomy</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+</script>
+
 {% if map_engine == 'google' %}
 {# ═══ Google Maps Engine ═══ #}
 <script>
@@ -785,17 +968,17 @@ try {
 
 <!-- ═══ HiddenYatra Advanced Map System (engine-agnostic) ═══ -->
 <script src="{{ url_for('static', filename='js/map/map-state.js') }}?v=1.1"></script>
-<script src="{{ url_for('static', filename='js/map/map-layers.js') }}?v=1.1"></script>
-<script src="{{ url_for('static', filename='js/map/map-markers.js') }}?v=1.1"></script>
+<script src="{{ url_for('static', filename='js/map/map-layers.js') }}?v=2.2"></script>
+<script src="{{ url_for('static', filename='js/map/map-markers.js') }}?v=2.2"></script>
 {% if map_engine == 'google' %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="{{ url_for('static', filename='js/map/map-google-terrain-loader.js') }}?v=1.0"></script>
 <script src="{{ url_for('static', filename='js/map/map-google-terrain-mesh.js') }}?v=1.0"></script>
 <script src="{{ url_for('static', filename='js/map/map-google-terrain.js') }}?v=1.0"></script>
 <script src="{{ url_for('static', filename='js/map/map-google-layers.js') }}?v=1.0"></script>
-<script src="{{ url_for('static', filename='js/map/map-google.js') }}?v=1.0"></script>
+<script src="{{ url_for('static', filename='js/map/map-google.js') }}?v=2.2"></script>
 {% else %}
-<script src="{{ url_for('static', filename='js/map/map-leaflet.js') }}?v=1.1"></script>
+<script src="{{ url_for('static', filename='js/map/map-leaflet.js') }}?v=2.2"></script>
 <script src="{{ url_for('static', filename='js/map/map-maplibre.js') }}?v=1.1"></script>
 <script src="{{ url_for('static', filename='js/map/map-transition.js') }}?v=1.1"></script>
 {% endif %}
@@ -950,9 +1133,37 @@ window._hyInitGoogleMap = function() {
     }
     window.selectPlace = selectPlace;
 
+    /* ── Nearby Radius Circle Overlay ─── */
+    let _nearbyRadiusCircle = null;
+
+    function showNearbyRadius(lat, lng, radiusKm) {
+      removeNearbyRadius();
+      _nearbyRadiusCircle = new google.maps.Circle({
+        map: googleMap,
+        center: { lat: lat, lng: lng },
+        radius: radiusKm * 1000,
+        fillColor: '#FF7A18',
+        fillOpacity: 0.04,
+        strokeColor: '#FF7A18',
+        strokeOpacity: 0.2,
+        strokeWeight: 1.5,
+        strokeDashArray: [4, 4],
+        clickable: false,
+        zIndex: 1,
+      });
+    }
+
+    function removeNearbyRadius() {
+      if (_nearbyRadiusCircle) {
+        _nearbyRadiusCircle.setMap(null);
+        _nearbyRadiusCircle = null;
+      }
+    }
+
     function hidePreview() {
       document.getElementById('map-place-preview').style.display = 'none';
       activePlace = null;
+      removeNearbyRadius();
     }
     window.hidePreview = hidePreview;
 
@@ -982,6 +1193,21 @@ window._hyInitGoogleMap = function() {
 
       renderNearbyList(_nearbyCache.slice(0, 5));
       nearbySection.style.display = _nearbyCache.length > 0 ? 'block' : 'none';
+
+      // Update nearby header count
+      const nearbyTitle = nearbySection.querySelector('.nearby-title');
+      if (nearbyTitle) {
+        nearbyTitle.textContent = `📍 ${_nearbyCache.length} Nearby Place${_nearbyCache.length !== 1 ? 's' : ''}`;
+      }
+
+      // Show subtle radius circle on the map
+      if (!isNaN(targetLat) && !isNaN(targetLng) && _nearbyCache.length > 0) {
+        // Use the farthest nearby place's distance as the visual radius (capped at 25km)
+        const maxDist = Math.min(_nearbyCache[_nearbyCache.length - 1]._distToTarget, 25);
+        showNearbyRadius(targetLat, targetLng, maxDist);
+      } else {
+        removeNearbyRadius();
+      }
     }
 
     function filterNearby(cat) {
@@ -993,6 +1219,17 @@ window._hyInitGoogleMap = function() {
     }
     window.filterNearby = filterNearby;
 
+    /**
+     * Focus a nearby place on the map without navigating away.
+     * @param {number|string} placeId
+     */
+    function showNearbyOnMap(placeId) {
+      if (hyMap.googleAdapter) {
+        hyMap.googleAdapter.selectPlaceById(placeId);
+      }
+    }
+    window.showNearbyOnMap = showNearbyOnMap;
+
     function renderNearbyList(items) {
       const nearbyList = document.getElementById('nearby-list');
       nearbyList.innerHTML = '';
@@ -1002,19 +1239,23 @@ window._hyInitGoogleMap = function() {
       }
       items.forEach(np => {
         const catEmoji = (window.HYMapMarkers ? window.HYMapMarkers.getEmoji(np.category) : '📍') || '📍';
-        const item = document.createElement('a');
-        item.href = `/place/${encodeURIComponent(np.slug)}`;
+        const catColor = (window.HYMapMarkers ? window.HYMapMarkers.getColor(np.category) : '#6366f1') || '#6366f1';
+        const item = document.createElement('div');
         item.className = 'nearby-item';
         item.innerHTML = `
           <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:0.9rem;">${catEmoji}</span>
-              <strong class="nearby-item-name" style="font-size:0.8rem;color:var(--text-primary);">${escapeHTML(np.name)}</strong>
+            <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+              <span style="font-size:0.9rem;flex-shrink:0;">${catEmoji}</span>
+              <strong class="nearby-item-name" style="font-size:0.8rem;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(np.name)}</strong>
             </div>
-            <span style="font-size:0.72rem;color:var(--primary);font-weight:600;">${np._distToTarget} km</span>
+            <span style="font-size:0.72rem;color:var(--primary);font-weight:600;flex-shrink:0;margin-left:6px;">${np._distToTarget} km</span>
           </div>
-          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;padding-left:22px;">
-            ${escapeHTML(np.district_name || 'Bihar')}
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;padding-left:22px;">
+            <span style="font-size:0.72rem;color:var(--text-muted);">${escapeHTML(np.district_name || 'Bihar')}</span>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <button class="nearby-show-map-btn" onclick="event.stopPropagation();showNearbyOnMap(${np.id})" title="Show on map" style="background:none;border:1px solid ${catColor}44;border-radius:4px;padding:2px 6px;font-size:0.68rem;color:${catColor};cursor:pointer;white-space:nowrap;">🗺️ Map</button>
+              <a href="/place/${encodeURIComponent(np.slug)}" class="nearby-detail-link" style="font-size:0.68rem;color:var(--primary);text-decoration:none;padding:2px 6px;border:1px solid rgba(255,122,24,0.3);border-radius:4px;white-space:nowrap;">View →</a>
+            </div>
           </div>
         `;
         nearbyList.appendChild(item);
@@ -1283,7 +1524,7 @@ window._hyInitGoogleMap = function() {
       }
     });
 
-    /* ── Auto-select from URL query params (?place_id=, ?category=, ?district=, ?near_me=) ── */
+    /* ── Auto-select from URL query params (?place_id=, ?category=, ?district=, ?near_me=, ?lat=, ?lng=, ?zoom=) ── */
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const qPlaceId = urlParams.get('place_id');
@@ -1291,6 +1532,22 @@ window._hyInitGoogleMap = function() {
       const qCategory = urlParams.get('category');
       const qDistrict = urlParams.get('district');
       const qNearMe = urlParams.get('near_me');
+      const qLat = urlParams.get('lat');
+      const qLng = urlParams.get('lng');
+      const qZoom = urlParams.get('zoom');
+
+      // Restore map position from URL if provided
+      if (qLat && qLng) {
+        const lat = parseFloat(qLat);
+        const lng = parseFloat(qLng);
+        const zoom = qZoom ? parseInt(qZoom, 10) : null;
+        if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+          googleMap.setCenter({ lat, lng });
+          if (zoom && zoom >= 1 && zoom <= 21) {
+            googleMap.setZoom(zoom);
+          }
+        }
+      }
 
       if (qCategory) {
         const chip = document.querySelector(`.map-filters .filter-chip[data-category="${qCategory}"]`);
@@ -1327,6 +1584,57 @@ window._hyInitGoogleMap = function() {
       }
     } catch (e) {
       console.warn('[HYMap] Query param handler error:', e);
+    }
+
+    /* ── Share Map View ── */
+    function shareMapView() {
+      const center = googleMap.getCenter();
+      const zoom = googleMap.getZoom();
+      const params = new URLSearchParams();
+      params.set('lat', center.lat().toFixed(5));
+      params.set('lng', center.lng().toFixed(5));
+      params.set('zoom', Math.round(zoom));
+
+      // Include active place if selected
+      if (activePlace && activePlace.id) {
+        params.set('place_id', activePlace.id);
+      }
+
+      const url = window.location.origin + window.location.pathname + '?' + params.toString();
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          showShareToast('Map link copied!');
+        }).catch(() => {
+          showShareToast('Could not copy link');
+        });
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          showShareToast('Map link copied!');
+        } catch(e) {
+          showShareToast('Could not copy link');
+        }
+        document.body.removeChild(textArea);
+      }
+    }
+    window.shareMapView = shareMapView;
+
+    function showShareToast(msg) {
+      const existing = document.getElementById('hy-share-toast');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.id = 'hy-share-toast';
+      toast.textContent = msg;
+      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:10px 20px;border-radius:8px;font-size:0.82rem;z-index:10000;backdrop-filter:blur(8px);pointer-events:none;animation:hyToastFade 2s forwards;';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2200);
     }
 
     console.log('[HYMap] ✅ Google Maps Engine & Advanced Markers initialized');

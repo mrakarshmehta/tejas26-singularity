@@ -377,6 +377,48 @@
         name = props.name || 'Waterfall';
         cls = 'waterfall-osm';
         size = 26;
+      } else if (layerType === 'culture_heritage' || props.category === 'heritage') {
+        color = '#b45309';
+        emoji = props.icon || '🏛️';
+        label = props.subcategory || 'Heritage Site';
+        name = props.name || 'Heritage';
+        cls = 'culture-heritage';
+        size = 28;
+      } else if (layerType === 'culture_festivals' || props.category === 'festivals') {
+        color = '#dc2626';
+        emoji = props.icon || '🎪';
+        label = props.subcategory || 'Festival';
+        name = props.name || 'Festival';
+        cls = 'culture-festival';
+        size = 28;
+      } else if (layerType === 'culture_crafts' || props.category === 'crafts') {
+        color = '#7c3aed';
+        emoji = props.icon || '🎨';
+        label = props.subcategory || 'Craft Center';
+        name = props.name || 'Craft';
+        cls = 'culture-craft';
+        size = 28;
+      } else if (layerType === 'culture_performing_arts' || props.category === 'performing_arts') {
+        color = '#db2777';
+        emoji = props.icon || '🎭';
+        label = props.subcategory || 'Performing Art';
+        name = props.name || 'Performing Art';
+        cls = 'culture-art';
+        size = 28;
+      } else if (layerType === 'culture_food' || props.category === 'local_food') {
+        color = '#ea580c';
+        emoji = props.icon || '🍲';
+        label = props.subcategory || 'Heritage Food';
+        name = props.name || 'Heritage Food';
+        cls = 'culture-food';
+        size = 28;
+      } else if (layerType && layerType.startsWith('culture')) {
+        color = '#d97706';
+        emoji = props.icon || '🏺';
+        label = props.subcategory || 'Culture';
+        name = props.name || 'Culture';
+        cls = 'culture-item';
+        size = 28;
       }
 
       markerEl.className = `hy-gmp-marker point-marker ${cls}` + (opts.selected ? ' selected' : '');
@@ -427,15 +469,20 @@
         const isSpecial = !!data.is_hidden_gem || !!data.is_featured;
         zIndex = isSpecial ? 150 : 100;
       } else {
-        const coords = data.geometry ? data.geometry.coordinates : [0, 0];
-        lng = coords[0];
-        lat = coords[1];
+        if (data.lat !== undefined && data.lng !== undefined) {
+          lat = parseFloat(data.lat);
+          lng = parseFloat(data.lng);
+        } else {
+          const coords = data.geometry ? data.geometry.coordinates : [0, 0];
+          lng = coords[0];
+          lat = coords[1];
+        }
         if (isNaN(lat) || isNaN(lng) || lat === 0) return null;
 
         const props = data.properties || data;
         domEl = this.createPointMarkerDOM(props, type, opts);
         title = props.name || props.title || 'Location';
-        zIndex = type === 'hotels' ? 90 : (type === 'homestays' ? 90 : 80);
+        zIndex = type.startsWith('culture') ? 85 : (type === 'hotels' ? 90 : (type === 'homestays' ? 90 : 80));
       }
 
       const isRequiredCollision = (type === 'place' && (!!data.is_hidden_gem || !!data.is_featured));
@@ -624,6 +671,54 @@
     },
 
     /**
+     * Build rich InfoWindow HTML for a Culture marker.
+     * @param {Object} props
+     * @param {Array<number>} coords - [lng, lat]
+     * @returns {string} Safe HTML string
+     */
+    buildCulturePopupHTML(props, coords) {
+      const esc = MapMarkers._escHtml;
+      const name = esc(props.name || 'Cultural Site');
+      const subcategory = esc(props.subcategory || 'Culture');
+      const icon = props.icon || '🏺';
+      const district = esc(props.district || 'Bihar');
+      const period = props.period ? esc(props.period) : '';
+      const description = props.description ? esc(props.description) : '';
+      const detailUrl = props.detail_url ? esc(props.detail_url) : '';
+      const lat = coords ? coords[1] : (props.lat || 25.0);
+      const lng = coords ? coords[0] : (props.lng || 85.0);
+
+      const colorMap = {
+        heritage: '#b45309',
+        festivals: '#dc2626',
+        crafts: '#7c3aed',
+        performing_arts: '#db2777',
+        local_food: '#ea580c',
+      };
+      const themeColor = colorMap[props.category] || '#d97706';
+
+      return `
+        <div class="hy-gmp-popup-card" style="min-width:220px;max-width:260px;font-family:var(--font-body,'Inter',sans-serif);line-height:1.4;padding:2px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <span style="font-size:1.15rem;">${icon}</span>
+            <span style="display:inline-block;padding:2px 7px;background:${themeColor}18;color:${themeColor};border:1px solid ${themeColor}33;border-radius:4px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;">
+              ${subcategory}
+            </span>
+          </div>
+          <h4 style="margin:0 0 4px 0;font-size:0.95rem;color:var(--text-primary,#1e293b);font-weight:700;line-height:1.3;">${name}</h4>
+          <div style="font-size:0.75rem;color:var(--text-muted,#64748b);margin-bottom:6px;">
+            📍 ${district}${period ? ' • 🗓️ ' + period : ''}
+          </div>
+          ${description ? `<p style="margin:0 0 8px 0;font-size:0.78rem;color:var(--text-secondary,#475569);line-height:1.4;">${description}</p>` : ''}
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            ${detailUrl ? `<a href="${detailUrl}" style="flex:1;text-align:center;padding:5px 8px;border-radius:6px;background:${themeColor};color:#fff;font-size:0.76rem;font-weight:600;text-decoration:none;">Explore →</a>` : ''}
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" rel="noopener noreferrer" style="padding:5px 8px;border-radius:6px;background:var(--bg-tertiary,#f1f5f9);color:var(--text-primary,#1e293b);font-size:0.76rem;font-weight:600;text-decoration:none;">🧭 Route</a>
+          </div>
+        </div>
+      `;
+    },
+
+    /**
      * Set selection visual on a marker element.
      * @param {google.maps.marker.AdvancedMarkerElement} marker
      * @param {boolean} isSelected
@@ -632,6 +727,26 @@
       if (!marker || !marker._hyElement) return;
       marker._hyElement.classList.toggle('selected', isSelected);
       marker.zIndex = isSelected ? 999 : (marker._hyType === 'place' ? 100 : 80);
+
+      // Manage the pulse ring overlay for selected state
+      const pin = marker._hyElement.querySelector('.hy-gmp-pin');
+      if (!pin) return;
+      const existingRing = pin.querySelector('.hy-selected-pulse-ring');
+
+      if (isSelected) {
+        // Add pulse ring if not already present
+        if (!existingRing) {
+          const ring = document.createElement('span');
+          ring.className = 'hy-selected-pulse-ring';
+          // Use the marker's category color for the pulse
+          const bgColor = pin.style.backgroundColor || '#FF7A18';
+          ring.style.setProperty('--pulse-color', bgColor);
+          pin.appendChild(ring);
+        }
+      } else {
+        // Remove pulse ring on deselect
+        if (existingRing) existingRing.remove();
+      }
     },
   };
 
@@ -703,6 +818,25 @@
           transform: scale(1.25);
           outline: 3px solid #FF7A18;
           box-shadow: 0 8px 24px rgba(255, 122, 24, 0.5);
+          animation: hySelectedBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .hy-selected-pulse-ring {
+          position: absolute;
+          inset: -3px;
+          border-radius: 50%;
+          border: 2.5px solid var(--pulse-color, #FF7A18);
+          opacity: 0;
+          pointer-events: none;
+          animation: hySelectedPulse 2s ease-out infinite;
+        }
+        @keyframes hySelectedBounce {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.35); }
+          100% { transform: scale(1.25); }
+        }
+        @keyframes hySelectedPulse {
+          0% { transform: scale(1); opacity: 0.7; }
+          100% { transform: scale(2.4); opacity: 0; }
         }
         .hy-gmp-marker.pulse-gold .hy-gmp-pin {
           animation: hyGmpPulseGold 2s infinite;

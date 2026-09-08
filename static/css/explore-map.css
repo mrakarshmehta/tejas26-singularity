@@ -1175,3 +1175,231 @@
 [data-theme="light"] .map-place-preview::before {
   background: rgba(0, 0, 0, 0.2);
 }
+
+/* ── Share Toast Animation ── */
+@keyframes hyToastFade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  75% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* ── Nearby Item Enhancements ── */
+.nearby-show-map-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  transform: scale(1.05);
+}
+
+.nearby-detail-link:hover {
+  background: rgba(255, 122, 24, 0.1) !important;
+}
+
+.nearby-item {
+  transition: background 0.15s ease;
+}
+
+.nearby-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ═══════════════════════════════════════════════════
+   Bihar Tourism Discovery Snapshot Modal (Tejas 2.2)
+   ═══════════════════════════════════════════════════ */
+.hy-snapshot-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 99998;
+  animation: hyFadeIn 0.2s ease;
+}
+
+.hy-snapshot-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 660px;
+  max-height: 86vh;
+  background: var(--bg-card, #131d31);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: hySnapshotPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes hySnapshotPop {
+  0% { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.hy-snapshot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(20, 184, 166, 0.08));
+}
+
+.hy-snapshot-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.hy-snapshot-subtitle {
+  font-size: 0.72rem;
+  color: var(--text-muted, #94a3b8);
+  margin: 2px 0 0 0;
+}
+
+.hy-snapshot-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted, #94a3b8);
+  font-size: 1.1rem;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.hy-snapshot-close:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.hy-snapshot-body {
+  padding: 18px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.hy-snapshot-loading,
+.hy-snapshot-error {
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.85rem;
+}
+
+.hy-snapshot-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: hySpin 0.8s linear infinite;
+}
+
+@keyframes hySpin {
+  to { transform: rotate(360deg); }
+}
+
+.hy-snapshot-sec-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary, #cbd5e1);
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hy-snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 10px;
+}
+
+.hy-snapshot-stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.hy-snapshot-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hy-snapshot-stat-card.highlight-gem {
+  border-color: rgba(236, 72, 153, 0.35);
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), transparent);
+}
+
+.hy-stat-icon {
+  font-size: 1.25rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.hy-stat-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary, #fff);
+  line-height: 1.2;
+}
+
+.hy-stat-sub {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted, #94a3b8);
+}
+
+.hy-stat-lbl {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted, #94a3b8);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.hy-snapshot-total-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(45, 212, 191, 0.25);
+}
+
+.hy-snapshot-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 0.7rem;
+  color: var(--text-muted, #94a3b8);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .hy-snapshot-panel {
+    width: 95%;
+    max-height: 90vh;
+  }
+  .hy-snapshot-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

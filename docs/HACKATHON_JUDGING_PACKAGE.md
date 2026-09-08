@@ -38,7 +38,7 @@
 1. **Navigate to Community Suggest Page (`http://127.0.0.1:5000/suggest`)**:
    - Show how local users can upload photos, GPS coordinates, and historical context.
 2. **Login to Admin Panel (`http://127.0.0.1:5000/admin/login`)**:
-   - Enter password `admin@hidden123`.
+   - Enter the admin password (set via `ADMIN_PASSWORD` environment variable).
    - Show **Dashboard Analytics** (Live statistics, recent logs, pending submissions).
    - Navigate to **Submissions (`/admin/submissions`)**: Show One-Click Approve, Duplicate Detection, and Replace/Merge capabilities.
    - Navigate to **Hero Media / Districts / User Photos**: Show enterprise control over all platform assets.

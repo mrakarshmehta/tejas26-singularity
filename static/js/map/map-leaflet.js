@@ -335,12 +335,68 @@
     }
 
     /**
+     * Add culture markers to the Leaflet map.
+     * @param {string} layerId
+     * @param {Array<Object>} items
+     * @param {Object} [styleOpts]
+     * @returns {L.LayerGroup}
+     */
+    addCultureMarkerLayer(layerId, items, styleOpts) {
+      this.removeLayer(layerId);
+      const style = styleOpts || {};
+      const markerColor = style.markerColor || '#d97706';
+      const markers = [];
+
+      items.forEach(item => {
+        if (item.lat && item.lng) {
+          const cm = L.circleMarker([item.lat, item.lng], {
+            radius: 7,
+            fillColor: markerColor,
+            color: '#ffffff',
+            weight: 2,
+            opacity: 1.0,
+            fillOpacity: 0.9,
+          });
+
+          const popupContent = `
+            <div style="font-family:sans-serif;min-width:180px;line-height:1.4;">
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+                <span>${item.icon || '🏺'}</span>
+                <strong style="color:${markerColor};font-size:0.75rem;text-transform:uppercase;">${item.subcategory || 'Culture'}</strong>
+              </div>
+              <h4 style="margin:2px 0 4px;font-size:0.9rem;">${item.name}</h4>
+              <div style="font-size:0.75rem;color:#64748b;">📍 ${item.district || 'Bihar'}</div>
+              ${item.description ? `<p style="margin:4px 0;font-size:0.75rem;color:#475569;">${item.description}</p>` : ''}
+              ${item.detail_url ? `<a href="${item.detail_url}" style="font-size:0.75rem;color:${markerColor};font-weight:600;">Explore →</a>` : ''}
+            </div>
+          `;
+          cm.bindPopup(popupContent);
+          markers.push(cm);
+        }
+      });
+
+      const layerGroup = L.layerGroup(markers);
+      layerGroup.addTo(this.map);
+      this._overlays.set(layerId, layerGroup);
+      return layerGroup;
+    }
+
+    /**
      * Toggle layer visibility.
      * @param {string} layerId
      * @param {boolean} visible
      */
     async toggleLayer(layerId, visible) {
       if (visible) {
+        // Handle culture parent group
+        if (layerId === 'culture') {
+          const cultureChildren = ['culture_heritage', 'culture_festivals', 'culture_crafts', 'culture_performing_arts', 'culture_food'];
+          for (const childId of cultureChildren) {
+            await this.toggleLayer(childId, true);
+          }
+          return;
+        }
+
         // Check if layer is already loaded
         if (this._overlays.has(layerId)) {
           const layer = this._overlays.get(layerId);
@@ -354,6 +410,15 @@
         const def = root.HYLayerRegistry ? root.HYLayerRegistry.get(layerId) : null;
         if (!def) return;
 
+        // Culture point markers
+        if (layerId.startsWith('culture_') && def.source) {
+          const data = await root.HYLayerRegistry.fetchData(layerId);
+          if (data && data.items) {
+            this.addCultureMarkerLayer(layerId, data.items, def.style);
+          }
+          return;
+        }
+
         const isGeoJSON = (def.sourceType === 'geojson' || def.type === 'geojson');
         if (isGeoJSON && def.source) {
           const data = await root.HYLayerRegistry.fetchData(layerId);
@@ -362,6 +427,15 @@
           }
         }
       } else {
+        // Handle culture parent group
+        if (layerId === 'culture') {
+          const cultureChildren = ['culture_heritage', 'culture_festivals', 'culture_crafts', 'culture_performing_arts', 'culture_food'];
+          for (const childId of cultureChildren) {
+            await this.toggleLayer(childId, false);
+          }
+          return;
+        }
+
         // Hide layer (keep in memory for fast re-toggle)
         const layer = this._overlays.get(layerId);
         if (layer && this.map.hasLayer(layer)) {
