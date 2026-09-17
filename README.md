@@ -1,3 +1,9 @@
+# tejas26-singularity
+
+Official Code Repository for tejas26-singularity at Tejas India Hackathon 2026
+
+---
+
 # 🗺️ HiddenYatra — Bihar Heritage, Culture & Eco-Tourism Portal
 
 HiddenYatra is an immersive digital tourism platform and PWA dedicated to uncovering Bihar's ancient heritage, sacred thematic circuits, GI-tagged handicrafts, authentic gastronomy, wildlife reserves, and rural community immersion.
@@ -77,4 +83,3 @@ Built for the Tejas India Hackathon 2.2 (Bihar Tourism problem statement), these
 - Smooth animated fly-to on marker selection with intelligent zoom behavior
 - Pulse ring animation on selected markers
 - Nearby radius overlay showing distance to surrounding places
-
