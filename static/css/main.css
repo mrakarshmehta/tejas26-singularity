@@ -1555,6 +1555,21 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 }
 .mobile-nav-item svg { width: 22px; height: 22px; }
 
+/* ── HOMEPAGE SEARCH VISIBILITY (P1-1 FIX) ── */
+@media (min-width: 769px) {
+  body.page-home .nav-search {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  body.page-home .navbar.scrolled .nav-search {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   /* IMPORTANT: .navbar has backdrop-filter which creates a containing block,
@@ -1653,7 +1668,13 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 
   .mobile-bottom-nav { display: block; }
   .main-content { padding-bottom: 70px; }
-  .scroll-top-btn { bottom: 80px; }
+  .scroll-top-btn {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    z-index: 990;
+  }
   .site-footer { padding-bottom: 80px; }
 }
 

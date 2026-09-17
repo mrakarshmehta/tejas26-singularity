@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}AI Trip Planner — {{ app_name }}{% endblock %}
-{% block meta_desc %}Plan your perfect Bihar trip with our AI-powered trip planner. Get smart itineraries, budget estimates, and more.{% endblock %}
+{% block title %}Smart Trip Planner — {{ app_name }}{% endblock %}
+{% block meta_desc %}Plan your perfect Bihar trip with our smart algorithmic trip planner. Get optimized routes, budget estimates, and more.{% endblock %}
 
 {% block extra_css %}
 <style>
-/* ═══ AI TRIP PLANNER ═══ */
+/* ═══ SMART TRIP PLANNER ═══ */
 .planner-hero { text-align:center; padding:var(--space-3xl) var(--space-lg) var(--space-xl); }
 .planner-hero h1 { font-family:var(--font-heading); font-size:clamp(2rem,4vw,3rem); font-weight:800; margin-bottom:var(--space-sm); }
 .planner-hero .ai-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(20,184,166,.15)); border:1px solid rgba(99,102,241,.3); border-radius:var(--radius-full); font-size:.8rem; font-weight:600; color:var(--secondary); margin-bottom:var(--space-lg); }
@@ -272,7 +272,7 @@
     <div class="itin-budget-card" id="itin-budget-widget" style="margin:20px 0;padding:18px;background:var(--card-bg, #1e293b);border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <h3 style="margin:0;font-size:1.1rem;">💰 Estimated Trip Budget & Cost Breakdown</h3>
-        <span class="itin-pace-badge" style="padding:4px 10px;border-radius:20px;font-size:0.78rem;background:rgba(99,102,241,0.2);color:#818cf8;">AI Calculated</span>
+        <span class="itin-pace-badge" style="padding:4px 10px;border-radius:20px;font-size:0.78rem;background:rgba(99,102,241,0.2);color:#818cf8;">Smart Calculated</span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:10px;">
         <div class="itin-cost-stat" style="padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">
@@ -298,7 +298,7 @@
 <div class="planner-hero">
   <div class="ai-badge">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    AI-Powered
+    Smart Routing
   </div>
   <h1>Trip <span class="text-gradient">Planner</span></h1>
   <p class="page-subtitle">Plan your perfect Bihar adventure in seconds</p>
@@ -336,11 +336,11 @@
       <div class="places-section-header">
         <div>
           <label class="places-section-title">📍 Places you want to visit</label>
-          <span class="form-hint">Choose specific Bihar destinations or let AI build your custom route</span>
+          <span class="form-hint">Choose specific Bihar destinations or let the smart engine build your custom route</span>
         </div>
         <button type="button" class="btn-ai-toggle" id="btn-ai-toggle" onclick="toggleAiChooseMode()">
-          <span class="ai-sparkle">✨</span>
-          <span id="ai-toggle-text">Let AI choose for me</span>
+          <span class="ai-sparkle">🧭</span>
+          <span id="ai-toggle-text">Smart Auto-Select</span>
         </button>
       </div>
 
@@ -359,10 +359,10 @@
 
       <!-- AI Mode Info Banner -->
       <div class="ai-mode-banner" id="ai-mode-banner" style="display:none;">
-        <span class="ai-mode-icon">✨</span>
+        <span class="ai-mode-icon">🧭</span>
         <div class="ai-mode-content">
-          <strong>Smart AI Discovery Active</strong>
-          <p>AI will automatically select and cluster the highest-rated destinations across Bihar matching your preferences.</p>
+          <strong>Smart Auto-Discovery Active</strong>
+          <p>The routing algorithm will automatically select and cluster the highest-rated destinations across Bihar matching your preferences.</p>
         </div>
         <button type="button" class="btn-switch-manual" onclick="toggleAiChooseMode()">Custom Pick Places</button>
       </div>
@@ -429,7 +429,7 @@
 
     <button class="btn-generate" id="btn-generate" onclick="generateTrip()">
       <span class="spinner"></span>
-      <span class="btn-text">✨ Generate AI Trip Plan</span>
+      <span class="btn-text">🧭 Generate Smart Trip Plan</span>
     </button>
   </div>
 
@@ -733,7 +733,7 @@ function renderSelectedPlaceChips() {
   aiToggleBtn.classList.remove('active');
 
   if (selectedPlaces.length === 0) {
-    chipsContainer.innerHTML = '<span style="font-size:0.82rem;color:var(--text-muted);font-style:italic;padding:4px 0;">No specific places selected yet. Click below to add destinations or use AI mode.</span>';
+    chipsContainer.innerHTML = '<span style="font-size:0.82rem;color:var(--text-muted);font-style:italic;padding:4px 0;">No specific places selected yet. Click below to add destinations or use auto-select mode.</span>';
     selectBtnText.textContent = '+ Select Places';
     countBadge.style.display = 'none';
     clearBtn.style.display = 'none';
