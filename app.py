@@ -154,7 +154,7 @@ def create_app():
             'map_engine': MAP_ENGINE,
             'google_maps_api_key': GOOGLE_MAPS_API_KEY,
             'google_maps_map_id': GOOGLE_MAPS_MAP_ID,
-            'skip_base_leaflet': (MAP_ENGINE == 'google'),
+            'skip_base_leaflet': False,
         }
 
     # ═══ TEMPLATE FILTERS ═══

@@ -4,6 +4,9 @@ Loads sensitive values from environment variables with secure defaults.
 """
 import os
 import secrets
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 

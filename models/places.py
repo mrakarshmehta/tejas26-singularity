@@ -798,7 +798,7 @@ def get_places_by_filter(district_id=None, category=None, sort_by='views', limit
             SELECT p.*, d.name AS district_name, d.slug AS district_slug
             FROM places p
             LEFT JOIN districts d ON p.district_id = d.id
-            WHERE p.is_deleted = 0
+            WHERE p.deleted_at IS NULL
         """
         params = []
         if district_id:
@@ -808,12 +808,10 @@ def get_places_by_filter(district_id=None, category=None, sort_by='views', limit
             query += " AND p.category = %s"
             params.append(category)
 
-        if sort_by == 'rating':
-            query += " ORDER BY p.rating DESC, p.views_count DESC"
-        elif sort_by == 'name':
+        if sort_by == 'name':
             query += " ORDER BY p.name ASC"
         else:
-            query += " ORDER BY p.views_count DESC, p.id DESC"
+            query += " ORDER BY p.view_count DESC, p.id DESC"
 
         query += " LIMIT %s"
         params.append(limit)

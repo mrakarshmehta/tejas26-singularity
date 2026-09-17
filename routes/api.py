@@ -344,6 +344,16 @@ def api_places_nearby_radius():
     })
 
 
+@api_bp.route('/places/map', methods=['GET'])
+def api_places_map():
+    """Returns all active places formatted for GIS map rendering."""
+    category = request.args.get('category')
+    state_id = request.args.get('state_id', type=int)
+    from models.places import get_places_for_map
+    places = get_places_for_map(category=category, state_id=state_id)
+    return jsonify(places)
+
+
 @api_bp.route('/circuits', methods=['GET'])
 def api_get_circuits():
     """JSON API endpoint returning all curated Bihar thematic circuits."""
@@ -1610,6 +1620,7 @@ def api_discovery_snapshot():
 
     # Database-backed counts
     db_stats = {}
+    top_districts = []
     try:
         with get_cursor() as cur:
             cur.execute("""
@@ -1621,11 +1632,23 @@ def api_discovery_snapshot():
                     (SELECT COUNT(DISTINCT category) FROM places WHERE deleted_at IS NULL) AS place_categories
             """)
             db_stats = dict(cur.fetchone())
+
+            cur.execute("""
+                SELECT d.name, COUNT(p.id) AS place_count
+                FROM districts d
+                JOIN places p ON p.district_id = d.id
+                WHERE p.deleted_at IS NULL
+                GROUP BY d.id, d.name
+                ORDER BY place_count DESC
+                LIMIT 8
+            """)
+            top_districts = [dict(r) for r in cur.fetchall()]
     except Exception:
         db_stats = {
             'verified_places': 0, 'districts_covered': 0,
             'hidden_gems': 0, 'geo_mapped_places': 0, 'place_categories': 0
         }
+        top_districts = []
 
     # Culture data counts from in-memory models (verified data)
     culture_stats = {
@@ -1653,6 +1676,7 @@ def api_discovery_snapshot():
             'geo_mapped_places': db_stats.get('geo_mapped_places', 0),
             'place_categories': db_stats.get('place_categories', 0),
         },
+        'top_districts': top_districts,
         'culture': culture_stats,
         'total_culture_records': total_culture_records,
     })

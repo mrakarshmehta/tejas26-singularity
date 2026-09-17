@@ -1,5 +1,5 @@
 """Public page routes — home, browse, search, district, block, explore map, food & culture."""
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, abort
 from models.database import (
     get_places_by_filter,
     get_all_states, get_state_by_slug, get_featured_places,
@@ -389,6 +389,7 @@ def transport_guide():
     )
 
 @main_bp.route('/virtual-tours')
+@main_bp.route('/panoramas')
 def virtual_tours():
     """Browse 360-degree virtual photo spheres and aerial viewpoints of Bihar heritage."""
     from models.panoramas import get_all_panoramas, get_panoramas_by_district, get_panoramas_by_category

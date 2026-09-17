@@ -1,6 +1,6 @@
 """Place detail routes."""
 import logging
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, redirect, url_for
 from models.database import (
     get_places_by_filter,
     get_place_by_slug, get_photos_by_place,
@@ -21,6 +21,9 @@ places_bp = Blueprint('places', __name__)
 @places_bp.route('/place/<slug>')
 def place_detail(slug):
     """Full place detail page with gallery, map, specialties, and reviews."""
+    if slug == 'barabar-caves-siddheshwar-nath-gaya':
+        return redirect(url_for('places.place_detail', slug='barabar-caves-gaya'), code=301)
+
     place = get_place_by_slug(slug)
     if not place:
         return render_template('404.html'), 404
