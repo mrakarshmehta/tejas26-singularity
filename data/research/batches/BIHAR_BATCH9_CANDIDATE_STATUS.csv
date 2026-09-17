@@ -1,0 +1,46 @@
+candidate,district,previous_status,current_status,reason
+Lali Pahadi Archaeological Site,Lakhisarai,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 1; verified Grade A institutional evidence; adds district depth and experience diversity.
+"Khudneshwar Asthan, Morwa",Samastipur,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 2; verified Grade A institutional evidence; adds district depth and experience diversity.
+Panth Pakar,Sitamarhi,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 3; verified Grade A institutional evidence; adds district depth and experience diversity.
+Manihari Ganga Ghat & Maharshi Mehi Ashram,Katihar,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 4; verified Grade A institutional evidence; adds district depth and experience diversity.
+Rishi Kund,Munger,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 5; verified Grade A institutional evidence; adds district depth and experience diversity.
+Chandradhari Museum,Darbhanga,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 6; verified Grade A institutional evidence; adds district depth and experience diversity.
+Sohagara Dham,Siwan,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 7; verified Grade A institutional evidence; adds district depth and experience diversity.
+Manjhi Fort Ruins & Ancient Mound,Saran,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 8; verified Grade A institutional evidence; adds district depth and experience diversity.
+"Tomb of Bakhtiyar Khan, Chainpur",Kaimur,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 9; verified Grade A institutional evidence; adds district depth and experience diversity.
+Khuda Bakhsh Oriental Public Library,Patna,HOLD / CANDIDATE QUEUE,APPROVAL-READY,Selected as Batch 9 Rank 10; verified Grade A institutional evidence; adds district depth and experience diversity.
+Nagi Dam Bird Sanctuary,Jamui,HOLD,HOLD,Notified Wildlife Sanctuary and Ramsar site 2541; located 3.10 km from Nakti Dam; Jamui already heavily represented with 11 active places.
+Kauwadol Hill & Colossal Buddha Statue,Gaya,HOLD,HOLD,ASI protected monument with 8-foot seated Buddha; located 4.10 km from Barabar; Gaya already has 12 active places; held for geographic balance.
+Kurkihar Archaeological Site,Gaya,HOLD,HOLD,World-famous 9th-12th century Pala bronze hoard discovery site; held due to heavy Gaya representation (12 active destinations).
+"Sun Temple, Tarari",Bhojpur,HOLD,HOLD,Medieval Sun temple in Dev village; Bhojpur recently gained Ara House in Batch 8; held for future consideration.
+Buddha Relic Stupa,Vaishali,HOLD,HOLD,Excavated mud stupa of the Lichchhavis; held due to 0.93 km marker proximity to ID 10; Vaishali already has 3 active places.
+Chankigarh Fort,West Champaran,HOLD,HOLD,Massive 90-foot ancient brick mound; held to avoid Champaran saturation (already 6 active destinations).
+Bettiah Raj Palace Complex,West Champaran,HOLD,HOLD,Historic 18th-century zamindari palace; ongoing court receiver administration and property disputes.
+Amjhar Sharif,Aurangabad,HOLD,HOLD,Sufi shrine on official Bihar Tourism circuit; Aurangabad already has 4 active places; held for geographic balance.
+Husepur Fort Ruins,Gopalganj,HOLD,HOLD,Historic fort ruins of Raja Fateh Bahadur Sahi; Gopalganj recently gained Lakri Dargah in Batch 8; held for future batch.
+Nagarjuni Caves,Jehanabad,HOLD,HOLD,Adjacent Maurya-era cave complex 1.78 km from Barabar Caves (ID 5); part of the canonical Barabar-Nagarjuni archaeological cluster.
+Dharahara Village,Supaul,HOLD,HOLD,Renowned tree-planting social tradition; held as community socio-cultural practice without formal tourism infrastructure.
+Sheohar Raj Palace,Sheohar,HOLD,HOLD,Former 19th-century estate residence; disputed private property without official tourism department notification.
+"Indrasal Cave, Parvati Hill",Nawada,HOLD,HOLD,Scholarly debate and coordinate divergence between Giriyak Hill and Parvati Hill; held pending field verification.
+Sagar Dih Mound & Stupa,East Champaran,HOLD,HOLD,Archaeological stupa mound near Raxaul; East Champaran has 3 active destinations; held pending further ASI excavation documentation.
+Agnihotri Temple,Khagaria,HOLD,HOLD,Local Shaivite temple; lacks Grade A/B institutional documentation on Bihar Tourism or district portal; held.
+Forbesganj Railway Station Bazar,Araria,REJECTED,REJECTED,"Transit railway commercial area; generic retail, zero tourism value."
+Arwal Bus Stand Commercial Complex,Arwal,REJECTED,REJECTED,Generic transit retail infrastructure; zero tourism value.
+Barauni IOCL Refinery Township,Begusarai,REJECTED,REJECTED,"Active petrochemical industrial complex; restricted entry, no public tourism access."
+Ara Sadar Hospital,Bhojpur,REJECTED,REJECTED,Municipal healthcare facility; zero tourism value.
+Buxar Central Jail,Buxar,REJECTED,REJECTED,Active correctional security institution; restricted access.
+Samastipur Dairy Milk Plant,Samastipur,REJECTED,REJECTED,Industrial milk processing plant; commercial industrial property.
+Chhapra Main Bazar Cloth Market,Saran,REJECTED,REJECTED,Local commercial clothing market; generic retail.
+Hotel Grand Sheohar,Sheohar,REJECTED,REJECTED,Commercial lodging business; generic private enterprise.
+Siwan Civil Court Complex,Siwan,REJECTED,REJECTED,Judicial administrative premises; zero tourism value.
+Katihar Railway Junction Yard,Katihar,REJECTED,REJECTED,Active railway operational infrastructure; restricted entry.
+Saptaparni Cave,Nalanda,DUPLICATE / ALIAS,DUPLICATE / ALIAS,"Subcomponent of Rajgir hill complex (ID 9, 1.48 km); first Buddhist council cave, already subsumed under Rajgir destination."
+Cyclopean Wall of Rajgir,Nalanda,DUPLICATE / ALIAS,DUPLICATE / ALIAS,Pre-Mauryan 40-km cyclopean perimeter wall surrounding Rajgir; integral perimeter feature of active destination ID 9.
+Rajgir Glass Bridge & Nature Safari,Nalanda,DUPLICATE / ALIAS,DUPLICATE / ALIAS,"Eco-adventure park in Jethian valley, 5.58 km from Rajgir (ID 9); Nalanda already has 5 active destinations."
+Papaharini Tank,Banka,DUPLICATE / ALIAS,DUPLICATE / ALIAS,"Sacred water tank situated directly at the foothills of Mandar Hill (ID 12, 0.42 km); same-site complex component."
+Sujata Stupa & Kuti,Gaya,DUPLICATE / ALIAS,DUPLICATE / ALIAS,"Excavated brick stupa across Falgu river, 1.42 km from Bodh Gaya / Mahabodhi complex; tightly clustered with existing Gaya inventory."
+Ranti Art Village,Madhubani,DUPLICATE / ALIAS,DUPLICATE / ALIAS,Mithila painting artisan village 1.72 km from Jitwarpur Art Village (ID 13); same artisan cluster.
+Balirajgarh,Madhubani,DUPLICATE / ALIAS,DUPLICATE / ALIAS,Alternate local name / official archaeological name for Raja Bali Ka Garh (ID 184).
+Ahirauli Ahilya Sthan,Buxar,DUPLICATE / ALIAS,DUPLICATE / ALIAS,"Buxar rural shrine 4.12 km from Battle of Buxar Memorial; distinct from Ahilya Sthan, Ahiyari (Darbhanga)."
+"Brahmeshwar Nath Temple, Brahmpur",Buxar,DUPLICATE / ALIAS,DUPLICATE / ALIAS,"Duplicate of active place ID 194: Baba Brahmeshwar Nath Temple, Brahmpur."
+Gunawa Ji Tirth,Nawada,DUPLICATE / ALIAS,DUPLICATE / ALIAS,Duplicate of active place ID 195: Gunawa Ji (Jain Tirth).

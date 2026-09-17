@@ -1,0 +1,23 @@
+candidate_name,district,category,latitude,longitude,nearest_place_id,nearest_place_name,nearest_place_district,haversine_distance_km,overlap_classification,audit_resolution
+Lali Pahadi Archaeological Site,Lakhisarai,historical,25.1764,85.9981,127,Ashok Dham Temple,Lakhisarai,6.35,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+"Khudneshwar Asthan, Morwa",Samastipur,cultural,25.761,85.689,131,Vidyapati Dham,Samastipur,18.17,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Panth Pakar,Sitamarhi,cultural,26.637,85.452,161,Punaura Dham,Sitamarhi,2.73,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Manihari Ganga Ghat & Maharshi Mehi Ashram,Katihar,cultural,25.337,87.625,124,Gogabil Lake Bird Sanctuary,Katihar,2.67,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Rishi Kund,Munger,nature,25.263,86.518,19,Munger Fort,Munger,13.25,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Chandradhari Museum,Darbhanga,cultural,26.155,85.898,26,Darbhanga Raj (Laxmi Vilas Palace),Darbhanga,0.87,SAME SITE / SEVERE OVERLAP,Scrutinized: distinct parcel/institution vs. attached monument; held if same-site.
+Sohagara Dham,Siwan,temple,26.082,84.085,135,Zeeradei (Dr. Rajendra Prasad Ancestral House),Siwan,23.53,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Manjhi Fort Ruins & Ancient Mound,Saran,historical,25.823,84.582,188,"Gautam Asthan, Revelganj",Saran,10.07,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+"Tomb of Bakhtiyar Khan, Chainpur",Kaimur,historical,25.043,83.518,122,Karkatgarh Waterfall & Eco Park,Kaimur,4.28,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Khuda Bakhsh Oriental Public Library,Patna,cultural,25.6185,85.163,2,Takht Sri Patna Sahib,Patna,1.35,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Nagi Dam Bird Sanctuary,Jamui,nature,24.815,86.375,68,Gidhaur Raj Palace,Jamui,8.66,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Kauwadol Hill & Colossal Buddha Statue,Gaya,historical,24.992,85.048,5,Barabar Caves & Siddheshwar Nath,Jehanabad,2.12,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Kurkihar Archaeological Site,Gaya,historical,24.8152,85.2512,112,Gehlaur Ghati - Dashrath Manjhi Smarak,Gaya,6.38,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+"Sun Temple, Tarari",Bhojpur,historical,25.265,84.453,183,Aganoor Mini Hydroelectric Project,Arwal,17.03,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Buddha Relic Stupa,Vaishali,historical,25.986,85.127,10,Vaishali - Birthplace of Democracy,Vaishali,0.14,SAME SITE / SEVERE OVERLAP,Scrutinized: distinct parcel/institution vs. attached monument; held if same-site.
+Chankigarh Fort,West Champaran,historical,27.052,84.475,153,Lauriya Nandangarh,West Champaran,8.84,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Bettiah Raj Palace Complex,West Champaran,historical,26.801,84.502,162,Udaipur Wildlife Sanctuary,West Champaran,5.95,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Amjhar Sharif,Aurangabad,cultural,24.9854,84.5218,178,Deokund,Aurangabad,7.24,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Husepur Fort Ruins,Gopalganj,historical,26.5412,84.2815,121,Thawe Mandir,Gopalganj,15.8,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.
+Nagarjuni Caves,Jehanabad,historical,25.0125,85.0785,5,Barabar Caves & Siddheshwar Nath,Jehanabad,1.8,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Sujata Stupa & Kuti,Gaya,historical,24.6925,85.0028,110,Bodh Gaya Archaeological Museum,Gaya,1.43,NEARBY BUT DISTINCT (Special Scrutiny),"Verified distinct attraction identity, independent visitor intent, and separate parcel/grounds."
+Dharahara Village,Supaul,cultural,26.15,86.58,198,"Baba Tileshwar Nath Mandir, Sukhpur",Supaul,10.18,DISTINCT DESTINATION,Clear geographic separation (>5 km) from all active inventory.

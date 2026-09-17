@@ -1,0 +1,37 @@
+Candidate Name,Candidate District,Existing Place ID,Existing Place Name,Existing District,Match Type,Resolution Notes
+Mandar Hill,Banka,12,Mandar Hill,Bhagalpur,District Boundary Conflict,"Place is physically inside Banka district (Bounsi block), but was seeded in Bhagalpur district. Recommend reassigning district_id from Bhagalpur to Banka upon human approval."
+Barabar Caves,Jehanabad,5,Barabar Caves & Siddheshwar Nath,Gaya,District Boundary Conflict,Place is physically inside Makhdumpur block of Jehanabad district. Seeded in Gaya in earlier builds. Recommend updating district_id to Jehanabad upon human review.
+Deo Sun Temple,Aurangabad,13,Deo Sun Temple,Aurangabad,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Kanwar Lake Bird Sanctuary,Begusarai,15,Kanwar Lake Bird Sanctuary,Begusarai,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Vikramshila University Ruins,Bhagalpur,11,Vikramshila University Ruins,Bhagalpur,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+"Veer Kunwar Singh Fort, Jagdishpur",Bhojpur,28,"Veer Kunwar Singh Fort, Jagdishpur",Bhojpur,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Battle of Buxar Memorial,Buxar,23,Battle of Buxar Memorial,Buxar,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Darbhanga Raj Palace Complex,Darbhanga,26,Darbhanga Raj Palace Complex,Darbhanga,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Kesariya Stupa,East Champaran,18,Kesariya Stupa,East Champaran,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Barabar Caves & Siddheshwar Nath,Gaya,5,Barabar Caves & Siddheshwar Nath,Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Vishnupad Temple Gaya,Gaya,6,Vishnupad Temple Gaya,Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+"Great Buddha Statue, Bodh Gaya",Gaya,7,"Great Buddha Statue, Bodh Gaya",Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Dungeshwari Cave Temples,Gaya,104,Dungeshwari Cave Temples,Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Pretshila Hill & Ram Kund,Gaya,105,Pretshila Hill & Ram Kund,Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Brahmayoni Hill,Gaya,111,Brahmayoni Hill,Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Gehlaur Ghati - Dashrath Manjhi Smarak,Gaya,112,Gehlaur Ghati - Dashrath Manjhi Smarak,Gaya,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Nakti Dam Bird Sanctuary,Jamui,67,Nakti Dam Bird Sanctuary,Jamui,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Giddheswar Temple,Jamui,57,Giddheswar Temple,Jamui,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Simultala Hill Station,Jamui,59,Simultala Hill Station,Jamui,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+"Minto Tower, Gidhaur",Jamui,61,"Minto Tower, Gidhaur",Jamui,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Lachhuar Jain Temple & Kundagram,Jamui,63,Lachhuar Jain Temple & Kundagram,Jamui,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Barabar Caves Complex,Jehanabad,5,Barabar Caves Complex,Jehanabad,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Maa Mundeshwari Temple,Kaimur,24,Maa Mundeshwari Temple,Kaimur,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Madhubani Art Village (Jitwarpur),Madhubani,13,Madhubani Art Village (Jitwarpur),Madhubani,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Munger Fort,Munger,19,Munger Fort,Munger,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Bhimbandh Hot Springs & Wildlife Sanctuary,Munger,21,Bhimbandh Hot Springs & Wildlife Sanctuary,Munger,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Litchi Gardens & Jubba Sahni Park,Muzaffarpur,27,Litchi Gardens & Jubba Sahni Park,Muzaffarpur,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Nalanda University Ruins,Nalanda,8,Nalanda University Ruins,Nalanda,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Rajgir,Nalanda,9,Rajgir,Nalanda,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Kakolat Waterfall,Nawada,16,Kakolat Waterfall,Nawada,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+"Choti Dargah, Maner",Patna,95,"Choti Dargah, Maner",Patna,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+"Sher Shah Suri Tomb, Sasaram",Rohtas,14,"Sher Shah Suri Tomb, Sasaram",Rohtas,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Rohtasgarh Fort,Rohtas,15,Rohtasgarh Fort,Rohtas,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Janaki Sthan Temple,Sitamarhi,25,Janaki Sthan Temple,Sitamarhi,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Vaishali - Birthplace of Democracy,Vaishali,10,Vaishali - Birthplace of Democracy,Vaishali,Exact Seeded Match,Already catalogued in current HiddenYatra database.
+Valmiki National Park & Tiger Reserve,West Champaran,17,Valmiki National Park & Tiger Reserve,West Champaran,Exact Seeded Match,Already catalogued in current HiddenYatra database.
