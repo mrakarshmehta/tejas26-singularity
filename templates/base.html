@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Leaflet CSS for Map Rendering -->
-  {% if not skip_base_leaflet %}
+  {% if not skip_base_leaflet or needs_leaflet %}
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   {% endif %}
 
@@ -51,7 +51,7 @@
   <script>window.HY_CSRF_TOKEN = "{{ csrf_token() }}";</script>
   {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% if request.path == '/' %}page-home{% endif %}">
 
   <!-- Skip Navigation (Accessibility) -->
   <a href="#main-content" class="skip-link" style="position:absolute;top:-100%;left:50%;transform:translateX(-50%);padding:12px 24px;background:var(--primary);color:#fff;font-weight:600;border-radius:0 0 8px 8px;z-index:9999;transition:top .2s;">Skip to main content</a>
@@ -290,7 +290,7 @@
   </button>
 
   <!-- Leaflet JS -->
-  {% if not skip_base_leaflet %}
+  {% if not skip_base_leaflet or needs_leaflet %}
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   {% endif %}
 

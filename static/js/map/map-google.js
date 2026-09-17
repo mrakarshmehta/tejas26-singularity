@@ -521,9 +521,10 @@
 
       const markerMap = new Map();
 
-      // Support both Culture items array ({ items: [...] }) and GeoJSON ({ features: [...] })
-      if (data.items && Array.isArray(data.items)) {
-        data.items.forEach((item, idx) => {
+      // Support Culture items array ({ items: [...] }), Nearby results ({ results: [...] }), raw array, and GeoJSON ({ features: [...] })
+      const itemsList = data.items || data.results || (Array.isArray(data) ? data : null);
+      if (itemsList && Array.isArray(itemsList)) {
+        itemsList.forEach((item, idx) => {
           const marker = root.HYGoogleMarkerFactory.createMarker(this.map, item, {
             type: layerId,
             onClick: (itm, m) => this.handlePointMarkerClick(itm, layerId, m),
@@ -564,6 +565,9 @@
       if (featureOrItem.lat !== undefined && featureOrItem.lng !== undefined) {
         lat = parseFloat(featureOrItem.lat);
         lng = parseFloat(featureOrItem.lng);
+      } else if (featureOrItem.latitude !== undefined && featureOrItem.longitude !== undefined) {
+        lat = parseFloat(featureOrItem.latitude);
+        lng = parseFloat(featureOrItem.longitude);
       } else if (featureOrItem.geometry && featureOrItem.geometry.coordinates) {
         lng = featureOrItem.geometry.coordinates[0];
         lat = featureOrItem.geometry.coordinates[1];
@@ -582,6 +586,8 @@
         html = root.HYGoogleMarkerFactory.buildHomestayPopupHTML(props, [lng, lat]);
       } else if (layerId === 'waterfalls_geo' || layerId === 'waterfalls') {
         html = root.HYGoogleMarkerFactory.buildWaterfallPopupHTML(props, [lng, lat]);
+      } else if (layerId === 'restaurants') {
+        html = root.HYGoogleMarkerFactory.buildHotelPopupHTML(props, [lng, lat]);
       } else if (layerId.startsWith('culture') || (props.category && ['heritage', 'festivals', 'crafts', 'performing_arts', 'local_food'].includes(props.category))) {
         html = root.HYGoogleMarkerFactory.buildCulturePopupHTML(props, [lng, lat]);
       } else {
@@ -628,6 +634,7 @@
         layerId === 'homestays' ||
         layerId === 'waterfalls_geo' ||
         layerId === 'waterfalls' ||
+        layerId === 'restaurants' ||
         layerId.startsWith('culture_')
       );
 

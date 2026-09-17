@@ -253,9 +253,9 @@
       const def = root.HYLayerRegistry ? root.HYLayerRegistry.get(layerId) : null;
       let sourceUrl = def ? def.source : null;
 
-      // Handle state_boundary fallback to districts.geojson if not explicitly set
+      // Handle state_boundary fallback to authoritative state_boundary.geojson if not explicitly set
       if (layerId === 'state_boundary' && !sourceUrl) {
-        sourceUrl = '/static/data/bihar/districts.geojson';
+        sourceUrl = '/static/data/bihar/state_boundary.geojson';
       }
 
       if (!sourceUrl) {
@@ -288,9 +288,10 @@
 
       this._layers.set(layerId, layerRecord);
 
-      // Ingest GeoJSON features
+      // Ingest GeoJSON features (normalize non-standard API responses first)
       try {
-        dataLayer.addGeoJson(geojsonData);
+        const normalized = this._normalizeToGeoJson(geojsonData);
+        dataLayer.addGeoJson(normalized);
       } catch (err) {
         console.error(`[HYGoogleGeoLayerManager] Error ingesting GeoJSON for ${layerId}:`, err);
         return null;
@@ -377,10 +378,25 @@
         const strokeColor = baseStyle.strokeColor || baseStyle.stroke || '#6366f1';
         const strokeWeight = baseStyle.strokeWeight || baseStyle.strokeWidth || 2;
         const strokeOpacity = (baseStyle.strokeOpacity !== undefined ? baseStyle.strokeOpacity : 0.85) * layerOpacity;
+        const zIndex = baseStyle.zIndex || 20;
+
+        if (geomType === 'Point') {
+          const markerColor = baseStyle.markerColor || baseStyle.fillColor || strokeColor || '#b45309';
+          return {
+            icon: {
+              path: (typeof google !== 'undefined' && google.maps && google.maps.SymbolPath) ? google.maps.SymbolPath.CIRCLE : 0,
+              scale: 8,
+              fillColor: markerColor,
+              fillOpacity: Math.min(1.0, 0.9 * layerOpacity),
+              strokeColor: '#ffffff',
+              strokeWeight: 2,
+            },
+            zIndex: zIndex || 100,
+          };
+        }
 
         const fillColor = baseStyle.fillColor || strokeColor;
         const fillOpacity = isLine ? 0 : ((baseStyle.fillOpacity !== undefined ? baseStyle.fillOpacity : 0.25) * layerOpacity);
-        const zIndex = baseStyle.zIndex || 20;
 
         return {
           strokeColor: strokeColor,
@@ -522,9 +538,71 @@
       if (layerId === 'state_boundary') {
         return this._buildStatePopup(props);
       }
+      if (layerId.startsWith('culture') || (props.category && ['heritage', 'festivals', 'crafts', 'performing_arts', 'local_food'].includes(props.category))) {
+        return this._buildCulturePopup(props);
+      }
 
       const name = props.name || props.NAME || props.title || 'Geographic Feature';
       return `<div style="padding:4px 6px;font-family:system-ui,sans-serif;"><strong>${escHtml(name)}</strong></div>`;
+    }
+
+    /**
+     * Normalize API responses or items arrays into GeoJSON FeatureCollection.
+     * @param {Object} data
+     * @returns {Object|null}
+     */
+    _normalizeToGeoJson(data) {
+      if (!data) return null;
+      if (data.type === 'FeatureCollection' || data.type === 'Feature') {
+        return data;
+      }
+      const rawList = data.items || data.results || (Array.isArray(data) ? data : null);
+      if (rawList && Array.isArray(rawList)) {
+        return {
+          type: 'FeatureCollection',
+          features: rawList.map((item, idx) => {
+            const lat = parseFloat(item.latitude !== undefined ? item.latitude : (item.lat !== undefined ? item.lat : 0));
+            const lng = parseFloat(item.longitude !== undefined ? item.longitude : (item.lng !== undefined ? item.lng : 0));
+            return {
+              type: 'Feature',
+              id: item.id || item.slug || idx,
+              geometry: {
+                type: 'Point',
+                coordinates: [lng, lat]
+              },
+              properties: { ...item }
+            };
+          }).filter(f => !isNaN(f.geometry.coordinates[0]) && !isNaN(f.geometry.coordinates[1]) && (f.geometry.coordinates[0] !== 0 || f.geometry.coordinates[1] !== 0))
+        };
+      }
+      return data;
+    }
+
+    /** @private */
+    _buildCulturePopup(props) {
+      const name = props.name || props.title || 'Cultural Heritage';
+      const category = (props.category || 'culture').replace('_', ' ');
+      const district = props.district || '';
+      const desc = props.description || '';
+      const period = props.period || '';
+      const icon = props.icon || '🏛️';
+      const detailUrl = props.detail_url || '';
+
+      return `
+        <div style="font-family:system-ui,-apple-system,sans-serif;padding:6px 8px;max-width:280px;line-height:1.4;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <span style="font-size:16px;">${icon}</span>
+            <strong style="font-size:14px;color:#1e293b;">${escHtml(name)}</strong>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;">
+            <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:#fef3c7;color:#92400e;font-weight:600;text-transform:capitalize;">${escHtml(category)}</span>
+            ${district ? `<span style="font-size:10px;padding:2px 8px;border-radius:10px;background:#f1f5f9;color:#475569;">📍 ${escHtml(district)}</span>` : ''}
+            ${period ? `<span style="font-size:10px;padding:2px 8px;border-radius:10px;background:#ede9fe;color:#5b21b6;">⏳ ${escHtml(period)}</span>` : ''}
+          </div>
+          ${desc ? `<p style="font-size:12px;color:#475569;line-height:1.4;margin:4px 0 8px;">${escHtml(desc)}</p>` : ''}
+          ${detailUrl ? `<a href="${escHtml(detailUrl)}" style="font-size:11px;color:#FF7A18;font-weight:600;text-decoration:none;">Learn More →</a>` : ''}
+        </div>
+      `;
     }
 
     /** @private */

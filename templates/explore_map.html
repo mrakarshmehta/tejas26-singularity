@@ -301,6 +301,20 @@ function renderDiscoverySnapshot(data) {
   const p = data.platform || {};
   const c = data.culture || {};
 
+  const topDistrictsHTML = (data.top_districts && data.top_districts.length > 0) ? `
+    <div class="hy-snapshot-section" style="margin-top:16px;">
+      <h4 class="hy-snapshot-sec-title">🏆 Top Covered Districts (Authoritative Database Counts)</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px;">
+        ${data.top_districts.map(d => `
+          <div style="background:var(--bg-secondary,#f8fafc);border:1px solid var(--border-color,#e2e8f0);border-radius:8px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:0.82rem;font-weight:600;color:var(--text-primary,#1e293b);">${escapeHTML(d.name)}</span>
+            <span style="font-size:0.8rem;font-weight:700;color:var(--primary,#FF7A18);background:rgba(255,122,24,0.1);padding:2px 8px;border-radius:12px;">${d.place_count}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
   content.innerHTML = `
     <div class="hy-snapshot-section">
       <h4 class="hy-snapshot-sec-title">📍 Platform Destinations</h4>
@@ -332,6 +346,8 @@ function renderDiscoverySnapshot(data) {
         </div>
       </div>
     </div>
+
+    ${topDistrictsHTML}
 
     <div class="hy-snapshot-section" style="margin-top:16px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -368,15 +384,143 @@ function renderDiscoverySnapshot(data) {
     </div>
   `;
 }
+
+// ═══════════════════════════════════════════════════════
+// Shared Map Utilities (Engine-Agnostic)
+// ═══════════════════════════════════════════════════════
+function escapeHTML(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+window.escapeHTML = escapeHTML;
+
+function matchesCategory(place, selectedCat) {
+  if (!selectedCat) return true;
+  const pCat = (place.category || '').toLowerCase();
+  const sel = selectedCat.toLowerCase();
+
+  if (sel === 'hidden_gem') {
+    return place.is_hidden_gem === 1 || place.is_hidden_gem === true;
+  }
+  if (sel === 'temple') {
+    return pCat === 'temple' || pCat === 'religious';
+  }
+  if (sel === 'nature') {
+    return pCat === 'nature' || pCat === 'wildlife' || pCat === 'park';
+  }
+  if (sel === 'waterfall') {
+    return pCat === 'waterfall';
+  }
+  if (sel === 'lake') {
+    return pCat === 'lake' || pCat === 'river';
+  }
+  if (sel === 'historical') {
+    return pCat === 'historical' || pCat === 'fort' || pCat === 'monument';
+  }
+  if (sel === 'museum') {
+    return pCat === 'museum';
+  }
+  if (sel === 'mountain') {
+    return pCat === 'mountain' || pCat === 'hill';
+  }
+  return pCat === sel;
+}
+window.matchesCategory = matchesCategory;
+
+function showShareToast(msg) {
+  const existing = document.getElementById('hy-share-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'hy-share-toast';
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:10px 20px;border-radius:8px;font-size:0.82rem;z-index:10000;backdrop-filter:blur(8px);pointer-events:none;animation:hyToastFade 2s forwards;';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2200);
+}
+window.showShareToast = showShareToast;
+
+function shareMapView() {
+  const params = new URLSearchParams();
+
+  // Read center & zoom from whichever map engine is active
+  if (window.googleMap && typeof window.googleMap.getCenter === 'function') {
+    const center = window.googleMap.getCenter();
+    const zoom = window.googleMap.getZoom();
+    if (center) {
+      params.set('lat', center.lat().toFixed(5));
+      params.set('lng', center.lng().toFixed(5));
+    }
+    if (zoom) params.set('zoom', Math.round(zoom));
+  } else if (window.map && typeof window.map.getCenter === 'function') {
+    const center = window.map.getCenter();
+    const zoom = window.map.getZoom();
+    if (center) {
+      params.set('lat', center.lat.toFixed(5));
+      params.set('lng', center.lng.toFixed(5));
+    }
+    if (zoom) params.set('zoom', Math.round(zoom));
+  }
+
+  // Include active place if selected
+  if (window.activePlace && window.activePlace.id) {
+    params.set('place_id', window.activePlace.id);
+  }
+
+  // Include active category filter
+  const activeChip = document.querySelector('.map-filters .filter-chip.active');
+  if (activeChip && activeChip.dataset.category) {
+    params.set('category', activeChip.dataset.category);
+  }
+
+  // Include active district filter
+  const distEl = document.getElementById('map-district-filter');
+  if (distEl && distEl.value) {
+    params.set('district', distEl.value);
+  }
+
+  const queryString = params.toString();
+  const url = window.location.origin + window.location.pathname + (queryString ? ('?' + queryString) : '');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      showShareToast('Map link copied!');
+    }).catch(() => {
+      showShareToast('Could not copy link');
+    });
+  } else {
+    const textArea = document.createElement('textarea');
+    textArea.value = url;
+    textArea.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showShareToast('Map link copied!');
+    } catch(e) {
+      showShareToast('Could not copy link');
+    }
+    document.body.removeChild(textArea);
+  }
+}
+window.shareMapView = shareMapView;
 </script>
 
-{% if map_engine == 'google' %}
-{# ═══ Google Maps Engine ═══ #}
+<script type="application/json" id="places-data">{{ places | tojson | safe }}</script>
 <script>
-const ALL_PLACES = {{ places | tojson | safe }};
-window.ALL_PLACES = ALL_PLACES;
-window.MAP_ENGINE = 'google';
-window.GOOGLE_MAPS_MAP_ID = '{{ google_maps_map_id }}';
+window.ALL_PLACES = (function() {
+  try {
+    const el = document.getElementById('places-data');
+    return el ? JSON.parse(el.textContent || '[]') : [];
+  } catch(e) {
+    return [];
+  }
+})();
+var ALL_PLACES = window.ALL_PLACES;
 
 // Helper: Escape HTML to prevent XSS (shared across engines)
 function escapeHTML(str) {
@@ -389,24 +533,19 @@ function escapeHTML(str) {
     .replace(/'/g, '&#039;');
 }
 </script>
+
+{% if map_engine == 'google' %}
+{# ═══ Google Maps Engine ═══ #}
+<script>
+window.MAP_ENGINE = 'google';
+window.GOOGLE_MAPS_MAP_ID = '{{ google_maps_map_id }}';
+</script>
 {% else %}
 {# ═══ Leaflet Engine (existing, unchanged) ═══ #}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
-const ALL_PLACES = {{ places | tojson | safe }};
-window.ALL_PLACES = ALL_PLACES;
-
-// Helper: Escape HTML to prevent XSS
-function escapeHTML(str) {
-  if (str === null || str === undefined) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+window.MAP_ENGINE = 'leaflet';
 
 // State variables
 let userLat = null;
@@ -772,7 +911,7 @@ function applyFilters() {
     if (search && !nameStr.includes(search) && !distStr.includes(search)) {
       return false;
     }
-    if (cat && p.category !== cat) return false;
+    if (cat && !matchesCategory(p, cat)) return false;
     if (district && p.district_name !== district) return false;
     if (stateId && p.state_id != stateId) return false;
     return true;
@@ -925,6 +1064,18 @@ try {
   const qCategory = urlParams.get('category');
   const qDistrict = urlParams.get('district');
   const qNearMe = urlParams.get('near_me');
+  const qLat = urlParams.get('lat');
+  const qLng = urlParams.get('lng');
+  const qZoom = urlParams.get('zoom');
+
+  if (qLat && qLng) {
+    const lat = parseFloat(qLat);
+    const lng = parseFloat(qLng);
+    const zoom = qZoom ? parseInt(qZoom, 10) : 10;
+    if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      map.setView([lat, lng], zoom);
+    }
+  }
 
   if (qCategory) {
     const chip = document.querySelector(`.map-filters .filter-chip[data-category="${qCategory}"]`);
@@ -955,6 +1106,8 @@ try {
           map.setView([parseFloat(target.latitude), parseFloat(target.longitude)], 13);
         }
       }, 400);
+    } else {
+      showShareToast('Place not found. Showing all Bihar destinations.');
     }
   }
   if (qNearMe === '1' || qNearMe === 'true') {
@@ -1338,7 +1491,7 @@ window._hyInitGoogleMap = function() {
           const dist = (p.district_name || '').toLowerCase();
           if (!name.includes(query) && !dist.includes(query)) return false;
         }
-        if (category && (p.category || '').toLowerCase() !== category.toLowerCase()) return false;
+        if (category && !matchesCategory(p, category)) return false;
         if (district && (p.district_name || '').toLowerCase() !== district) return false;
         if (state && (p.state_name || '').toLowerCase() !== state) return false;
         return true;
@@ -1586,56 +1739,7 @@ window._hyInitGoogleMap = function() {
       console.warn('[HYMap] Query param handler error:', e);
     }
 
-    /* ── Share Map View ── */
-    function shareMapView() {
-      const center = googleMap.getCenter();
-      const zoom = googleMap.getZoom();
-      const params = new URLSearchParams();
-      params.set('lat', center.lat().toFixed(5));
-      params.set('lng', center.lng().toFixed(5));
-      params.set('zoom', Math.round(zoom));
-
-      // Include active place if selected
-      if (activePlace && activePlace.id) {
-        params.set('place_id', activePlace.id);
-      }
-
-      const url = window.location.origin + window.location.pathname + '?' + params.toString();
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(() => {
-          showShareToast('Map link copied!');
-        }).catch(() => {
-          showShareToast('Could not copy link');
-        });
-      } else {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = url;
-        textArea.style.cssText = 'position:fixed;opacity:0;';
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-          document.execCommand('copy');
-          showShareToast('Map link copied!');
-        } catch(e) {
-          showShareToast('Could not copy link');
-        }
-        document.body.removeChild(textArea);
-      }
-    }
-    window.shareMapView = shareMapView;
-
-    function showShareToast(msg) {
-      const existing = document.getElementById('hy-share-toast');
-      if (existing) existing.remove();
-      const toast = document.createElement('div');
-      toast.id = 'hy-share-toast';
-      toast.textContent = msg;
-      toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:10px 20px;border-radius:8px;font-size:0.82rem;z-index:10000;backdrop-filter:blur(8px);pointer-events:none;animation:hyToastFade 2s forwards;';
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2200);
-    }
+    /* ── Share Map View handled globally by window.shareMapView ── */
 
     console.log('[HYMap] ✅ Google Maps Engine & Advanced Markers initialized');
   } catch (err) {

@@ -200,8 +200,10 @@
 
 .filter-chips {
   display: flex;
+  flex-wrap: nowrap !important;
   gap: 6px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 4px;
   scrollbar-width: none;
 }
@@ -218,6 +220,7 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.2s;
 }
 
@@ -722,14 +725,45 @@
 /* ── RESPONSIVE MOBILE STYLES ────────────────────────── */
 @media (max-width: 768px) {
   .map-floating-bar {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    padding: 8px 10px;
+    top: 6px;
+    left: 8px;
+    right: 8px;
+    padding: 5px 8px;
+    gap: 6px;
+    border-radius: var(--radius-lg);
+  }
+
+  .bar-search-box {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .bar-search-box input {
+    padding: 6px 26px 6px 28px;
+    font-size: 0.8rem;
+  }
+
+  .bar-search-box .search-icon {
+    left: 8px;
+    font-size: 0.8rem;
+  }
+
+  .search-clear-btn {
+    right: 6px;
+    font-size: 0.75rem;
   }
 
   .bar-select-group { display: none; }
+  .bar-actions {
+    gap: 4px;
+    flex-shrink: 0;
+  }
   .bar-actions .btn-label { display: none; }
+  .bar-btn {
+    padding: 5px 8px;
+    font-size: 0.78rem;
+    border-radius: var(--radius-md);
+  }
   
   .map-sidebar {
     position: absolute;
@@ -754,11 +788,19 @@
   }
 
   .map-main {
-    margin-top: 56px;
+    margin-top: 48px;
   }
 
   .mobile-map-controls {
     display: flex;
+    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+    z-index: 96;
+    padding: 4px 10px;
+  }
+
+  .mobile-control-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
   }
 }
 
@@ -993,18 +1035,19 @@
 @media (max-width: 768px) {
   .map-place-preview {
     position: fixed !important;
-    bottom: 0 !important;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
     left: 0 !important;
     right: 0 !important;
     top: auto !important;
     width: 100% !important;
-    max-height: 55vh;
-    border-radius: 20px 20px 0 0 !important;
+    max-height: clamp(200px, 36vh, 290px) !important;
+    border-radius: 16px 16px 0 0 !important;
     background: rgba(10, 10, 15, 0.96) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
-    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5) !important;
-    z-index: 200 !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    z-index: 995 !important;
     overflow-y: auto;
     animation: slide-up 0.3s ease-out;
   }
@@ -1024,29 +1067,52 @@
   .map-place-preview::before {
     content: '';
     display: block;
-    width: 40px;
+    width: 36px;
     height: 4px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.25);
     border-radius: 2px;
-    margin: 8px auto 4px;
+    margin: 6px auto 3px;
   }
 
   .map-preview-img-wrapper {
-    height: 120px !important;
-    border-radius: 12px !important;
-    margin: 0 12px !important;
+    height: 85px !important;
+    border-radius: 10px !important;
+    margin: 0 10px !important;
   }
 
   .map-preview-body {
-    padding: 10px 16px 20px !important;
+    padding: 6px 12px 12px !important;
+  }
+
+  .map-preview-name {
+    font-size: 0.95rem !important;
+  }
+
+  .preview-rating {
+    padding: 2px 6px !important;
+    font-size: 0.72rem !important;
   }
 
   .preview-actions {
     flex-wrap: wrap;
+    gap: 6px !important;
+    margin-top: 6px !important;
+  }
+
+  .preview-actions .btn-sm {
+    padding: 5px 12px !important;
+    font-size: 0.75rem !important;
   }
 
   .preview-actions-secondary {
     justify-content: center;
+    gap: 4px !important;
+    margin-top: 6px !important;
+  }
+
+  .preview-actions-secondary .btn-action-sm {
+    padding: 4px 8px !important;
+    font-size: 0.7rem !important;
   }
 }
 

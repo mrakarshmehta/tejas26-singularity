@@ -714,9 +714,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Explore Map Radius Control
 window.HY_setSearchRadius = function(radiusKm) {
-  if (!window.HY_MAP_INSTANCE) return;
-  console.log('[Map] Updating search radius:', radiusKm, 'km');
-  if (window.HY_RADIUS_CIRCLE) {
-    window.HY_RADIUS_CIRCLE.setRadius(radiusKm * 1000);
+  const km = parseFloat(radiusKm) || 5.0;
+  console.log('[Map] Updating search radius:', km, 'km');
+  if (window.SNS && typeof window.SNS.setRadius === 'function') {
+    window.SNS.setRadius(km);
+  }
+  if (window.HY_RADIUS_CIRCLE && typeof window.HY_RADIUS_CIRCLE.setRadius === 'function') {
+    window.HY_RADIUS_CIRCLE.setRadius(km * 1000);
   }
 };

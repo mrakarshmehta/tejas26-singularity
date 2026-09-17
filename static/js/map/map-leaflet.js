@@ -348,8 +348,10 @@
       const markers = [];
 
       items.forEach(item => {
-        if (item.lat && item.lng) {
-          const cm = L.circleMarker([item.lat, item.lng], {
+        const lat = parseFloat(item.lat || item.latitude);
+        const lng = parseFloat(item.lng || item.longitude);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          const cm = L.circleMarker([lat, lng], {
             radius: 7,
             fillColor: markerColor,
             color: '#ffffff',
@@ -361,11 +363,11 @@
           const popupContent = `
             <div style="font-family:sans-serif;min-width:180px;line-height:1.4;">
               <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
-                <span>${item.icon || '🏺'}</span>
-                <strong style="color:${markerColor};font-size:0.75rem;text-transform:uppercase;">${item.subcategory || 'Culture'}</strong>
+                <span>${item.icon || '📍'}</span>
+                <strong style="color:${markerColor};font-size:0.75rem;text-transform:uppercase;">${item.subcategory || item.category || 'Layer'}</strong>
               </div>
               <h4 style="margin:2px 0 4px;font-size:0.9rem;">${item.name}</h4>
-              <div style="font-size:0.75rem;color:#64748b;">📍 ${item.district || 'Bihar'}</div>
+              <div style="font-size:0.75rem;color:#64748b;">📍 ${item.district || item.vicinity || item.address || 'Bihar'}</div>
               ${item.description ? `<p style="margin:4px 0;font-size:0.75rem;color:#475569;">${item.description}</p>` : ''}
               ${item.detail_url ? `<a href="${item.detail_url}" style="font-size:0.75rem;color:${markerColor};font-weight:600;">Explore →</a>` : ''}
             </div>
@@ -410,11 +412,13 @@
         const def = root.HYLayerRegistry ? root.HYLayerRegistry.get(layerId) : null;
         if (!def) return;
 
-        // Culture point markers
-        if (layerId.startsWith('culture_') && def.source) {
+        // Point / Culture markers
+        const isPointLayer = (layerId === 'restaurants' || layerId.startsWith('culture_') || def.type === 'point' || def.sourceType === 'point');
+        if (isPointLayer && def.source) {
           const data = await root.HYLayerRegistry.fetchData(layerId);
-          if (data && data.items) {
-            this.addCultureMarkerLayer(layerId, data.items, def.style);
+          const items = data ? (data.items || data.results || (Array.isArray(data) ? data : [])) : [];
+          if (items.length > 0) {
+            this.addCultureMarkerLayer(layerId, items, def.style);
           }
           return;
         }

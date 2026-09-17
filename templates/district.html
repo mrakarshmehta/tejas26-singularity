@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set needs_leaflet = true %}
 {% block title %}{{ district.name }} District — Tourist Directory — {{ app_name }}{% endblock %}
 {% block meta_desc %}Explore all {{ total }} verified tourist places in {{ district.name }} district, {{ state.name }}. Discover temples, hill stations, waterfalls, historical monuments, local foods, and hidden gems.{% if district.famous_for %} Famous for {{ district.famous_for }}.{% endif %}{% endblock %}
 {% block og_title %}{{ district.name }} District Tourist Guide — {{ app_name }}{% endblock %}
@@ -17,6 +18,9 @@
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
   transition: transform 8s ease;
+}
+.dist-hero-fallback {
+  background: linear-gradient(135deg, rgba(255, 122, 24, 0.25), rgba(99, 102, 241, 0.18));
 }
 .dist-hero:hover .dist-hero-bg { transform: scale(1.03); }
 .dist-hero-overlay {
@@ -304,6 +308,13 @@
   background-size: cover; background-position: center;
   flex-shrink: 0;
 }
+.dist-related-thumb-fallback {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
 .dist-related-name { font-weight: 600; font-size: 0.85rem; }
 .dist-related-meta { font-size: 0.72rem; color: var(--text-muted); }
 
@@ -335,7 +346,11 @@
 {% set dist_colors = ['#FF7A18', '#00BFA6', '#6366F1', '#F43F5E', '#8B5CF6', '#3B82F6'] %}
 {% set hero_color = dist_colors[district.id % 6] %}
 <section class="dist-hero">
-  <div class="dist-hero-bg" style="background: {% if district.display_image %}url('{{ district.display_image }}'){% else %}linear-gradient(135deg, {{ hero_color }}33, {{ hero_color }}11){% endif %}; background-size:cover; background-position:center;"></div>
+  {% if district.display_image %}
+  <div class="dist-hero-bg" style="background-image: url('{{ district.display_image }}');"></div>
+  {% else %}
+  <div class="dist-hero-bg dist-hero-fallback"></div>
+  {% endif %}
   <div class="dist-hero-overlay"></div>
   <div class="dist-hero-content">
     <div class="dist-hero-breadcrumb">
@@ -538,7 +553,7 @@
         {% if rd.display_image %}
         <div class="dist-related-thumb" style="background-image:url('{{ rd.display_image }}');"></div>
         {% else %}
-        <div class="dist-related-thumb" style="background:linear-gradient(135deg, {{ dist_colors[rd.id % 6] }}33, {{ dist_colors[(rd.id + 2) % 6] }}22);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏔️</div>
+        <div class="dist-related-thumb dist-related-thumb-fallback">🏔️</div>
         {% endif %}
         <div>
           <div class="dist-related-name">{{ rd.name }}</div>

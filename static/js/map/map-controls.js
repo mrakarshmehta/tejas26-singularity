@@ -125,23 +125,29 @@ if (typeof window !== 'undefined' && 'ontouchstart' in window) {
               const childChecked = childVisible ? 'checked' : '';
               const childAriaChecked = childVisible ? 'true' : 'false';
 
+              const childSwitch = child.disabled ? `
+                <span class="hy-lm-badge-planned" style="font-size:0.65rem;padding:2px 6px;border-radius:4px;background:rgba(148,163,184,0.18);color:#94a3b8;font-weight:600;letter-spacing:0.3px;" title="Dataset planned for future release">Planned</span>
+              ` : `
+                <label class="hy-lm-switch">
+                  <input type="checkbox"
+                         id="hy-layer-switch-${child.id}"
+                         role="switch"
+                         aria-checked="${childAriaChecked}"
+                         data-layer="${child.id}"
+                         data-parent="${layer.id}"
+                         class="hy-lm-switch-input"
+                         ${childChecked}>
+                  <span class="hy-lm-slider-mark"></span>
+                </label>
+              `;
+
               childListHTML += `
-                <div class="hy-lm-item hy-lm-child-item" data-layer-id="${child.id}" data-parent-id="${layer.id}">
+                <div class="hy-lm-item hy-lm-child-item ${child.disabled ? 'is-disabled' : ''}" data-layer-id="${child.id}" data-parent-id="${layer.id}">
                   <label class="hy-lm-switch-label" for="hy-layer-switch-${child.id}">
                     <span class="hy-lm-icon">${child.icon || child.emoji || '•'}</span>
                     <span class="hy-lm-name">${this._escHtml(child.label || child.name)}</span>
                   </label>
-                  <label class="hy-lm-switch">
-                    <input type="checkbox"
-                           id="hy-layer-switch-${child.id}"
-                           role="switch"
-                           aria-checked="${childAriaChecked}"
-                           data-layer="${child.id}"
-                           data-parent="${layer.id}"
-                           class="hy-lm-switch-input"
-                           ${childChecked}>
-                    <span class="hy-lm-slider-mark"></span>
-                  </label>
+                  ${childSwitch}
                 </div>`;
             });
 
@@ -151,24 +157,30 @@ if (typeof window !== 'undefined' && 'ontouchstart' in window) {
               </div>`;
           }
 
+          const rootSwitch = layer.disabled ? `
+            <span class="hy-lm-badge-planned" style="font-size:0.65rem;padding:2px 6px;border-radius:4px;background:rgba(148,163,184,0.18);color:#94a3b8;font-weight:600;letter-spacing:0.3px;" title="Dataset planned for future release">Planned</span>
+          ` : `
+            <label class="hy-lm-switch">
+              <input type="checkbox"
+                     id="hy-layer-switch-${layer.id}"
+                     role="switch"
+                     aria-checked="${ariaChecked}"
+                     data-layer="${layer.id}"
+                     class="hy-lm-switch-input"
+                     ${checkedAttr}>
+              <span class="hy-lm-slider-mark"></span>
+            </label>
+          `;
+
           groupItemsHTML += `
             <div class="hy-lm-item-container" data-layer-id="${layer.id}">
-              <div class="hy-lm-item hy-lm-root-item ${hasChildren ? 'has-children' : ''}">
+              <div class="hy-lm-item hy-lm-root-item ${hasChildren ? 'has-children' : ''} ${layer.disabled ? 'is-disabled' : ''}">
                 <label class="hy-lm-switch-label" for="hy-layer-switch-${layer.id}">
                   <span class="hy-lm-icon">${layer.icon || layer.emoji || '📁'}</span>
                   <span class="hy-lm-name ${hasChildren ? 'is-parent-name' : ''}">${this._escHtml(layer.label || layer.name)}</span>
                   ${badge3D}
                 </label>
-                <label class="hy-lm-switch">
-                  <input type="checkbox"
-                         id="hy-layer-switch-${layer.id}"
-                         role="switch"
-                         aria-checked="${ariaChecked}"
-                         data-layer="${layer.id}"
-                         class="hy-lm-switch-input"
-                         ${checkedAttr}>
-                  <span class="hy-lm-slider-mark"></span>
-                </label>
+                ${rootSwitch}
               </div>
               ${childrenHTML}
             </div>`;
@@ -410,7 +422,7 @@ if (typeof window !== 'undefined' && 'ontouchstart' in window) {
       }
 
       const def = registry ? registry.get(layerId) : null;
-      if (!def) return;
+      if (!def || def.disabled) return;
 
       // Route to correct map engine
       const isGoogleEngine = (root.MAP_ENGINE === 'google' || Boolean(this.googleAdapter));
