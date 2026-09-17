@@ -379,7 +379,7 @@ class TestInputValidation(unittest.TestCase):
         self.assertIn(r.status_code, [200, 302])
 
 
-def test_places_filter_function_signature(self):
+    def test_places_filter_function_signature(self):
         """Verify get_places_by_filter exists and handles empty database gracefully."""
         from models.places import get_places_by_filter
         self.assertTrue(callable(get_places_by_filter))

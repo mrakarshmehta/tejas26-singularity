@@ -63,7 +63,7 @@ class TestDecoratorExits(unittest.TestCase):
         self.assertTrue(callable(get_session_id))
 
 
-def test_image_dimension_validation(self):
+    def test_image_dimension_validation(self):
         """Test validate_dimensions utility with in-memory test image."""
         import io
         from PIL import Image

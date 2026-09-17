@@ -4,7 +4,7 @@ import uuid
 import logging
 from flask import (
     Blueprint, render_template, request, redirect,
-    url_for, flash, session, jsonify
+    url_for, flash, session, jsonify, abort
 )
 from werkzeug.utils import secure_filename
 from PIL import Image
