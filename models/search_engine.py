@@ -268,6 +268,7 @@ SYNONYM_GROUPS = [
     {'viewpoint', 'view point', 'scenic point'},
     {'hotel', 'lodge', 'inn', 'dharamshala'},
     {'restaurant', 'dhaba', 'eatery', 'bhojanalaya'},
+    {'raja bali ka garh', 'balirajgarh', 'baligarh'},
 ]
 
 _SYNONYM_MAP = {}
@@ -684,8 +685,8 @@ class SearchIndex:
             for row in cur.fetchall():
                 keywords = []
                 if row['description']:
-                    desc_words = set(normalize(row['description']).split())
-                    keywords.extend(w for w in desc_words if len(w) >= 4)
+                    desc_words = set(re.findall(r'[a-zA-Z0-9\u0900-\u097F]{4,}', normalize(row['description'])))
+                    keywords.extend(desc_words)
                 if row['category']:
                     keywords.append(row['category'].replace('_', ' '))
                     cat_syns = get_synonyms(row['category'].replace('_', ' '))
@@ -873,7 +874,8 @@ class SearchIndex:
         intent = parse_nl_intent(query)
 
         # Merge intent filters with explicit filters
-        filters = filters or {}
+        explicit_filters = dict(filters) if filters else {}
+        filters = dict(filters) if filters else {}
         if intent.category_filter and not filters.get('category'):
             filters['category'] = intent.category_filter
         if intent.location_filter and not filters.get('district'):
@@ -901,19 +903,25 @@ class SearchIndex:
         query_compact = normalize_compact(query_str)
         query_soundex = [soundex(w) for w in query_str.split() if w.isalpha()]
 
-        if not query_norm:
+        query_orig_norm = normalize(query_original)
+        query_orig_compact = normalize_compact(query_original)
+        has_orig = bool(query_orig_norm and query_orig_norm != query_norm)
+
+        if not query_norm and not query_orig_norm:
             return []
 
         # Check cache (include filters in cache key)
         filter_key = str(sorted(filters.items())) if filters else ''
         geo_key = f"{user_lat:.4f},{user_lng:.4f}" if user_lat and user_lng else ''
-        cache_key = f"{query_norm}|{filter_key}|{geo_key}"
+        cache_key = f"{query_norm}|{query_orig_norm}|{filter_key}|{geo_key}"
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached[:limit]
 
         # Expand with synonyms
         synonym_queries = expand_query_with_synonyms(query_str)
+        if has_orig:
+            synonym_queries.extend(expand_query_with_synonyms(query_original))
 
         scored_results = []
 
@@ -926,50 +934,61 @@ class SearchIndex:
             match_type = ''
 
             # ── TIER 1: Exact name match (100) ──
-            if entry.name_norm == query_norm:
+            if entry.name_norm == query_norm or (has_orig and entry.name_norm == query_orig_norm):
                 best_score = 100
                 match_type = 'exact'
 
             # ── TIER 2: Prefix match (90) ──
-            elif entry.name_norm.startswith(query_norm):
+            elif entry.name_norm.startswith(query_norm) or (has_orig and entry.name_norm.startswith(query_orig_norm)):
                 best_score = 90
                 match_type = 'prefix'
 
             # ── TIER 3: Word-start match (75) ──
             elif not match_type:
                 name_words = entry.name_norm.split()
-                if any(w.startswith(query_norm) for w in name_words):
+                if any(w.startswith(query_norm) for w in name_words) or (has_orig and any(w.startswith(query_orig_norm) for w in name_words)):
                     best_score = 75
                     match_type = 'word_start'
 
             # ── TIER 4: Contains match (60) ──
-            if not match_type and query_norm in entry.name_norm:
+            if not match_type and (query_norm in entry.name_norm or (has_orig and query_orig_norm in entry.name_norm)):
                 best_score = 60
                 match_type = 'contains'
 
             # ── TIER 5: Compact contains (55) ──
-            if not match_type and len(query_compact) >= 3 and query_compact in entry.name_compact:
+            if not match_type and ((len(query_compact) >= 3 and query_compact in entry.name_compact) or
+                                   (has_orig and len(query_orig_compact) >= 3 and query_orig_compact in entry.name_compact)):
                 best_score = 55
                 match_type = 'contains'
 
-            # ── TIER 6: Synonym match (45) ──
+            # ── TIER 6: Synonym / Keyword match (45 / 30) ──
             if not match_type:
-                for alt_q in synonym_queries:
-                    alt_norm = normalize(alt_q)
-                    if alt_norm == query_norm:
-                        continue
-                    if alt_norm in entry.name_norm or entry.name_norm.startswith(alt_norm):
-                        best_score = max(best_score, 45)
-                        match_type = 'synonym'
+                for kw in entry.keywords:
+                    kw_norm = normalize(kw)
+                    if (query_norm == kw_norm or
+                        (len(query_norm) >= 4 and (query_norm in kw_norm or kw_norm.startswith(query_norm))) or
+                        (len(kw_norm) >= 4 and kw_norm in query_norm)):
+                        best_score = max(best_score, 30)
+                        match_type = 'keyword'
                         break
-                    for kw in entry.keywords:
-                        kw_norm = normalize(kw)
-                        if alt_norm in kw_norm or kw_norm.startswith(alt_norm):
-                            best_score = max(best_score, 15)
-                            match_type = 'keyword'
+
+                if not match_type:
+                    for alt_q in synonym_queries:
+                        alt_norm = normalize(alt_q)
+                        if alt_norm == query_norm:
+                            continue
+                        if alt_norm in entry.name_norm or entry.name_norm.startswith(alt_norm):
+                            best_score = max(best_score, 45)
+                            match_type = 'synonym'
                             break
-                    if match_type:
-                        break
+                        for kw in entry.keywords:
+                            kw_norm = normalize(kw)
+                            if alt_norm in kw_norm or kw_norm.startswith(alt_norm):
+                                best_score = max(best_score, 15)
+                                match_type = 'keyword'
+                                break
+                        if match_type:
+                            break
 
             # ── TIER 7: Phonetic / Soundex match (35) ──
             if not match_type and query_soundex:
@@ -1024,6 +1043,41 @@ class SearchIndex:
                 best_score += type_bonus.get(entry.entry_type, 0)
 
                 scored_results.append((best_score, match_type, entry))
+
+        # Fallback for NL queries where district filter yielded 0 results (e.g. "waterfall near jamui")
+        if not scored_results and intent.location_filter and not explicit_filters.get('district'):
+            relaxed_filters = dict(filters)
+            relaxed_filters.pop('district', None)
+            for entry in self._entries:
+                if not self._passes_filters(entry, relaxed_filters, user_lat, user_lng):
+                    continue
+                best_score = 0
+                match_type = ''
+                if entry.name_norm == query_norm:
+                    best_score = 100
+                    match_type = 'exact'
+                elif entry.name_norm.startswith(query_norm):
+                    best_score = 90
+                    match_type = 'prefix'
+                elif query_norm in entry.name_norm:
+                    best_score = 60
+                    match_type = 'contains'
+                else:
+                    for kw in entry.keywords:
+                        kw_norm = normalize(kw)
+                        if (query_norm == kw_norm or
+                            (len(query_norm) >= 4 and (query_norm in kw_norm or kw_norm.startswith(query_norm))) or
+                            (len(kw_norm) >= 4 and kw_norm in query_norm)):
+                            best_score = max(best_score, 30)
+                            match_type = 'keyword'
+                            break
+                    if not match_type and intent.category_filter:
+                        cat_clean = intent.category_filter.replace('_', ' ')
+                        if cat_clean in entry.category.replace('_', ' '):
+                            best_score = 25
+                            match_type = 'category'
+                if best_score > 0:
+                    scored_results.append((best_score, match_type, entry))
 
         # Sort by score descending, then name
         scored_results.sort(key=lambda x: (-x[0], x[2].name))

@@ -360,7 +360,7 @@ class TestPerformance(unittest.TestCase):
         self.assertLess(hot_ms, cold_ms + 5)
 
 
-def test_search_engine_seq_id_propagation(self):
+    def test_search_engine_seq_id_propagation(self):
         """Verify seq_id parameter propagates through instant_search results."""
         from models.search_engine import instant_search
         results = instant_search('patna', limit=5, seq_id=42)

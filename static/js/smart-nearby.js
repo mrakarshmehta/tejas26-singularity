@@ -146,20 +146,44 @@
     // 4. Bind Radius Selector Buttons (1km, 2km, 5km, 10km)
     document.querySelectorAll('.sn-radius-btn').forEach(btn => {
       btn.addEventListener('click', function () {
-        document.querySelectorAll('.sn-radius-btn').forEach(b => {
-          b.classList.remove('active');
-          b.style.background = 'transparent';
-          b.style.color = 'var(--sn-text)';
-        });
-        this.classList.add('active');
-        this.style.background = 'var(--sn-primary, #6366f1)';
-        this.style.color = '#fff';
-        currentRadius = parseFloat(this.dataset.radius || '5.0');
-        SNS.fetchNearby();
+        SNS.setRadius(parseFloat(this.dataset.radius || '5.0'));
       });
     });
 
     // Initial Fetch
+    SNS.fetchNearby();
+  };
+
+  // Set Search Radius Programmatically & Update Controls
+  SNS.setRadius = function (radiusKm) {
+    currentRadius = parseFloat(radiusKm) || 5.0;
+    document.querySelectorAll('.sn-radius-btn').forEach(b => {
+      const r = parseFloat(b.dataset.radius || '0');
+      if (Math.abs(r - currentRadius) < 0.1) {
+        b.classList.add('active');
+        b.style.background = 'var(--sn-primary, #6366f1)';
+        b.style.color = '#fff';
+      } else {
+        b.classList.remove('active');
+        b.style.background = 'transparent';
+        b.style.color = 'var(--sn-text)';
+      }
+    });
+
+    document.querySelectorAll('.radius-pill').forEach(b => {
+      if (b.textContent.includes(String(Math.round(currentRadius)))) {
+        b.classList.add('active');
+        b.style.background = 'rgba(255, 255, 255, 0.25)';
+      } else {
+        b.classList.remove('active');
+        b.style.background = 'rgba(255, 255, 255, 0.08)';
+      }
+    });
+
+    if (window.HY_RADIUS_CIRCLE && typeof window.HY_RADIUS_CIRCLE.setRadius === 'function') {
+      window.HY_RADIUS_CIRCLE.setRadius(currentRadius * 1000);
+    }
+
     SNS.fetchNearby();
   };
 

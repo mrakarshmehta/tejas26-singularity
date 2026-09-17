@@ -233,9 +233,9 @@ class TestSmartNearby(unittest.TestCase):
             self.assertTrue('!r.ok' in src or 'status' in src)
 
             # Ensure no blind toggle in catch
-            toggle_idx = src.find('toggleSave')
+            toggle_idx = src.rfind('toggleSave')
             self.assertGreater(toggle_idx, -1)
-            toggle_fn = src[toggle_idx:toggle_idx+1200]
+            toggle_fn = src[toggle_idx:toggle_idx+2000]
             
             # Catch block must not toggle the saved class
             catch_idx = toggle_fn.find('.catch')
