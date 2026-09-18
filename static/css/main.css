@@ -841,8 +841,106 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
   color: var(--accent-rose);
 }
 .dropdown-item-danger:hover {
-  background: rgba(244,63,94,0.08);
+  background: rgba(244, 63, 94, 0.08);
   color: var(--accent-rose);
+}
+
+/* ── DISCOVER DROPDOWN ── */
+.nav-discover-dropdown {
+  position: relative;
+}
+.nav-discover-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+.nav-discover-btn:hover,
+.nav-discover-btn.active,
+.nav-discover-dropdown.open .nav-discover-btn {
+  color: var(--text-primary);
+  background: var(--primary-50);
+}
+.nav-discover-dropdown.open .dropdown-chevron {
+  transform: rotate(180deg);
+}
+.nav-discover-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 290px;
+  max-width: 340px;
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-dropdown);
+  overflow: hidden;
+  padding: 6px 0;
+  animation: dropdownIn 0.2s ease;
+}
+.nav-discover-dropdown.open .nav-discover-menu {
+  display: block;
+}
+.discover-menu-header {
+  padding: 8px 16px 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 4px;
+}
+.nav-discover-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+.nav-discover-menu .dropdown-item:hover {
+  background: var(--primary-50);
+  color: var(--text-primary);
+}
+.discover-icon {
+  font-size: 1.15rem;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.discover-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.discover-item-title {
+  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+.discover-item-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+  margin-top: 1px;
 }
 
 /* Theme Toggle */
@@ -1147,6 +1245,131 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
   color: var(--text-primary);
 }
 
+/* ── CULTURAL DIMENSIONS GRID & CARDS ── */
+.cultural-dimensions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+.cultural-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  text-decoration: none;
+  color: var(--text-primary);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+.cultural-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+.cultural-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-200);
+  box-shadow: var(--shadow-card-hover), var(--shadow-glow-sm);
+}
+.cultural-card:hover::before {
+  opacity: 1;
+}
+.cultural-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+.cultural-card-icon {
+  font-size: 1.8rem;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-base);
+}
+.cultural-card:hover .cultural-card-icon {
+  transform: scale(1.1) rotate(-4deg);
+}
+.cultural-card-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--primary-100);
+  color: var(--primary);
+  border: 1px solid rgba(255, 122, 24, 0.2);
+}
+.cultural-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.cultural-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-lg);
+  flex-grow: 1;
+}
+.cultural-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+  font-size: 0.78rem;
+}
+.cultural-card-meta {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.cultural-card-arrow {
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap var(--transition-base);
+}
+.cultural-card:hover .cultural-card-arrow {
+  gap: 8px;
+}
+@media (max-width: 1024px) {
+  .cultural-dimensions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .cultural-dimensions-grid {
+    grid-template-columns: 1fr;
+  }
+  .cultural-card {
+    padding: var(--space-lg);
+  }
+}
+
 /* ── PAGE HEADERS ── */
 .page-header {
   max-width: var(--container-max); margin: 0 auto;
@@ -1338,8 +1561,8 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: var(--space-3xl);
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-2xl);
   margin-bottom: var(--space-3xl);
 }
 .footer-brand {
@@ -1615,6 +1838,25 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
     margin-top: 4px;
     padding-top: 8px;
     border-top: 1px solid var(--border-light);
+  }
+  .nav-links .nav-discover-dropdown {
+    width: 100%;
+    position: static;
+  }
+  .nav-links .nav-discover-btn {
+    width: 100%;
+    justify-content: flex-start;
+    min-height: 48px;
+  }
+  .nav-links .nav-discover-menu {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    border: 1px solid var(--border-light);
+    margin-top: 4px;
+    margin-bottom: 8px;
   }
   .nav-links .nav-profile-btn {
     width: 100%;

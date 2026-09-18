@@ -105,6 +105,82 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
             Map
           </a>
+
+          <!-- Discover Dropdown (Bihar Cultural Dimensions) -->
+          <div class="nav-discover-dropdown" id="nav-discover-dropdown">
+            <button class="nav-discover-btn {% if request.path in ['/intellectual-heritage', '/treks', '/souvenirs', '/guides', '/quiz', '/budget-planner', '/archaeology', '/performing-arts', '/weather'] or '/intellectual-heritage/' in request.path or '/guide/' in request.path or '/souvenir/' in request.path or '/weather/' in request.path or '/archaeology/' in request.path %}active{% endif %}" id="discover-dropdown-btn" type="button" aria-expanded="false" aria-haspopup="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              <span>Discover</span>
+              <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="nav-discover-menu" id="discover-dropdown-menu">
+              <div class="discover-menu-header">Explore Cultural Dimensions</div>
+              <a href="{{ url_for('main.intellectual_heritage_directory') }}" class="dropdown-item" id="nav-discover-scholars">
+                <span class="discover-icon">🏛️</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Ancient Scholars</span>
+                  <span class="discover-item-desc">Nalanda, Aryabhata & Treatises</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.treks_directory') }}" class="dropdown-item" id="nav-discover-treks">
+                <span class="discover-icon">🥾</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Eco-Trails & Treks</span>
+                  <span class="discover-item-desc">Hill Climbs & Canyon Trails</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.souvenirs_directory') }}" class="dropdown-item" id="nav-discover-souvenirs">
+                <span class="discover-icon">🎨</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">GI Souvenirs & Crafts</span>
+                  <span class="discover-item-desc">Mithila Art, Sikki & Silk</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.guides_directory') }}" class="dropdown-item" id="nav-discover-guides">
+                <span class="discover-icon">🧑‍🏫</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Certified Tour Guides</span>
+                  <span class="discover-item-desc">Verified Heritage Storytellers</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.heritage_quiz_view') }}" class="dropdown-item" id="nav-discover-quiz">
+                <span class="discover-icon">🧠</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Heritage Trivia Quiz</span>
+                  <span class="discover-item-desc">Test Knowledge & Earn Badges</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.budget_planner_view') }}" class="dropdown-item" id="nav-discover-budget">
+                <span class="discover-icon">💰</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Budget Planner</span>
+                  <span class="discover-item-desc">Multi-Currency Cost Calculator</span>
+                </div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="{{ url_for('main.archaeology_directory') }}" class="dropdown-item" id="nav-discover-archaeology">
+                <span class="discover-icon">🏺</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Archaeology & Edicts</span>
+                  <span class="discover-item-desc">Ashokan Inscriptions & Relics</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.performing_arts_directory') }}" class="dropdown-item" id="nav-discover-arts">
+                <span class="discover-icon">🎭</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Performing Arts</span>
+                  <span class="discover-item-desc">Bidesiya, Chhau & Folk Music</span>
+                </div>
+              </a>
+              <a href="{{ url_for('main.weather_directory') }}" class="dropdown-item" id="nav-discover-weather">
+                <span class="discover-icon">🌦️</span>
+                <div class="discover-item-text">
+                  <span class="discover-item-title">Weather & Climate</span>
+                  <span class="discover-item-desc">Microclimates & Best Windows</span>
+                </div>
+              </a>
+            </div>
+          </div>
           <button class="nav-link" id="hy-loc-btn" onclick="HY.requestLocation()" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;color:var(--text-muted);" title="Enable location for nearby places & distance info">
             📍 Location
           </button>
@@ -240,6 +316,15 @@
             <a href="{{ url_for('main.state_detail', slug='bihar') }}">Bihar Districts</a>
             <a href="{{ url_for('main.explore_map') }}">Explore Map</a>
             <a href="{{ url_for('main.food_culture') }}">Food & Culture</a>
+          </div>
+          <div class="footer-links-col">
+            <h4>Culture & Treks</h4>
+            <a href="{{ url_for('main.intellectual_heritage_directory') }}">Ancient Scholars</a>
+            <a href="{{ url_for('main.treks_directory') }}">Eco-Trails & Treks</a>
+            <a href="{{ url_for('main.souvenirs_directory') }}">GI Souvenirs & Crafts</a>
+            <a href="{{ url_for('main.guides_directory') }}">Certified Tour Guides</a>
+            <a href="{{ url_for('main.heritage_quiz_view') }}">Heritage Quiz</a>
+            <a href="{{ url_for('main.budget_planner_view') }}">Budget Planner</a>
           </div>
           <div class="footer-links-col">
             <h4>Community</h4>

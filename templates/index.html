@@ -531,6 +531,96 @@ body:has(.hy-search-dropdown.active) .hero-scroll-hint {
   </div>
 </section>
 
+<!-- ═══ CULTURAL DIMENSIONS & SUBSYSTEMS ═══ -->
+<section class="section reveal" id="cultural-dimensions-section" aria-label="Explore Bihar Cultural Dimensions">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">✨ Explore Bihar's <span class="text-gradient-saffron">Cultural Dimensions</span></h2>
+      <p style="color:var(--text-muted);font-size:0.92rem;margin-top:4px;">Immerse yourself in ancient wisdom, pristine eco-trails, master handicrafts, and verified local expertise</p>
+    </div>
+  </div>
+
+  <div class="cultural-dimensions-grid">
+    <a href="{{ url_for('main.intellectual_heritage_directory') }}" class="cultural-card" id="card-intellectual-heritage">
+      <div class="cultural-card-header">
+        <span class="cultural-card-icon">🏛️</span>
+        <span class="cultural-card-badge">Nalanda & Beyond</span>
+      </div>
+      <h3 class="cultural-card-title">Ancient Scholars & Treatises</h3>
+      <p class="cultural-card-desc">Discover intellectual giants—Aryabhata, Chanakya, Nagarjuna—and the world-renowned monastic universities of Nalanda and Vikramashila.</p>
+      <div class="cultural-card-footer">
+        <span class="cultural-card-meta">5 Polymaths • Classical Treatises</span>
+        <span class="cultural-card-arrow">Explore →</span>
+      </div>
+    </a>
+
+    <a href="{{ url_for('main.treks_directory') }}" class="cultural-card" id="card-treks">
+      <div class="cultural-card-header">
+        <span class="cultural-card-icon">🥾</span>
+        <span class="cultural-card-badge">Adventure Trails</span>
+      </div>
+      <h3 class="cultural-card-title">Eco-Trails & Hill Treks</h3>
+      <p class="cultural-card-desc">Conquer rugged granite peaks, sacred cave paths, and canyon vistas across Brahmayoni Peak, Gurpa Hill, and Dungeshwari caves.</p>
+      <div class="cultural-card-footer">
+        <span class="cultural-card-meta">5 Trails • GPS & Elevation Profiles</span>
+        <span class="cultural-card-arrow">Explore →</span>
+      </div>
+    </a>
+
+    <a href="{{ url_for('main.souvenirs_directory') }}" class="cultural-card" id="card-souvenirs">
+      <div class="cultural-card-header">
+        <span class="cultural-card-icon">🎨</span>
+        <span class="cultural-card-badge">GI Certified</span>
+      </div>
+      <h3 class="cultural-card-title">GI Souvenirs & Artisans</h3>
+      <p class="cultural-card-desc">Support local master craftsmen with GI-tagged Mithila paintings, Bhagalpur Tussar silk, Sikki golden grass, and ancient Tikuli craft.</p>
+      <div class="cultural-card-footer">
+        <span class="cultural-card-meta">Fair-Trade Index • Artisan Backstory</span>
+        <span class="cultural-card-arrow">Explore →</span>
+      </div>
+    </a>
+
+    <a href="{{ url_for('main.guides_directory') }}" class="cultural-card" id="card-guides">
+      <div class="cultural-card-header">
+        <span class="cultural-card-icon">🧑‍🏫</span>
+        <span class="cultural-card-badge">Verified Experts</span>
+      </div>
+      <h3 class="cultural-card-title">Certified Tour Guides</h3>
+      <p class="cultural-card-desc">Connect directly with government-licensed multilingual historians, cultural storytellers, and certified naturalist trackers.</p>
+      <div class="cultural-card-footer">
+        <span class="cultural-card-meta">5 Verified Guides • Direct Inquiries</span>
+        <span class="cultural-card-arrow">Explore →</span>
+      </div>
+    </a>
+
+    <a href="{{ url_for('main.heritage_quiz_view') }}" class="cultural-card" id="card-quiz">
+      <div class="cultural-card-header">
+        <span class="cultural-card-icon">🧠</span>
+        <span class="cultural-card-badge">Interactive</span>
+      </div>
+      <h3 class="cultural-card-title">Heritage Trivia & Badges</h3>
+      <p class="cultural-card-desc">Challenge your knowledge of Bihar's dynasties, monuments, and folklore to earn Bronze, Silver, and Gold explorer certificates.</p>
+      <div class="cultural-card-footer">
+        <span class="cultural-card-meta">10 Questions • Digital Certificates</span>
+        <span class="cultural-card-arrow">Explore →</span>
+      </div>
+    </a>
+
+    <a href="{{ url_for('main.budget_planner_view') }}" class="cultural-card" id="card-budget">
+      <div class="cultural-card-header">
+        <span class="cultural-card-icon">💰</span>
+        <span class="cultural-card-badge">Trip Estimator</span>
+      </div>
+      <h3 class="cultural-card-title">Multi-Currency Budget Planner</h3>
+      <p class="cultural-card-desc">Accurately calculate personalized travel budgets across Backpacker, Heritage, and Luxury tiers in 7 global currencies.</p>
+      <div class="cultural-card-footer">
+        <span class="cultural-card-meta">INR, USD, EUR, GBP, JPY & more</span>
+        <span class="cultural-card-arrow">Explore →</span>
+      </div>
+    </a>
+  </div>
+</section>
+
 <!-- ═══ 2. FEATURED DESTINATIONS CAROUSEL ═══ -->
 {% if featured %}
 <section class="section reveal" id="featured-section">
