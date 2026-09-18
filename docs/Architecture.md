@@ -61,16 +61,3 @@ HiddenYatra is a modern, responsive web application and PWA dedicated to uncover
 ### 2.6 Traveler Safety & Mobility (models/safety.py, models/transport.py)
 - 24/7 SOS 112 quick-dial, district control rooms, and trauma hospitals.
 - Transit hubs, distance matrices, and real-time commute fare estimator.
-## v2.7.0 Extended Subsystem Architecture Map
-
-- **Archaeology & Epigraphy Module** (models/archaeology.py)
-- **Weather & Microclimate Advisory** (models/weather.py)
-- **Folk Performing Arts & Music** (models/performing_arts.py)
-- **Certified Local Tour Guides** (models/guides.py)
-- **Eco-Trails & Hill Treks** (models/treks.py)
-- **GI Souvenirs & Artisan Crafts** (models/souvenirs.py)
-- **Ancient Intellectual Heritage** (models/intellectual_heritage.py)
-- **Trip Budget Planner** (models/budget_planner.py)
-- **Heritage Trivia Quiz** (models/quiz.py)
-- **Universal Cross-Domain Search** (models/search_engine.py)
-- **PWA Service Worker v7** (static/sw.js)
